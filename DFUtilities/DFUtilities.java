@@ -14,6 +14,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.nbt.CompoundTag;
+import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
@@ -23,8 +24,10 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -703,6 +706,7 @@ public class DFUtilities {
 //    }
 
     public static ItemStack parseItemNBT(String rawNBT){
+        if(rawNBT == "null") return null;
         CompoundTag nbt = null;
         try{nbt = TagParser.parseTag(rawNBT);}
         catch(CommandSyntaxException e){}
@@ -816,7 +820,7 @@ public class DFUtilities {
         return result;
     }
     
-    public static void createInventory(Player p, TreeMap<Integer, String> items){
+    public static Inventory createInventory(Player p, TreeMap<Integer, String> items){
         Inventory inv = Bukkit.createInventory(p, 27, "Menu");
         Integer[] keys = items.keySet().toArray(new Integer[0]);
         TreeMap<Integer, String> test = new TreeMap<Integer, String>(){{put(1, "test");}};
@@ -824,6 +828,17 @@ public class DFUtilities {
         for(int i = 0; i < keys.length; i++){
             inv.setItem(keys[i], parseItemNBT(items.get(keys[i])));
         }
-        p.openInventory(inv);
+        return inv;
+    }
+    
+    public static void expandInv(Player p, TreeMap<Integer, String> items){
+        if(p.getOpenInventory().getType() == InventoryType.CRAFTING) return; // Cannot expand player inventory!
+        ItemStack[] invItems = (ItemStack[]) ArrayUtils.addAll(p.getOpenInventory().getTopInventory().getContents(), createInventory(p, items).getContents());
+        byte length = (byte) Math.min(invItems.length, 54);
+        Inventory newInv = Bukkit.createInventory(p, length, p.getOpenInventory().getTitle());
+        for(int i = 0; i < length; i++){
+            newInv.setItem(i, invItems[i]);
+        }
+        p.openInventory(newInv);
     }
 }
