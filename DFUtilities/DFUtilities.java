@@ -781,11 +781,7 @@ public class DFUtilities {
         }
     }
 
-    public static FileManager getManager(JavaPlugin plugin, String fileName){
-        return new FileManager(plugin, fileName);
-    }
-
-    public static String saveInv(Player p){
+    public static void saveInv(Player p, FileManager managerClass){
         ItemStack[] inv = p.getInventory().getContents();
         String[] result = new String[inv.length];
         for(int i = 0; i < inv.length; i++){
@@ -801,7 +797,14 @@ public class DFUtilities {
            result[i] = formatCompoundTags(inv[i], CraftItemStack.asNMSCopy(inv[i]).getTag().toString());
         }
         p.sendMessage(String.join("|", result));
-        return String.join("|", result);
+        managerClass.getConfig().set("players." + p.getUniqueId() + ".inventory", String.join("|", result));
+    }
+    
+    public static void loadInv(Player p, FileManager managerClass){
+        String[] inv = managerClass.getConfig().getString("players." + p.getPlayer().getUniqueId() + ".inventory").split("|");
+        for(int i = 0; i < inv.length; i++){
+            p.getInventory().setItem(i, parseItemNBT(inv[i]));
+        }
     }
     
     public static String formatCompoundTags(ItemStack item, String tags){
