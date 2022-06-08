@@ -618,7 +618,7 @@ public class DFUtilities {
 
 
         int k = 0;
-        Object[] keys = currentBars.keySet().toArray();
+        Integer[] keys = currentBars.keySet().toArray(new Integer[0]);
         for(int i = currentBars.size() - 1; i >= 0; i--){ // Re-display the bars to adjust to correct order.
             currentBars.get(keys[i]).removePlayer(barPlayer);
             if(keys[i] == id) bar.addPlayer(barPlayer);
@@ -636,7 +636,7 @@ public class DFUtilities {
         else return bars;
 
         int k = 0;
-        Object[] keys = bars.keySet().toArray();
+        Integer[] keys = bars.keySet().toArray(new Integer[0]);
         for(int i = bars.size() - 1; i >= 0; i--){ // Re-display the bars to adjust to correct order.
             bars.get(keys[i]).removePlayer(p);
             if(keys[k] != id && id != null) bars.get(keys[k]).addPlayer(p);
@@ -794,18 +794,29 @@ public class DFUtilities {
               continue;
            }
            
-           result[i] = CraftItemStack.asNMSCopy(inv[i]).getTag().toString();
+           if(!CraftItemStack.asNMSCopy(inv[i]).hasTag()){
+              result[i] = "{Count:" + inv[i].getAmount() + "b,id:\"minecraft:" + inv[i].getType().toString().toLowerCase() + "\"}";
+              continue;
+           }
+           result[i] = formatCompoundTags(inv[i], CraftItemStack.asNMSCopy(inv[i]).getTag().toString());
         }
+        p.sendMessage(String.join("|", result));
         return String.join("|", result);
+    }
+    
+    public static String formatCompoundTags(ItemStack item, String tags){
+        String result = "{Count:" + item.getAmount() + "b, id:\"minecraft:" + item.getType().toString().toLowerCase() + "\",";
+        result += "tag:{" + tags.substring(1, tags.length() - 1) + "}}"; // Remove opening and ending brackets from the CompoundTag, then add closing bracket of main nbt.
+        return result;
     }
     
     public static void createInventory(Player p, TreeMap<Integer, String> items){
         Inventory inv = Bukkit.createInventory(p, 27, "Menu");
-        Object[] keys = items.keySet().toArray();
+        Integer[] keys = items.keySet().toArray(new Integer[0]);
         TreeMap<Integer, String> test = new TreeMap<Integer, String>(){{put(1, "test");}};
         
         for(int i = 0; i < keys.length; i++){
-            inv.setItem((int) keys[i], parseItemNBT(items.get(keys[i])));
+            inv.setItem(keys[i], parseItemNBT(items.get(keys[i])));
         }
         p.openInventory(inv);
     }
