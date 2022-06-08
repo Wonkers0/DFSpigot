@@ -798,12 +798,14 @@ public class DFUtilities {
         }
         p.sendMessage(String.join("|", result));
         managerClass.getConfig().set("players." + p.getUniqueId() + ".inventory", String.join("|", result));
+        managerClass.saveConfig();
     }
     
     public static void loadInv(Player p, FileManager managerClass){
-        String[] inv = managerClass.getConfig().getString("players." + p.getPlayer().getUniqueId() + ".inventory").split("|");
+        String[] inv = managerClass.getConfig().getString("players." + p.getPlayer().getUniqueId() + ".inventory").split("\\|");
         for(int i = 0; i < inv.length; i++){
-            p.getInventory().setItem(i, parseItemNBT(inv[i]));
+            if(inv[i] != null) p.getInventory().setItem(i, parseItemNBT(inv[i]));
+            else p.getInventory().setItem(i, null);
         }
     }
     
