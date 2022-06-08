@@ -802,7 +802,8 @@ public class DFUtilities {
     }
     
     public static void loadInv(Player p, FileManager managerClass){
-        String[] inv = managerClass.getConfig().getString("players." + p.getPlayer().getUniqueId() + ".inventory").split("\\|");
+        if(!managerClass.getConfig().contains("players." + p.getUniqueId() + ".inventory")) return;
+        String[] inv = managerClass.getConfig().getString("players." + p.getUniqueId() + ".inventory").split("\\|");
         for(int i = 0; i < inv.length; i++){
             if(inv[i] != null) p.getInventory().setItem(i, parseItemNBT(inv[i]));
             else p.getInventory().setItem(i, null);
