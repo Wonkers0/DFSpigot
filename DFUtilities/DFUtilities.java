@@ -841,4 +841,17 @@ public class DFUtilities {
         }
         p.openInventory(newInv);
     }
+    
+    public static void setMenuItem(Player p, int slot, String item){
+        if(p.getOpenInventory().getType() == InventoryType.CRAFTING) return; // Don't set player inventory slots with this, use SetSlotItem instead!
+        p.getOpenInventory().getTopInventory().setItem(slot, parseItemNBT(item));
+    }
+    
+    public static void setInvName(Player p, String name){
+        if(p.getOpenInventory().getType() == InventoryType.CRAFTING) return;
+        ItemStack[] currentInvItems = p.getOpenInventory().getTopInventory().getContents();
+        Inventory newInv = Bukkit.createInventory(p, currentInvItems.length, name);
+        newInv.setContents(currentInvItems);
+        p.openInventory(newInv);
+    }
 }
