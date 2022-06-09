@@ -24,7 +24,12 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
@@ -40,7 +45,8 @@ import java.io.InputStreamReader;
 import java.util.*;
 import java.util.logging.Level;
 
-public class DFUtilities {
+public class DFUtilities implements Listener {
+    public static FileManager managerClass;
     /*
         ** Big thanks to Infernity for helping with sounds **
         ** Big thanks to shermy_the_cat for helping with sounds **
@@ -785,7 +791,7 @@ public class DFUtilities {
         }
     }
 
-    public static void saveInv(Player p, FileManager managerClass){
+    public static void saveInv(Player p){
         ItemStack[] inv = p.getInventory().getContents();
         String[] result = new String[inv.length];
         for(int i = 0; i < inv.length; i++){
@@ -805,7 +811,7 @@ public class DFUtilities {
         managerClass.saveConfig();
     }
     
-    public static void loadInv(Player p, FileManager managerClass){
+    public static void loadInv(Player p){
         if(!managerClass.getConfig().contains("players." + p.getUniqueId() + ".inventory")) return;
         String[] inv = managerClass.getConfig().getString("players." + p.getUniqueId() + ".inventory").split("\\|");
         for(int i = 0; i < inv.length; i++){
@@ -831,8 +837,12 @@ public class DFUtilities {
         return inv;
     }
     
+    public static void openInv(Player p, TreeMap<Integer, String> items){
+       p.openInventory(createInventory(p, items));
+    }
+    
     public static void expandInv(Player p, TreeMap<Integer, String> items){
-        if(p.getOpenInventory().getType() == InventoryType.CRAFTING) return; // Cannot expand player inventory!
+        if(p.getOpenInventory().getType() == InventoryType.PLAYER) return; // Cannot expand player inventory!
         ItemStack[] invItems = (ItemStack[]) ArrayUtils.addAll(p.getOpenInventory().getTopInventory().getContents(), createInventory(p, items).getContents());
         byte length = (byte) Math.min(invItems.length, 54);
         Inventory newInv = Bukkit.createInventory(p, length, p.getOpenInventory().getTitle());
@@ -843,15 +853,28 @@ public class DFUtilities {
     }
     
     public static void setMenuItem(Player p, int slot, String item){
-        if(p.getOpenInventory().getType() == InventoryType.CRAFTING) return; // Don't set player inventory slots with this, use SetSlotItem instead!
+        if(p.getOpenInventory().getType() == InventoryType.PLAYER) return; // Don't set player inventory slots with this, use SetSlotItem instead!
         p.getOpenInventory().getTopInventory().setItem(slot, parseItemNBT(item));
     }
     
     public static void setInvName(Player p, String name){
-        if(p.getOpenInventory().getType() == InventoryType.CRAFTING) return;
+        if(p.getOpenInventory().getType() == InventoryType.PLAYER) return;
         ItemStack[] currentInvItems = p.getOpenInventory().getTopInventory().getContents();
         Inventory newInv = Bukkit.createInventory(p, currentInvItems.length, name);
         newInv.setContents(currentInvItems);
         p.openInventory(newInv);
+    }
+    
+    
+    @EventHandler
+    public void ClickMenuSlot(InventoryClickEvent event){
+        Inventory eventInv = event.getClickedInventory();
+        if(eventInv.getType() != InventoryType.PLAYER
+          && eventInv.getType() != InventoryType.CRAFTING
+          && eventInv.getLocation() == null) event.setCancelled(true); // ClickSlot event triggered from inside custom GUI
+    }
+        
+    public static void getManager(JavaPlugin plugin){
+        managerClass = new FileManager(plugin, "playerData.yml");
     }
 }
