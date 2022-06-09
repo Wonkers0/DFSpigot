@@ -865,13 +865,28 @@ public class DFUtilities implements Listener {
         p.openInventory(newInv);
     }
     
+    public static void removeInvRow(Player p, Integer rows){
+        if(!inCustomInv(p)) return;
+        
+        InventoryView inv = p.getOpenInventory();
+        List<ItemStack> invItems = Arrays.asList(inv.getTopInventory().getContents());
+        Integer invSize = invItems.size() - rows * 9;
+        if(invSize < 9) return;
+        Inventory newInv = Bukkit.createInventory(p, invSize, inv.getTitle());
+        newInv.setContents(invItems.subList(0, invSize).toArray(new ItemStack[0]));
+        p.openInventory(newInv);
+    }
+    
+    public static boolean inCustomInv(Player p){
+        Inventory inv = p.getOpenInventory().getTopInventory();
+        return inv.getType() != InventoryType.PLAYER
+          && inv.getType() != InventoryType.CRAFTING
+          && inv.getLocation() == null;
+    }
     
     @EventHandler
     public void ClickMenuSlot(InventoryClickEvent event){
-        Inventory eventInv = event.getClickedInventory();
-        if(eventInv.getType() != InventoryType.PLAYER
-          && eventInv.getType() != InventoryType.CRAFTING
-          && eventInv.getLocation() == null) event.setCancelled(true); // ClickSlot event triggered from inside custom GUI
+        if(inCustomInv((Player) event.getView().getPlayer())) event.setCancelled(true); // ClickSlot event triggered from inside custom GUI
     }
         
     public static void getManager(JavaPlugin plugin){
