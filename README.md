@@ -4,7 +4,7 @@ A tool for translating DiamondFire templates into Java Spigot Dependency Code.&n
 
 ## 📚 Utility Class
 If you are looking for the Utility Class, click [here](https://github.com/Wonkers0/DFSpigot/tree/main/DFUtilities).
-<br />*(Keep in mind you need to import the FileManager.java class as well!)*
+<br />*(Keep in mind you need to import the FileManager.java & PlayerData.java classes as well!)*
 <br />
 ## 📙 How to compile your plugin
 Lost? Here's a [tutorial](https://www.youtube.com/watch?v=Q7sgqSbuVRQ). 🙌
