@@ -14,6 +14,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.alchemy.Potion;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -37,6 +38,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
@@ -788,7 +790,9 @@ public class DFUtilities implements Listener {
 				}
 				if(clearCrafting){
 						p.setItemOnCursor(null);
-						//TODO: Clear crafting slots
+					  Inventory topInv = p.getOpenInventory().getTopInventory();
+						if(topInv.getType() == InventoryType.CRAFTING)
+							for(int i = 1; i <= 4; i++) topInv.setItem(i, null);
 				}
 		}
 
@@ -932,6 +936,10 @@ public class DFUtilities implements Listener {
 						p.openInventory(inv);
 						break;
 				}
+		}
+		
+		public static Player playerFromName(String name){
+			return Bukkit.getPlayer(name) == null ? Bukkit.getPlayer(UUID.fromString(name)) : Bukkit.getPlayer(name);
 		}
 		
 		public static boolean inCustomInv(Player p){
