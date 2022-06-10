@@ -31,6 +31,8 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -39,6 +41,7 @@ import org.bukkit.inventory.*;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
@@ -938,6 +941,10 @@ public class DFUtilities implements Listener {
 				}
 		}
 		
+		public static void removePotions(Player p, PotionEffect[] effects){
+			 for(PotionEffect effect : effects) p.removePotionEffect(effect.getType());
+		}
+		
 		public static Player playerFromName(String name){
 			return Bukkit.getPlayer(name) == null ? Bukkit.getPlayer(UUID.fromString(name)) : Bukkit.getPlayer(name);
 		}
@@ -952,6 +959,22 @@ public class DFUtilities implements Listener {
 		@EventHandler
 		public void ClickMenuSlot(InventoryClickEvent event){
 				if(inCustomInv((Player) event.getView().getPlayer())) event.setCancelled(true); // ClickSlot event triggered from inside custom GUI
+		}
+		
+		@EventHandler
+		public void PlayerDmgPlayer(EntityDamageByEntityEvent event){
+			if(event.getDamager() instanceof Player && event.getEntity() instanceof Player){
+				if(!PlayerData.getPlayerData(((Player) event.getEntity()).getUniqueId()).canPvP)
+					event.setCancelled(true);
+			}
+		}
+		
+		@EventHandler
+		public void Death(PlayerDeathEvent event){
+			PlayerData playerData = PlayerData.getPlayerData(((Player) event.getEntity()).getUniqueId());
+			if(!playerData.deathDrops) event.getDrops().clear();
+			if(playerData.keepInv) event.setKeepInventory(true);
+			if(playerData.instantRespawn) ((Player) event.getEntity()).spigot().respawn();
 		}
 		
 		public static void getManager(JavaPlugin plugin){
