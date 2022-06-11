@@ -31,6 +31,8 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -726,6 +728,18 @@ public class DFUtilities implements Listener {
 				net.minecraft.world.item.ItemStack nmsItem = net.minecraft.world.item.ItemStack.of(nbt);
 				return CraftItemStack.asBukkitCopy(nmsItem);
 		}
+		
+		public static ItemStack[] parseItemNBTs (String[] NBTArray){
+			 ItemStack[] result = new ItemStack[NBTArray.length];
+			 for(int i = 0; i < NBTArray.length; i++) result[i] = (parseItemNBT(NBTArray[i]));
+			 return result;
+		}
+		
+		public static Material[] getStackTypes(ItemStack[] items){
+			Material[] result = new Material[items.length];
+			for(int i = 0; i < items.length; i++) result[i] = items[i].getType();
+			return result;
+		}
 
 		public static void giveItems(Player p, String[] items, byte stack) {
 				for(int i = 0; i < items.length; i++){
@@ -967,6 +981,18 @@ public class DFUtilities implements Listener {
 				if(!PlayerData.getPlayerData(((Player) event.getEntity()).getUniqueId()).canPvP)
 					event.setCancelled(true);
 			}
+		}
+		
+		@EventHandler
+		public void PlaceBlock(BlockPlaceEvent event){
+			 PlayerData playerData = PlayerData.getPlayerData(event.getPlayer().getUniqueId());
+			 if(!playerData.allowedBlocks.contains(event.getBlockPlaced().getType())) event.setCancelled(true);
+		}
+		
+		@EventHandler
+		public void BreakBlock(BlockBreakEvent event){
+			 PlayerData playerData = PlayerData.getPlayerData(event.getPlayer().getUniqueId());
+			 if(!playerData.allowedBlocks.contains(event.getBlock().getType())) event.setCancelled(true);
 		}
 		
 		@EventHandler
