@@ -672,7 +672,7 @@ public class DFUtilities implements Listener {
 								player.sendMessage(msgs[index++]);
 								if(index >= msgs.length) this.cancel();
 						}
-				}.runTaskTimer(plugin, 0, delay);
+				}.runTaskTimerAsynchronously(plugin, 0, delay);
 		}
 
 		public static void playSounds(Player player, String[] sounds, Location loc, float[][] soundInfo, long delay, JavaPlugin plugin){
