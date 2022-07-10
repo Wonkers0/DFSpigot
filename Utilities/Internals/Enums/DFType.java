@@ -1,0 +1,13 @@
+package me.wonk2.Utilities.Internals.Enums;
+
+public enum DFType {
+    TXT,
+    NUM,
+    SND,
+    LOC,
+    ITEM,
+    POT,
+    VAR,
+    ANY, // This is only used internally for parameter types.
+    REPEATING // This will only be used for creating new DFValues internally, there won't be any input with this!
+}
