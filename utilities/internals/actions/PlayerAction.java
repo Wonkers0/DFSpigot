@@ -36,7 +36,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.*;
 
 public class PlayerAction {
-    public static void actions(HashMap<String, DFValue> args, HashMap<String, String> tags, String action, LivingEntity target, LivingEntity[] targets){
+    public static void invokeAction(Object[] inputArray, String action, LivingEntity[] targets, HashMap<String, DFValue> unused){
+        HashMap<String, DFValue> args = DFUtilities.getArgs(inputArray[0]);
+        HashMap<String, String> tags = DFUtilities.getTags(inputArray[1]);
+
         HashMap<String, SoundCategory> categories = new HashMap<>(){{
             put("Master", SoundCategory.MASTER);
             put("Music", SoundCategory.MUSIC);
@@ -50,421 +53,422 @@ public class PlayerAction {
             put("Voice/Speech", SoundCategory.VOICE);
         }};
 
-        switch(action){
-            case "SendMessage": {
-                String[] txtArray = DFValue.castTxt((DFValue[]) args.get("msg").getVal());
+        for(LivingEntity target : targets)
+            switch(action){
+                case "SendMessage": {
+                    String[] txtArray = DFValue.castTxt((DFValue[]) args.get("msg").getVal());
 
-                String msg = tags.get("Text Value Merging").equals("Add spaces") ?
-                        String.join(" ", txtArray) :
-                        String.join("", txtArray);
+                    String msg = tags.get("Text Value Merging").equals("Add spaces") ?
+                            String.join(" ", txtArray) :
+                            String.join("", txtArray);
 
-                target.sendMessage(msg);
-                break;
-            }
-            case "PlaySound": {
-                DFSound[] soundArr = DFValue.castSound((DFValue[]) args.get("sounds").getVal());
-
-                for(DFSound sound : soundArr){
-                    if(!args.containsKey("playbackLoc"))
-                        ((Player) target).playSound(target.getLocation(), sound.sound, SoundCategory.MASTER, sound.volume, sound.pitch);
-                    else ((Player) target).playSound((Location) args.get("playbackLoc").getVal(), sound.sound, categories.get(tags.get("Sound Source")), sound.volume, sound.pitch);
+                    target.sendMessage(msg);
+                    break;
                 }
-                break;
-            }
+                case "PlaySound": {
+                    DFSound[] soundArr = DFValue.castSound((DFValue[]) args.get("sounds").getVal());
 
-            case "SendTitle":{
-                ((Player) target).sendTitle((String) args.get("title").getVal(), (String) args.get("subtitle").getVal(), args.get("fadeIn").getInt(), args.get("duration").getInt(), args.get("fadeOut").getInt());
-                break;
-            }
-
-            case "SetBossBar":{
-                HashMap<String, BarStyle> barStyles = new HashMap<>(){{
-                    put("Solid", BarStyle.SOLID);
-                    put("6 segments", BarStyle.SEGMENTED_6);
-                    put("10 segments", BarStyle.SEGMENTED_10);
-                    put("12 segments", BarStyle.SEGMENTED_12);
-                    put("20 segments", BarStyle.SEGMENTED_20);
-                }};
-
-                BarColor color = BarColor.valueOf(tags.get("Bar Color").toUpperCase());
-                double barHealth = (Float) args.get("health").getVal() / (Float) args.get("maxHealth").getVal();;
-                ArrayList<BarFlag> barFlags = new ArrayList<>();
-                if(tags.get("Sky Effect") == "Both" || tags.get("Sky Effect") == "Create fog")
-                    barFlags.add(BarFlag.CREATE_FOG);
-                if(tags.get("Sky Effect") == "Both" || tags.get("Sky Effect") == "Darken sky")
-                    barFlags.add(BarFlag.DARKEN_SKY);
-
-                setBossBar((Player) target, (String) args.get("title").getVal(), args.get("index").getInt(), barHealth, color, barStyles.get(tags.get("Bar Style")), barFlags.toArray(new BarFlag[0]));
-                break;
-            }
-
-            case "RemoveBossBar": {
-                removeBossbar((Player) target, args.get("index").getInt());
-                break;
-            }
-
-            case "ActionBar":{
-                String[] txtArray = DFValue.castTxt((DFValue[]) args.get("msg").getVal());
-
-                String msg = tags.get("Text Value Merging").equals("Add spaces") ?
-                        String.join(" ", txtArray) :
-                        String.join("", txtArray);
-
-                ((Player) target).spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(msg));
-                break;
-            }
-
-            case "SendMessageSeq":{
-                sendMessageSeq((Player) target, DFValue.castTxt((DFValue[]) args.get("msgs").getVal()), (long) args.get("delay").getVal(), DFPlugin.plugin);
-                break;
-            }
-
-            case "PlaySoundSeq":{
-                Location loc = args.containsKey("loc") ?
-                        (Location) args.get("loc").getVal() :
-                        null;
-                playSoundSeq((Player[]) targets, DFValue.castSound((DFValue[]) args.get("sounds").getVal()), loc, (long) args.get("delay").getInt(), DFPlugin.plugin);
-                break;
-            }
-
-            case "SendHover": {
-                sendHover((Player) target, (String) args.get("msg").getVal(), (String) args.get("hover").getVal());
-                break;
-            }
-
-            case "StopSound": {
-                stopSounds((Player) target, DFValue.castSound((DFValue[]) args.get("sounds").getVal()), categories.get(tags.get("Sound Source")));
-                break;
-            }
-
-            case "SetTabListInfo": {
-                if(tags.get("Player List Field") == "Header") ((Player) target).setPlayerListHeader((String) args.get("tabInfo").getVal());
-                else ((Player) target).setPlayerListFooter((String) args.get("tabInfo").getVal());
-                break;
-            }
-
-            case "GiveItems": {
-                for(ItemStack item : DFValue.castItem((DFValue[]) args.get("items").getVal()))
-                    for(int i = 0; i < args.get("stack").getInt(); i++)
-                        ((Player) target).getInventory().addItem(item);
-                break;
-            }
-
-            case "SetHotbar": {
-                DFValue[] items = (DFValue[]) args.get("items").getVal();
-                for(int i = 0; i < 9; i++){
-                    if(items[i].slot != i) ((Player) target).getInventory().clear(i);
-                    else ((Player) target).getInventory().setItem(i, (ItemStack) items[i].getVal());
+                    for(DFSound sound : soundArr){
+                        if(!args.containsKey("playbackLoc"))
+                            ((Player) target).playSound(target.getLocation(), sound.sound, SoundCategory.MASTER, sound.volume, sound.pitch);
+                        else ((Player) target).playSound((Location) args.get("playbackLoc").getVal(), sound.sound, categories.get(tags.get("Sound Source")), sound.volume, sound.pitch);
+                    }
+                    break;
                 }
-                break;
-            }
 
-            case "SetInventory": {
-                DFValue[] items = (DFValue[]) args.get("items").getVal();
-                for(int i = 9; i < 36; i++)
-                    if(items[i].slot == i)
-                        ((Player) target).getInventory().setItem(items[i].slot, (ItemStack) items[i].getVal());
-                    else ((Player) target).getInventory().clear(i);
-                break;
-            }
-
-            case "SetSlotItem": {
-                ((Player) target).getInventory().setItem(args.get("slot").getInt() - 1, (ItemStack) args.get("item").getVal());
-                break;
-            }
-
-            case "SetEquipment": {
-                HashMap<String, EquipmentSlot> equipmentSlots = new HashMap<>(){{
-                    put("Main hand", EquipmentSlot.HAND);
-                    put("Off hand", EquipmentSlot.OFF_HAND);
-                    put("Head", EquipmentSlot.HEAD);
-                    put("Chest", EquipmentSlot.CHEST);
-                    put("Legs", EquipmentSlot.LEGS);
-                    put("Feet", EquipmentSlot.FEET);
-                }};
-
-                ((Player) target).getInventory().setItem(equipmentSlots.get(tags.get("Equipment Slot")), (ItemStack) args.get("item").getVal());
-                break;
-            }
-
-            case "SetArmor": {
-                Player player = (Player) target;
-
-                player.getInventory().setArmorContents(
-                        new ItemStack[]{(ItemStack) args.get("head").getVal(), (ItemStack) args.get("chest").getVal(), (ItemStack) args.get("leggings").getVal(), (ItemStack) args.get("feet").getVal()}
-                );
-                break;
-            }
-
-            case "ReplaceItems": {
-                replaceItems((Player) target, DFValue.castItem((DFValue[]) args.get("replaceables").getVal()), (ItemStack) args.get("replacement").getVal(), (byte) args.get("amount").getVal());
-                break;
-            }
-
-            case "RemoveItems": {
-                for(ItemStack item : DFValue.castItem((DFValue[]) args.get("removals").getVal()))
-                    ((Player) target).getInventory().removeItem(item);
-                break;
-            }
-
-            case "ClearItems": {
-                clearItems((Player) target, DFValue.castItem((DFValue[]) args.get("items").getVal()));
-                break;
-            }
-
-            case "SetCursorItem": {
-                ((Player) target).setItemOnCursor((ItemStack) args.get("item").getVal());
-                break;
-            }
-
-            case "ClearInv": {
-                HashMap<String, Integer[]> clearTypes = new HashMap<>(){{
-                    put("Entire inventory", new Integer[]{0, 41});
-                    put("Main inventory", new Integer[]{0, 35});
-                    put("Upper inventory", new Integer[]{8, 35});
-                    put("Hotbar", new Integer[]{0, 8});
-                    put("Armor", new Integer[]{36,39});
-                }};
-
-                Integer[] clearIndices = clearTypes.get(tags.get("Clear Mode"));
-
-                clearInv((Player) target, clearIndices[1], clearIndices[2], tags.get("Clear Crafting and Cursor") == "True");
-                break;
-            }
-
-            case "SetItemCooldown": {
-                Material material = ((ItemStack) args.get("item").getVal()).getType();
-                ((Player) target).setCooldown(material, args.get("ticks").getInt());
-                break;
-            }
-
-            case "SaveInv": {
-                saveInv((Player) target);
-                break;
-            }
-
-            case "LoadInv": {
-                loadInv((Player) target);
-                break;
-            }
-
-            case "ShowInv": {
-                ((Player) target).openInventory(createInventory((Player) target,(DFValue[]) args.get("items").getVal(), 27));
-                break;
-            }
-
-            case "ExpandInv": {
-                expandInv((Player) target, (DFValue[]) args.get("items").getVal(), 27);
-                break;
-            }
-
-            case "SetMenuItem": {
-                ((Player) target).getOpenInventory().setItem( args.get("slot").getInt() - 1, (ItemStack) args.get("item").getVal());
-                break;
-            }
-
-            case "SetInvName": {
-                setInvName((Player) target, (String) args.get("invName").getVal());
-                break;
-            }
-
-            case "CloseInv": {
-                ((Player) target).closeInventory();
-                break;
-            }
-
-            case "RemoveInvRow": {
-                removeInvRow((Player) target, args.get("rows").getInt());
-                break;
-            }
-
-            case "AddInvRow": {
-                expandInv((Player) target, (DFValue[]) args.get("items").getVal(), 9);
-                break;
-            }
-
-            case "OpenBlockInv": {
-                openContainerInv((Player) target, (Location) args.get("loc").getVal());
-                break;
-            }
-
-            case "Damage": {
-                if(args.get("source").getVal() == null) target.damage((double) args.get("amount").getVal());
-                else target.damage((double) args.get("amount").getVal(), Bukkit.getEntity(UUID.fromString((String) args.get("source").getVal())));
-                break;
-            }
-
-            case "Heal": {
-                Integer amount = args.get("amount").getInt();
-                if(amount == null) target.setHealth(target.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-                else target.setHealth(target.getHealth() + amount);
-                break;
-            }
-
-            case "SetHealth": {
-                target.setHealth(args.get("amount").getInt());
-                break;
-            }
-
-            case "SetMaxHealth": {
-                target.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue((double) args.get("amount").getVal());
-                if(tags.get("Heal Player to Max Health") == "True")
-                    target.setHealth(target.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-                break;
-            }
-
-            case "SetAbsorption": {
-                target.setAbsorptionAmount((double) args.get("amount").getVal());
-                break;
-            }
-
-            case "SetFoodLevel": {
-                ((Player) target).setFoodLevel(args.get("amount").getInt());
-                break;
-            }
-
-            case "SetSaturation": {
-                ((Player) target).setSaturation((Float) args.get("amount").getVal());
-                break;
-            }
-
-            case "GiveExp": {
-                Player player = (Player) target;
-                switch(tags.get("Give Experience")){
-                    case "Points":
-                        player.giveExp(args.get("amount").getInt());
-                        break;
-                    case "Level":
-                        player.giveExpLevels(args.get("amount").getInt());
-                        break;
-                    case "Level Percentage":
-                        player.setExp(player.getExp() + Math.min((Float) args.get("amount").getVal()/100f, 1f));
-                        break;
+                case "SendTitle":{
+                    ((Player) target).sendTitle((String) args.get("title").getVal(), (String) args.get("subtitle").getVal(), args.get("fadeIn").getInt(), args.get("duration").getInt(), args.get("fadeOut").getInt());
+                    break;
                 }
-                break;
-            }
 
-            case "SetExp": {
-                Player player = (Player) target;
-                switch(tags.get("Set Experience")){
-                    case "Points":
-                        player.setTotalExperience(args.get("amount").getInt());
-                        break;
-                    case "Level":
-                        player.setLevel(args.get("amount").getInt());
-                        break;
-                    case "Level Percentage":
-                        player.setExp(Math.min((Float) args.get("amount").getVal()/100, 1));
-                        break;
+                case "SetBossBar":{
+                    HashMap<String, BarStyle> barStyles = new HashMap<>(){{
+                        put("Solid", BarStyle.SOLID);
+                        put("6 segments", BarStyle.SEGMENTED_6);
+                        put("10 segments", BarStyle.SEGMENTED_10);
+                        put("12 segments", BarStyle.SEGMENTED_12);
+                        put("20 segments", BarStyle.SEGMENTED_20);
+                    }};
+
+                    BarColor color = BarColor.valueOf(tags.get("Bar Color").toUpperCase());
+                    double barHealth = (Float) args.get("health").getVal() / (Float) args.get("maxHealth").getVal();;
+                    ArrayList<BarFlag> barFlags = new ArrayList<>();
+                    if(tags.get("Sky Effect") == "Both" || tags.get("Sky Effect") == "Create fog")
+                        barFlags.add(BarFlag.CREATE_FOG);
+                    if(tags.get("Sky Effect") == "Both" || tags.get("Sky Effect") == "Darken sky")
+                        barFlags.add(BarFlag.DARKEN_SKY);
+
+                    setBossBar((Player) target, (String) args.get("title").getVal(), args.get("index").getInt(), barHealth, color, barStyles.get(tags.get("Bar Style")), barFlags.toArray(new BarFlag[0]));
+                    break;
                 }
-                break;
+
+                case "RemoveBossBar": {
+                    removeBossbar((Player) target, args.get("index").getInt());
+                    break;
+                }
+
+                case "ActionBar":{
+                    String[] txtArray = DFValue.castTxt((DFValue[]) args.get("msg").getVal());
+
+                    String msg = tags.get("Text Value Merging").equals("Add spaces") ?
+                            String.join(" ", txtArray) :
+                            String.join("", txtArray);
+
+                    ((Player) target).spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(msg));
+                    break;
+                }
+
+                case "SendMessageSeq":{
+                    sendMessageSeq((Player[]) targets, DFValue.castTxt((DFValue[]) args.get("msgs").getVal()), (long) args.get("delay").getVal(), DFPlugin.plugin);
+                    return; // This method already affects all targets, no need to continue main loop
+                }
+
+                case "PlaySoundSeq":{
+                    Location loc = args.containsKey("loc") ?
+                            (Location) args.get("loc").getVal() :
+                            null;
+                    playSoundSeq((Player[]) targets, DFValue.castSound((DFValue[]) args.get("sounds").getVal()), loc, (long) args.get("delay").getInt(), DFPlugin.plugin);
+                    return; // This method already affects all targets, no need to continue main loop
+                }
+
+                case "SendHover": {
+                    sendHover((Player) target, (String) args.get("msg").getVal(), (String) args.get("hover").getVal());
+                    break;
+                }
+
+                case "StopSound": {
+                    stopSounds((Player) target, DFValue.castSound((DFValue[]) args.get("sounds").getVal()), categories.get(tags.get("Sound Source")));
+                    break;
+                }
+
+                case "SetTabListInfo": {
+                    if(tags.get("Player List Field") == "Header") ((Player) target).setPlayerListHeader((String) args.get("tabInfo").getVal());
+                    else ((Player) target).setPlayerListFooter((String) args.get("tabInfo").getVal());
+                    break;
+                }
+
+                case "GiveItems": {
+                    for(ItemStack item : DFValue.castItem((DFValue[]) args.get("items").getVal()))
+                        for(int i = 0; i < args.get("stack").getInt(); i++)
+                            ((Player) target).getInventory().addItem(item);
+                    break;
+                }
+
+                case "SetHotbar": {
+                    DFValue[] items = (DFValue[]) args.get("items").getVal();
+                    for(int i = 0; i < 9; i++){
+                        if(items[i].slot != i) ((Player) target).getInventory().clear(i);
+                        else ((Player) target).getInventory().setItem(i, (ItemStack) items[i].getVal());
+                    }
+                    break;
+                }
+
+                case "SetInventory": {
+                    DFValue[] items = (DFValue[]) args.get("items").getVal();
+                    for(int i = 9; i < 36; i++)
+                        if(items[i].slot == i)
+                            ((Player) target).getInventory().setItem(items[i].slot, (ItemStack) items[i].getVal());
+                        else ((Player) target).getInventory().clear(i);
+                    break;
+                }
+
+                case "SetSlotItem": {
+                    ((Player) target).getInventory().setItem(args.get("slot").getInt() - 1, (ItemStack) args.get("item").getVal());
+                    break;
+                }
+
+                case "SetEquipment": {
+                    HashMap<String, EquipmentSlot> equipmentSlots = new HashMap<>(){{
+                        put("Main hand", EquipmentSlot.HAND);
+                        put("Off hand", EquipmentSlot.OFF_HAND);
+                        put("Head", EquipmentSlot.HEAD);
+                        put("Chest", EquipmentSlot.CHEST);
+                        put("Legs", EquipmentSlot.LEGS);
+                        put("Feet", EquipmentSlot.FEET);
+                    }};
+
+                    ((Player) target).getInventory().setItem(equipmentSlots.get(tags.get("Equipment Slot")), (ItemStack) args.get("item").getVal());
+                    break;
+                }
+
+                case "SetArmor": {
+                    Player player = (Player) target;
+
+                    player.getInventory().setArmorContents(
+                            new ItemStack[]{(ItemStack) args.get("head").getVal(), (ItemStack) args.get("chest").getVal(), (ItemStack) args.get("leggings").getVal(), (ItemStack) args.get("feet").getVal()}
+                    );
+                    break;
+                }
+
+                case "ReplaceItems": {
+                    replaceItems((Player) target, DFValue.castItem((DFValue[]) args.get("replaceables").getVal()), (ItemStack) args.get("replacement").getVal(), (byte) args.get("amount").getVal());
+                    break;
+                }
+
+                case "RemoveItems": {
+                    for(ItemStack item : DFValue.castItem((DFValue[]) args.get("removals").getVal()))
+                        ((Player) target).getInventory().removeItem(item);
+                    break;
+                }
+
+                case "ClearItems": {
+                    clearItems((Player) target, DFValue.castItem((DFValue[]) args.get("items").getVal()));
+                    break;
+                }
+
+                case "SetCursorItem": {
+                    ((Player) target).setItemOnCursor((ItemStack) args.get("item").getVal());
+                    break;
+                }
+
+                case "ClearInv": {
+                    HashMap<String, Integer[]> clearTypes = new HashMap<>(){{
+                        put("Entire inventory", new Integer[]{0, 41});
+                        put("Main inventory", new Integer[]{0, 35});
+                        put("Upper inventory", new Integer[]{8, 35});
+                        put("Hotbar", new Integer[]{0, 8});
+                        put("Armor", new Integer[]{36,39});
+                    }};
+
+                    Integer[] clearIndices = clearTypes.get(tags.get("Clear Mode"));
+
+                    clearInv((Player) target, clearIndices[1], clearIndices[2], tags.get("Clear Crafting and Cursor") == "True");
+                    break;
+                }
+
+                case "SetItemCooldown": {
+                    Material material = ((ItemStack) args.get("item").getVal()).getType();
+                    ((Player) target).setCooldown(material, args.get("ticks").getInt());
+                    break;
+                }
+
+                case "SaveInv": {
+                    saveInv((Player) target);
+                    break;
+                }
+
+                case "LoadInv": {
+                    loadInv((Player) target);
+                    break;
+                }
+
+                case "ShowInv": {
+                    ((Player) target).openInventory(createInventory((Player) target,(DFValue[]) args.get("items").getVal(), 27));
+                    break;
+                }
+
+                case "ExpandInv": {
+                    expandInv((Player) target, (DFValue[]) args.get("items").getVal(), 27);
+                    break;
+                }
+
+                case "SetMenuItem": {
+                    ((Player) target).getOpenInventory().setItem( args.get("slot").getInt() - 1, (ItemStack) args.get("item").getVal());
+                    break;
+                }
+
+                case "SetInvName": {
+                    setInvName((Player) target, (String) args.get("invName").getVal());
+                    break;
+                }
+
+                case "CloseInv": {
+                    ((Player) target).closeInventory();
+                    break;
+                }
+
+                case "RemoveInvRow": {
+                    removeInvRow((Player) target, args.get("rows").getInt());
+                    break;
+                }
+
+                case "AddInvRow": {
+                    expandInv((Player) target, (DFValue[]) args.get("items").getVal(), 9);
+                    break;
+                }
+
+                case "OpenBlockInv": {
+                    openContainerInv((Player) target, (Location) args.get("loc").getVal());
+                    break;
+                }
+
+                case "Damage": {
+                    if(args.get("source").getVal() == null) target.damage((double) args.get("amount").getVal());
+                    else target.damage((double) args.get("amount").getVal(), Bukkit.getEntity(UUID.fromString((String) args.get("source").getVal())));
+                    break;
+                }
+
+                case "Heal": {
+                    Integer amount = args.get("amount").getInt();
+                    if(amount == null) target.setHealth(target.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+                    else target.setHealth(target.getHealth() + amount);
+                    break;
+                }
+
+                case "SetHealth": {
+                    target.setHealth(args.get("amount").getInt());
+                    break;
+                }
+
+                case "SetMaxHealth": {
+                    target.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue((double) args.get("amount").getVal());
+                    if(tags.get("Heal Player to Max Health") == "True")
+                        target.setHealth(target.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+                    break;
+                }
+
+                case "SetAbsorption": {
+                    target.setAbsorptionAmount((double) args.get("amount").getVal());
+                    break;
+                }
+
+                case "SetFoodLevel": {
+                    ((Player) target).setFoodLevel(args.get("amount").getInt());
+                    break;
+                }
+
+                case "SetSaturation": {
+                    ((Player) target).setSaturation((Float) args.get("amount").getVal());
+                    break;
+                }
+
+                case "GiveExp": {
+                    Player player = (Player) target;
+                    switch(tags.get("Give Experience")){
+                        case "Points":
+                            player.giveExp(args.get("amount").getInt());
+                            break;
+                        case "Level":
+                            player.giveExpLevels(args.get("amount").getInt());
+                            break;
+                        case "Level Percentage":
+                            player.setExp(player.getExp() + Math.min((Float) args.get("amount").getVal()/100f, 1f));
+                            break;
+                    }
+                    break;
+                }
+
+                case "SetExp": {
+                    Player player = (Player) target;
+                    switch(tags.get("Set Experience")){
+                        case "Points":
+                            player.setTotalExperience(args.get("amount").getInt());
+                            break;
+                        case "Level":
+                            player.setLevel(args.get("amount").getInt());
+                            break;
+                        case "Level Percentage":
+                            player.setExp(Math.min((Float) args.get("amount").getVal()/100, 1));
+                            break;
+                    }
+                    break;
+                }
+
+                case "GivePotion": {
+                    target.addPotionEffects(Arrays.asList(DFValue.castPotion((DFValue[]) args.get("effects").getVal())));
+                    break;
+                }
+
+                case "RemovePotion": {
+                    removePotions((Player) target, DFValue.castPotion((DFValue[]) args.get("effects").getVal()));
+                    break;
+                }
+
+                case "ClearPotions": {
+                    removePotions((Player) target, target.getActivePotionEffects().toArray(new PotionEffect[0]));
+                    break;
+                }
+
+                case "SetSlot": {
+                    ((Player) target).getInventory().setHeldItemSlot(args.get("slot").getInt());
+                    break;
+                }
+
+                case "SetAtkSpeed": {
+                    target.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue((double) args.get("amount").getVal());
+                    break;
+                }
+
+                case "SetFireTicks": {
+                    target.setFireTicks(args.get("ticks").getInt());
+                    break;
+                }
+
+                case "SetFreezeTicks": {
+                    target.setFreezeTicks(args.get("ticks").getInt());
+                    break;
+                }
+
+                case "SetAirTicks": {
+                    target.setRemainingAir(args.get("ticks").getInt());
+                    break;
+                }
+
+                case "SetInvulTicks": {
+                    target.setNoDamageTicks(args.get("ticks").getInt());
+                    break;
+                }
+
+                case "SetFallDistance": {
+                    target.setFallDistance((float) args.get("distance").getVal());
+                    break;
+                }
+
+                case "SetSpeed": {
+                    String speedTag = tags.get("Speed Type");
+                    Float speedAmount = (Float) args.get("speed").getVal();
+                    if(speedTag == "Ground speed" || speedTag == "Both") ((Player) target).setWalkSpeed(speedAmount/1000f);
+                    if(speedTag == "Flight speed" || speedTag == "Both") ((Player) target).setFlySpeed(speedAmount/1000f);
+                    break;
+                }
+
+                case "SetAllowFlight": {
+                    ((Player) target).setAllowFlight(tags.get("Allow Flight") == "Enable");
+                    break;
+                }
+
+                case "SetAllowPvP": {
+                    PlayerData.getPlayerData(target.getUniqueId()).canPvP = tags.get("PVP") == "Enable";
+                    break;
+                }
+
+                case "SetDropsEnabled": {
+                    PlayerData.getPlayerData(target.getUniqueId()).deathDrops = tags.get("Spawn Death Drops") == "Enable";
+                    break;
+                }
+
+                case "SetInventoryKept": {
+                    PlayerData.getPlayerData(target.getUniqueId()).keepInv = tags.get("Inventory Kept") == "Enable";
+                    break;
+                }
+
+                case "SetCollidable": {
+                    target.setCollidable(tags.get("Collision") == "Enable");
+                    break;
+                }
+
+                case "InstantRespawn": {
+                    PlayerData.getPlayerData(target.getUniqueId()).instantRespawn = tags.get("Instant Respawn") == "Enable";
+                    break;
+                }
+
+                case "EnableBlocks": {
+                    PlayerData playerData = PlayerData.getPlayerData(target.getUniqueId());
+
+                    if(args.get("blocks").getVal() == null) playerData.allowedBlocks = (ArrayList<Material>) Arrays.asList(Material.values());
+                    else playerData.allowBlocks(getStackTypes(DFValue.castItem( (DFValue[]) args.get("blocks").getVal())));
+                    break;
+                }
+
+                case "DisableBlocks": {
+
+                    PlayerData playerData = PlayerData.getPlayerData(target.getUniqueId());
+
+                    if(args.get("blocks").getVal() == null) playerData.allowedBlocks = new ArrayList<>();
+                    else playerData.allowedBlocks.removeAll(Arrays.asList(getStackTypes(DFValue.castItem((DFValue[]) args.get("blocks").getVal()))));
+                    break;
+                }
             }
-
-            case "GivePotion": {
-                target.addPotionEffects(Arrays.asList(DFValue.castPotion((DFValue[]) args.get("effects").getVal())));
-                break;
-            }
-
-            case "RemovePotion": {
-                removePotions((Player) target, DFValue.castPotion((DFValue[]) args.get("effects").getVal()));
-                break;
-            }
-
-            case "ClearPotions": {
-                removePotions((Player) target, target.getActivePotionEffects().toArray(new PotionEffect[0]));
-                break;
-            }
-
-            case "SetSlot": {
-                ((Player) target).getInventory().setHeldItemSlot(args.get("slot").getInt());
-                break;
-            }
-
-            case "SetAtkSpeed": {
-                target.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue((double) args.get("amount").getVal());
-                break;
-            }
-
-            case "SetFireTicks": {
-                target.setFireTicks(args.get("ticks").getInt());
-                break;
-            }
-
-            case "SetFreezeTicks": {
-                target.setFreezeTicks(args.get("ticks").getInt());
-                break;
-            }
-
-            case "SetAirTicks": {
-                target.setRemainingAir(args.get("ticks").getInt());
-                break;
-            }
-
-            case "SetInvulTicks": {
-                target.setNoDamageTicks(args.get("ticks").getInt());
-                break;
-            }
-
-            case "SetFallDistance": {
-                target.setFallDistance((float) args.get("distance").getVal());
-                break;
-            }
-
-            case "SetSpeed": {
-                String speedTag = tags.get("Speed Type");
-                Float speedAmount = (Float) args.get("speed").getVal();
-                if(speedTag == "Ground speed" || speedTag == "Both") ((Player) target).setWalkSpeed(speedAmount/1000f);
-                if(speedTag == "Flight speed" || speedTag == "Both") ((Player) target).setFlySpeed(speedAmount/1000f);
-                break;
-            }
-
-            case "SetAllowFlight": {
-                ((Player) target).setAllowFlight(tags.get("Allow Flight") == "Enable");
-                break;
-            }
-
-            case "SetAllowPvP": {
-                PlayerData.getPlayerData(target.getUniqueId()).canPvP = tags.get("PVP") == "Enable";
-                break;
-            }
-
-            case "SetDropsEnabled": {
-                PlayerData.getPlayerData(target.getUniqueId()).deathDrops = tags.get("Spawn Death Drops") == "Enable";
-                break;
-            }
-
-            case "SetInventoryKept": {
-                PlayerData.getPlayerData(target.getUniqueId()).keepInv = tags.get("Inventory Kept") == "Enable";
-                break;
-            }
-
-            case "SetCollidable": {
-                target.setCollidable(tags.get("Collision") == "Enable");
-                break;
-            }
-
-            case "InstantRespawn": {
-                PlayerData.getPlayerData(target.getUniqueId()).instantRespawn = tags.get("Instant Respawn") == "Enable";
-                break;
-            }
-
-            case "EnableBlocks": {
-                PlayerData playerData = PlayerData.getPlayerData(target.getUniqueId());
-
-                if(args.get("blocks").getVal() == null) playerData.allowedBlocks = (ArrayList<Material>) Arrays.asList(Material.values());
-                else playerData.allowBlocks(getStackTypes(DFValue.castItem( (DFValue[]) args.get("blocks").getVal())));
-                break;
-            }
-
-            case "DisableBlocks": {
-
-                PlayerData playerData = PlayerData.getPlayerData(target.getUniqueId());
-
-                if(args.get("blocks").getVal() == null) playerData.allowedBlocks = new ArrayList<>();
-                else playerData.allowedBlocks.removeAll(Arrays.asList(getStackTypes(DFValue.castItem((DFValue[]) args.get("blocks").getVal()))));
-                break;
-            }
-        }
     }
 
     public static void setBossBar(Player barPlayer, String title, Integer id, double barHealth, BarColor color, BarStyle style, BarFlag[] flags){
@@ -509,12 +513,13 @@ public class PlayerAction {
         handler.put(p.getName(), bars);
     }
 
-    public static void sendMessageSeq(Player player, String[] msgs, long delay, JavaPlugin plugin){
+    public static void sendMessageSeq(Player[] players, String[] msgs, long delay, JavaPlugin plugin){
         new BukkitRunnable() {
             int index = 0;
             @Override
             public void run(){
-                player.sendMessage(msgs[index++]);
+                for(Player player: players)
+                    player.sendMessage(msgs[index++]);
                 if(index >= msgs.length) this.cancel();
             }
         }.runTaskTimerAsynchronously(plugin, 0, delay);
