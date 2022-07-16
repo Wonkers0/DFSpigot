@@ -10,6 +10,7 @@ package me.wonk2.utilities;
 
 import me.wonk2.utilities.internals.FileManager;
 import me.wonk2.utilities.internals.PlayerData;
+import me.wonk2.utilities.internals.actions.PlayerAction;
 import me.wonk2.utilities.internals.enums.DFType;
 import me.wonk2.utilities.internals.values.DFValue;
 import me.wonk2.utilities.internals.values.DFVar;
@@ -34,17 +35,6 @@ import java.util.regex.Pattern;
 public class DFUtilities implements Listener {
     public static FileManager playerConfig;
     public static FileManager varConfig;
-    public static void invokeAction(Object[] inputArray, String action, LivingEntity[] targets, HashMap<String, DFValue> localStorage){
-
-        //TODO: Surround with try/catch, figure out which error to catch first (NullPointerException/NullDFValueException/etc)
-        HashMap<String, DFValue> args = (HashMap<String, DFValue>) inputArray[0];
-        HashMap<String, String> tags = (HashMap<String, String>) inputArray[1];
-        for(LivingEntity target : targets)/*TODO: Call actions method from respective code block class*/;
-
-        // The indentation looks sus here because the for loop above has no brackets :)
-    }
-
-
 
     public static HashMap<String, DFValue> purgeKeys(String[] varNames, HashMap<String, DFValue> storage, String matchReq, boolean ignoreCase){
         String[] storageKeys = storage.keySet().toArray(new String[0]);
@@ -70,6 +60,7 @@ public class DFUtilities implements Listener {
             }
 
         for(String key : matchedKeys) storage.remove(key);
+        /*TODO: Purge global & saved vars*/
 
         return storage;
     }
@@ -79,6 +70,14 @@ public class DFUtilities implements Listener {
         return inv.getType() != InventoryType.PLAYER
                 && inv.getType() != InventoryType.CRAFTING
                 && inv.getLocation() == null;
+    }
+
+    public static HashMap<String, DFValue> getArgs(Object obj){
+        return (HashMap<String, DFValue>) obj;
+    }
+
+    public static HashMap<String, String> getTags(Object obj){
+        return (HashMap<String, String>) obj;
     }
 
     @EventHandler
