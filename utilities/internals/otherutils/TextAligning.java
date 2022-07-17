@@ -1,4 +1,4 @@
-package me.wonk2.utilities.internals;
+package me.wonk2.utilities.internals.otherutils;
 
 import net.md_5.bungee.api.ChatColor;
 
