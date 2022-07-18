@@ -700,8 +700,40 @@
           "defaultValue": null
         },
         {
-          "name": "num",
+          "name": "clampNum",
+          "type": "NUM",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "min",
+          "type": "NUM",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "max",
+          "type": "NUM",
+          "repeating": false,
+          "defaultValue": null
+        }
+      ],
+      [
+        {
+          "name": "var",
           "type": "VAR",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "min",
+          "type": "NUM",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "max",
+          "type": "NUM",
           "repeating": false,
           "defaultValue": null
         }
@@ -981,6 +1013,114 @@
           "type": "ITEM",
           "repeating": true,
           "defaultValue": null
+        }
+      ]
+    ],
+    "WrapNumber": [
+      [
+        {
+          "name": "var",
+          "type": "VAR",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "wrapNum",
+          "type": "NUM",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "min",
+          "type": "NUM",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "max",
+          "type": "NUM",
+          "repeating": false,
+          "defaultValue": null
+        }
+      ],
+      [
+        {
+          "name": "var",
+          "type": "VAR",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "min",
+          "type": "NUM",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "max",
+          "type": "NUM",
+          "repeating": false,
+          "defaultValue": null
+        }
+      ]
+    ],
+    "Average": [
+      [
+        {
+          "name": "var",
+          "type": "VAR",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "nums",
+          "type": "NUM",
+          "repeating": true,
+          "defaultValue": null
+        }
+      ]
+    ],
+    "RandomNumber": [
+      [
+        {
+          "name": "var",
+          "type": "VAR",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "min",
+          "type": "NUM",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "max",
+          "type": "NUM",
+          "repeating": false,
+          "defaultValue": null
+        }
+      ]
+    ],
+    "Round": [
+      [
+        {
+          "name": "var",
+          "type": "VAR",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "roundNum",
+          "type": "NUM",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "multiple",
+          "type": "NUM",
+          "repeating": false,
+          "defaultValue": 1
         }
       ]
     ]
