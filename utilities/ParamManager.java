@@ -76,18 +76,24 @@ public class ParamManager {
     private static Parameter[] getParamTemplate(HashMap<Integer, DFValue> input, Parameter[][] templates, HashMap<String, DFValue> localStorage){
         if(templates.length == 1) return templates[0];
 
+        int paramIndex = -1;
         for(Parameter[] template : templates){
-            for(int i = 0; i < template.length; i++){
+            for(int i = 0; i < input.size(); i++){
                 if(!input.containsKey(i)) break;
                 DFValue currentArg = input.get(i);
 
-                if(currentArg.type == DFType.VAR && template[i].type != DFType.VAR)
-                    // Do we need the var itself here, or its value? ^
-                    currentArg = DFVar.getVar((DFVar) currentArg.getVal(), localStorage); // Get var value
+                while(currentArg.type == template[paramIndex].type){
+                    if(currentArg.type == DFType.VAR && template[i].type != DFType.VAR)
+                        currentArg = DFVar.getVar((DFVar) currentArg.getVal(), localStorage);
 
-                if(currentArg.type != template[i].type) break;
+                    if(currentArg.type != template[paramIndex].type) break;
 
+                    currentArg = input.get(++i);
+                }
+
+                if(currentArg.type != template[++paramIndex].type) break;
                 if(i == template.length - 1) return template;
+
             }
         }
 
