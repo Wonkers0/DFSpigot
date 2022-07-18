@@ -165,3 +165,13 @@
 ✅ ParseNumber
 
 ✅ AbsoluteValue
+
+✅ ClampNumber
+
+✅ WrapNumber
+
+✅ Average
+
+✅ RandomNumber
+
+✅ Round
