@@ -6,6 +6,7 @@ import me.wonk2.utilities.values.DFValue;
 import me.wonk2.utilities.values.DFVar;
 import org.bukkit.entity.LivingEntity;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -40,43 +41,43 @@ public class SetVariable {
                 }
 
                 case "+": {
-                    Float[] nums = DFValue.castNum((DFValue[]) args.get("nums").getVal());
-                    float result = nums[0];
+                    double[] nums = DFValue.castNum((DFValue[]) args.get("nums").getVal());
+                    double result = nums[0];
 
                     for(int i = 1; i < nums.length; i++) result += nums[i];
-                    DFVar.setVar((DFVar) args.get("var").getVal(), new DFValue(result, null, DFType.NUM),localStorage);
+                    DFVar.setVar((DFVar) args.get("var").getVal(), new DFValue(result, DFType.NUM),localStorage);
                     break;
                 }
 
                 case "-": {
-                    Float[] nums = DFValue.castNum((DFValue[]) args.get("nums").getVal());
-                    float result = nums[0];
+                    double[] nums = DFValue.castNum((DFValue[]) args.get("nums").getVal());
+                    double result = nums[0];
 
                     for(int i = 1; i < nums.length; i++) result -= nums[i];
-                    DFVar.setVar((DFVar) args.get("var").getVal(), new DFValue(result, null, DFType.NUM),localStorage);
+                    DFVar.setVar((DFVar) args.get("var").getVal(), new DFValue(result, DFType.NUM),localStorage);
                     break;
                 }
 
                 case "x": {
-                    Float[] nums = DFValue.castNum((DFValue[]) args.get("nums").getVal());
-                    float result = nums[0];
+                    double[] nums = DFValue.castNum((DFValue[]) args.get("nums").getVal());
+                    double result = nums[0];
 
                     for(int i = 1; i < nums.length; i++) result *= nums[i];
-                    DFVar.setVar((DFVar) args.get("var").getVal(), new DFValue(result, null, DFType.NUM),localStorage);
+                    DFVar.setVar((DFVar) args.get("var").getVal(), new DFValue(result, DFType.NUM),localStorage);
                     break;
                 }
 
                 case "/": {
-                    Float[] nums = DFValue.castNum((DFValue[]) args.get("nums").getVal());
-                    float result = nums[0];
+                    double[] nums = DFValue.castNum((DFValue[]) args.get("nums").getVal());
+                    double result = nums[0];
 
                     for(int i = 1; i < nums.length; i++) result /= nums[i];
-                    DFVar.setVar((DFVar) args.get("var").getVal(), new DFValue(result, null, DFType.NUM),localStorage);
+                    DFVar.setVar((DFVar) args.get("var").getVal(), new DFValue(result, DFType.NUM),localStorage);
                     break;
                 }
 
                 case "%": {
-                    DFValue val = new DFValue((Float) args.get("dividend").getVal() % (Float) args.get("divisor").getVal(), null, DFType.NUM);
+                    DFValue val = new DFValue((double) args.get("dividend").getVal() % (double) args.get("divisor").getVal(), DFType.NUM);
                     DFVar.setVar((DFVar) args.get("var").getVal(), val, localStorage);
                     break;
                 }
@@ -84,37 +85,39 @@ public class SetVariable {
                 case "+=": {
                     DFVar var = (DFVar) args.get("var").getVal();
 
-                    Float[] nums = DFValue.castNum((DFValue[]) args.get("nums").getVal());
-                    Float num = (Float) DFVar.getVar(var, localStorage).getVal();
+                    double[] nums = DFValue.castNum((DFValue[]) args.get("nums").getVal());
+                    double num = (double) DFVar.getVar(var, localStorage).getVal();
 
-                    for(float increment : nums) num += increment;
-                    DFVar.setVar(var, new DFValue(num, null, DFType.NUM), localStorage);
+                    for(double increment : nums) num += increment;
+                    DFVar.setVar(var, new DFValue(num, DFType.NUM), localStorage);
                     break;
                 }
 
                 case "-=": {
                     DFVar var = (DFVar) args.get("var").getVal();
 
-                    Float[] nums = DFValue.castNum((DFValue[]) args.get("nums").getVal());
-                    Float num = (Float) DFVar.getVar(var, localStorage).getVal();
+                    double[] nums = DFValue.castNum((DFValue[]) args.get("nums").getVal());
+                    double num = (double) DFVar.getVar(var, localStorage).getVal();
 
-                    for(float decrement : nums) num -= decrement;
-                    DFVar.setVar(var, new DFValue(num, null, DFType.NUM), localStorage);
+                    for(double decrement : nums) num -= decrement;
+                    DFVar.setVar(var, new DFValue(num, DFType.NUM), localStorage);
                     break;
                 }
 
                 case "Exponent": {
                     DFVar var = (DFVar) args.get("var").getVal();
-                    DFValue val = new DFValue(Math.pow((Float) args.get("num").getVal(), (Float) args.get("exponent").getVal()), null, DFType.NUM);
+                    DFValue val = new DFValue(Math.pow((Float) args.get("num").getVal(), (Float) args.get("exponent").getVal()), DFType.NUM);
 
                     DFVar.setVar(var, val, localStorage);
+                    break;
                 }
 
                 case "Root": {
                     DFVar var = (DFVar) args.get("var").getVal();
-                    DFValue val = new DFValue(Math.pow((Float) args.get("num").getVal(), 1/((Float) args.get("rootIndex").getVal())), null, DFType.NUM);
+                    DFValue val = new DFValue(Math.pow((Float) args.get("num").getVal(), 1/((Float) args.get("rootIndex").getVal())), DFType.NUM);
 
                     DFVar.setVar(var, val, localStorage);
+                    break;
                 }
 
                 case "Logarithm": {
@@ -122,23 +125,84 @@ public class SetVariable {
                     Float num = (Float) args.get("num").getVal();
                     Float base = (Float) args.get("base").getVal();
 
-                    DFValue val = new DFValue(Math.log(num) / Math.log(base), null, DFType.NUM);
+                    DFValue val = new DFValue(Math.log(num) / Math.log(base), DFType.NUM);
 
                     DFVar.setVar(var, val, localStorage);
+                    break;
                 }
 
                 case "ParseNumber": {
                     DFVar var = (DFVar) args.get("var").getVal();
                     String txt = (String) (args.get("txt").getVal() == null ? DFVar.getVar(var, localStorage).getVal() : args.get("txt").getVal());
 
-                    DFVar.setVar(var, new DFValue(Float.parseFloat(txt), null, DFType.NUM), localStorage);
+                    DFVar.setVar(var, new DFValue(Float.parseFloat(txt), DFType.NUM), localStorage);
+                    break;
                 }
 
                 case "AbsoluteValue": {
                     DFVar var = (DFVar) args.get("var").getVal();
                     Float num = (Float) (args.get("num").getVal() == null ? DFVar.getVar(var, localStorage).getVal() : args.get("num").getVal());
 
-                    DFVar.setVar(var, new DFValue(Math.abs(num), null, DFType.NUM), localStorage);
+                    DFVar.setVar(var, new DFValue(Math.abs(num), DFType.NUM), localStorage);
+                    break;
+                }
+
+                case "ClampNumber": {
+                    double numToClamp;
+                    DFVar var = (DFVar) args.get("var").getVal();
+                    numToClamp = args.containsKey("clampNum") ? (double) args.get("clampNum").getVal() : (double) DFVar.getVar(var, localStorage).getVal();
+
+                    DFValue val = new DFValue(DFUtilities.clampNum(numToClamp, (double) args.get("min").getVal(), (double) args.get("max").getVal()), DFType.NUM);
+                    DFVar.setVar(var, val, localStorage);
+                    break;
+                }
+
+                case "WrapNumber": {
+                    double numToWrap;
+                    DFVar var = (DFVar) args.get("var").getVal();
+                    numToWrap = args.containsKey("wrapNum") ? (double) args.get("wrapNum").getVal() : (double) DFVar.getVar(var, localStorage).getVal();
+
+                    DFValue val = new DFValue(DFUtilities.wrapNum(numToWrap, (double) args.get("min").getVal(), (double) args.get("max").getVal()), DFType.NUM);
+                    DFVar.setVar(var, val, localStorage);
+                    break;
+                }
+
+                case "Average": {
+                    double[] nums = DFValue.castNum((DFValue[]) args.get("nums").getVal());
+                    double sum = Arrays.stream(nums).sum();
+
+                    DFVar.setVar((DFVar) args.get("var").getVal(), new DFValue(sum/nums.length, DFType.NUM), localStorage);
+                    break;
+                }
+
+                case "RandomNumber": {
+                    DFVar var = (DFVar) args.get("var").getVal();
+                    double min = (double) args.get("min").getVal();
+                    double max = (double) args.get("max").getVal();
+
+                    double value;
+                    if(tags.get("Rounding Mode") == "Whole number") value = Math.floor(Math.random()*(max-min+1)+min);
+                    else value = Math.random()*(max-min+1)+min;
+
+                    DFVar.setVar(var, new DFValue(value, DFType.NUM), localStorage);
+                    break;
+                }
+
+                case "Round": {
+                    DFVar var = (DFVar) args.get("var").getVal();
+                    double numToRound = (double) (args.get("roundNum").getVal() == null ? args.get("roundNum").getVal() : DFVar.getVar(var, localStorage).getVal());
+                    double value = numToRound;
+
+                    switch(tags.get("Round Mode")){
+                        case "Floor":
+                            value = Math.floor(numToRound); break;
+                        case "Nearest":
+                            value = Math.round(numToRound); break;
+                        case "Ceiling":
+                            value = Math.ceil(numToRound); break;
+                    }
+
+                    DFVar.setVar(var, new DFValue(value, DFType.NUM), localStorage);
                 }
             }
     }
