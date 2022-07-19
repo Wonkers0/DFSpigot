@@ -40,8 +40,6 @@ Paste the template data that you've previously copied by `Right Clicking -> Past
 TODO: Fill out this section once commands are supported.
 
 ## ⚠️ Please keep in mind that generating code from code lines containing unsupported actions will yield errors. You can view a list of all the supported actions [here](https://github.com/Wonkers0/DFSpigot/blob/main/supported_actions.md).
-
-
-
+<br><br>
 ### 📙 How to compile your plugin
 For compiling your plugin, visit [this](https://github.com/Wonkers0/DFSpigot/blob/main/compiling_tutorial.md)
