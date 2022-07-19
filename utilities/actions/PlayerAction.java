@@ -39,7 +39,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.*;
 
 public class PlayerAction {
-    public static void invokeAction(Object[] inputArray, String action, LivingEntity[] targets, HashMap<String, DFValue> unused){
+    public static void invokeAction(Object[] inputArray, String action, LivingEntity[] targets){
         HashMap<String, DFValue> args = DFUtilities.getArgs(inputArray[0]);
         HashMap<String, String> tags = DFUtilities.getTags(inputArray[1]);
 
