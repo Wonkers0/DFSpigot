@@ -1,4 +1,4 @@
-package me.wonk2.utilities.internals.values;
+package me.wonk2.utilities.values;
 
 import org.bukkit.Sound;
 

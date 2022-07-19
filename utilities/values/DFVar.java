@@ -1,7 +1,7 @@
-package me.wonk2.utilities.internals.values;
+package me.wonk2.utilities.values;
 
-import me.wonk2.utilities.internals.enums.DFType;
-import me.wonk2.utilities.internals.enums.Scope;
+import me.wonk2.utilities.enums.DFType;
+import me.wonk2.utilities.enums.Scope;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static me.wonk2.utilities.DFUtilities.varConfig;
-import static me.wonk2.utilities.internals.enums.DFType.*;
+import static me.wonk2.utilities.enums.DFType.*;
 
 public class DFVar {
     public static HashMap<String, DFValue> globalVars = new HashMap<>();
@@ -100,4 +100,3 @@ public class DFVar {
         return new DFValue(0, null, DFType.NUM);
     }
 }
-

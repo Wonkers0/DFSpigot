@@ -1,4 +1,4 @@
-package me.wonk2.utilities.internals.enums;
+package me.wonk2.utilities.enums;
 
 public enum Scope {
     GLOBAL,

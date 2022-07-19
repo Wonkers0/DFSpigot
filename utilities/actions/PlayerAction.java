@@ -1,4 +1,4 @@
-package me.wonk2.utilities.internals.actions;
+package me.wonk2.utilities.actions;
 
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
@@ -7,8 +7,8 @@ import me.wonk2.DFPlugin;
 import me.wonk2.utilities.DFUtilities;
 import me.wonk2.utilities.internals.TextAligning;
 import me.wonk2.utilities.internals.PlayerData;
-import me.wonk2.utilities.internals.values.DFSound;
-import me.wonk2.utilities.internals.values.DFValue;
+import me.wonk2.utilities.values.DFSound;
+import me.wonk2.utilities.values.DFValue;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
