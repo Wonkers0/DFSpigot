@@ -60,6 +60,20 @@ public class DFUtilities implements Listener {
                 && inv.getType() != InventoryType.CRAFTING
                 && inv.getLocation() == null;
     }
+    
+    public static double clampNum(double num, double min, double max){
+        if(num > max) num = max;
+        else if (num < min) num = min;
+
+        return num;
+    }
+
+    public static double wrapNum(double num, double min, double max){
+        if(num > max) num = min;
+        else if (num < min) num = max;
+
+        return num;
+    }
 
     public static HashMap<String, DFValue> getArgs(Object obj){
         return (HashMap<String, DFValue>) obj;
