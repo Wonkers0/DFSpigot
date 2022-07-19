@@ -1,7 +1,7 @@
-package me.wonk2.utilities.internals.values;
+package me.wonk2.utilities.values;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import me.wonk2.utilities.internals.enums.DFType;
+import me.wonk2.utilities.enums.DFType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import org.bukkit.Location;

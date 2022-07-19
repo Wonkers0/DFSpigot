@@ -1,6 +1,6 @@
-package me.wonk2.utilities.internals.values;
+package me.wonk2.utilities.values;
 
-import me.wonk2.utilities.internals.enums.DFType;
+import me.wonk2.utilities.enums.DFType;
 
 public class Parameter {
     public final String paramName;

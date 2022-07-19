@@ -1,6 +1,6 @@
 # Player Action
 
-⚠️ SendMessage
+✅ SendMessage
 
 ✅ PlaySound
 
@@ -165,3 +165,13 @@
 ✅ ParseNumber
 
 ✅ AbsoluteValue
+
+✅ ClampNumber
+
+✅ WrapNumber
+
+✅ Average
+
+✅ RandomNumber
+
+✅ Round

@@ -45,8 +45,7 @@ public class FileManager {
         }
         catch(IOException error){
             plugin.getLogger().log(Level.SEVERE, "DF Spigot: Could not save config to " + configFile, error);
-        }
-    }
+        }    }
 
     public void saveDefaultConfig(){
         if(configFile == null) configFile = new File(plugin.getDataFolder(), fileName);
