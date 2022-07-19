@@ -6,7 +6,7 @@ If you wish to contribute, go ahead, but please follow the code standards laid o
 
 
 ## 📚 Utility Classes
-The **java classes** found in this repository need to be imported to provide the methods that your plugin needs to run. But first, visit [the project's website](https://dfspigot.wonk2.repl.co/) to generate a java class using a DiamondFire template. This class will communicate with the other classes found in this repo to move your games from DiamondFire to a *server of your own*. 👍
+The **java classes** found in this repository need to be imported to provide the methods that your plugin needs to run. But first, read the sections below to learn how to generate your DFPlugin.java class. This class will communicate with the other classes found in this repo to move your games from DiamondFire to a *server of your own*. 👍
 
 ### 💾 Setting up your project
 Before you can compile the code, you need to first set up your project in a standard IDE. This tutorial covers [the IntelliJ IDE](https://www.jetbrains.com/idea/download/download-thanks.html?platform=windows&code=IIC), so install this first.
