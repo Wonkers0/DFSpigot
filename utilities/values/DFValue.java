@@ -28,9 +28,12 @@ public class DFValue {
         return Arrays.copyOf(values, values.length, String[].class);
     }
 
-    public static Float[] castNum(DFValue[] arr){
+    public static double[] castNum(DFValue[] arr){
         Object[] values = getValues(arr);
-        return Arrays.copyOf(values, values.length, Float[].class);
+
+        double[] result = new double[values.length];
+        for(int i = 0; i < values.length; i++) result[i] = (double) values[i];
+        return result;
     }
 
     public static DFSound[] castSound(DFValue[] arr){
@@ -84,13 +87,19 @@ public class DFValue {
         this.type = type;
     }
 
+    public DFValue(Object val, DFType type){
+        this.val = val;
+        this.type = type;
+        this.slot = null;
+    }
+
     public Object getVal(){
         return val;
     }
 
     public Integer getInt(){
         if(type != DFType.NUM) throw new IllegalArgumentException("Attempt to cast non-number value to integer");
-        return (int) (float) val;
+        return (int) (double) val;
     }
 }
 
