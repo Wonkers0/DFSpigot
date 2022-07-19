@@ -2,9 +2,8 @@ package me.wonk2.utilities;
 
 import me.wonk2.utilities.internals.FileManager;
 import me.wonk2.utilities.internals.PlayerData;
-import me.wonk2.utilities.internals.values.DFValue;
-import org.bukkit.Location;
 import me.wonk2.utilities.values.DFValue;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
