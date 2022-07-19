@@ -13,8 +13,7 @@ Before you can compile the code, you need to first set up your project in a stan
 
 Once installed, you should see this welcome screen when opening the IDE for the first time:
 
-
-![IDEWelcome](https://user-images.githubusercontent.com/106038003/179754749-bd1dd846-dc9e-4969-adad-cf449aefd0ec.png)
+<img src="https://user-images.githubusercontent.com/106038003/179754749-bd1dd846-dc9e-4969-adad-cf449aefd0ec.png" width=500px; height=350px; alt="welcomeMenu">
 
 I have provided a starter project with all the boilerplate code you need. Download it [here](https://drive.google.com/drive/folders/17_R8zd2wP7fS9Sk1wV10HNqDKZxBQKew?usp=sharing).<br>
 
@@ -28,7 +27,7 @@ In order to generate the code for your plugin, you first need to copy the templa
 While holding the enderchest in your hand, run the command `/i nbt` in chat. This will send a large message with some gray text at the bottom.
 
 
-![itemNBT](https://user-images.githubusercontent.com/106038003/179759270-3ab19a91-d937-4e7d-9895-906abb05672d.png)
+<img src="https://user-images.githubusercontent.com/106038003/179759270-3ab19a91-d937-4e7d-9895-906abb05672d.png" height=350px; alt="nbtMsg">
 Open your chat and click on `"Click to copy unformatted NBT"`. This will copy the data to your clipboard. Next, visit the [project's website](https://dfspigot.wonk2.repl.co/), and scroll down until you see an input field saying `"Insert Template Data Here..."`
 
 
@@ -45,27 +44,4 @@ TODO: Fill out this section once commands are supported.
 
 
 ### 📙 How to compile your plugin
-To compile all this to a jar for use on your server, you will need an IDE. You should've already installed one from the steps above, but if you've skipped them, we recommend [IntelliJ](https://www.jetbrains.com/idea/download/download-thanks.html?platform=windows&code=IIC). 
-<br>
-<br>
-<br>
-*(The following instructions are for **IntelliJ**)*
-#### Compiling for Maven Ⓜ️
-If you are using maven, navigate to the right hand side of your screen, and click the button with the maven logo & trademark on it.
-
-
-![mvnButton](https://user-images.githubusercontent.com/106038003/179745648-7885d6f1-25dd-45fa-b743-60bb19eabd8e.png)
-
-This will open a menu on the right side with some buttons at the top. Find the "m" letter and click it to open a terminal.
-
-
-![mvnGoal](https://user-images.githubusercontent.com/106038003/179752913-1f8f6f33-62d6-49ae-b161-5d20b1d90c7a.png)
-
-
-In the terminal, you need to type `mvn clean package shade:shade`. Press enter, and wait for it to compile. You will then find your plugin jar at <br> 
-`<intelliJ install directory>/IdeaProjects/<project name>/target/`
-
-**The jar name is based off of the artifactId and version tags in your pom.xml** `(<artifactId>-<version>)`
-
-#### Compiling for Gradle 🐘
-(TODO: Publish dependencies and project setup instructions for gradle.)
+For compiling your plugin, visit [this](https://github.com/Wonkers0/DFSpigot/blob/main/compiling_tutorial.md)
