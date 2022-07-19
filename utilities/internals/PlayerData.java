@@ -1,5 +1,7 @@
 package me.wonk2.utilities.internals;
 
+import com.gmail.filoghost.holographicdisplays.api.Hologram;
+import org.bukkit.Location;
 import org.bukkit.Material;
 
 import java.util.*;
@@ -10,6 +12,7 @@ public final class PlayerData { // Permanently borrowed PlayerData class from Ch
     public boolean keepInv = false;
     public boolean instantRespawn = false;
     public ArrayList<Material> allowedBlocks = new ArrayList<>();
+    public LinkedList<Hologram> holograms = new LinkedList<>();
 
     public static final HashMap<UUID, PlayerData> data = new HashMap<>();
     public static PlayerData getPlayerData(UUID uuid) {

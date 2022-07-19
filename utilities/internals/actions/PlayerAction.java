@@ -1,5 +1,7 @@
 package me.wonk2.utilities.internals.actions;
 
+import com.gmail.filoghost.holographicdisplays.api.Hologram;
+import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import me.wonk2.DFPlugin;
 import me.wonk2.utilities.DFUtilities;
@@ -13,6 +15,17 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
+import net.minecraft.network.Connection;
+import net.minecraft.network.chat.ChatComponentUtils;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.IChatBaseComponent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.protocol.game.PacketPlayOutEntityMetadata;
+import net.minecraft.network.protocol.game.PacketPlayOutSpawnEntity;
+import net.minecraft.network.syncher.DataWatcher;
+import net.minecraft.server.network.PlayerConnection;
+import net.minecraft.world.entity.decoration.EntityArmorStand;
+import net.minecraft.world.level.World;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -25,6 +38,8 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
+import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -469,6 +484,29 @@ public class PlayerAction {
 
                     if(args.get("blocks").getVal() == null) playerData.allowedBlocks = new ArrayList<>();
                     else playerData.allowedBlocks.removeAll(Arrays.asList(getStackTypes(DFValue.castItem((DFValue[]) args.get("blocks").getVal()))));
+                    break;
+                }
+
+                case "DisplayHologram": {
+                    if(!(target instanceof Player))
+                        break;
+
+                    PlayerData playerData = PlayerData.getPlayerData(target.getUniqueId());
+                    Location loc = (Location) args.get("location").getVal();
+                    String text = (String) args.get("text").getVal();
+
+                    for (Hologram hologram : (Hologram[]) playerData.holograms.stream().filter(hologram -> DFUtilities.locationEquals(hologram.getLocation(), loc, true)).toArray()) {
+                        hologram.delete();
+                    }
+
+                    playerData.holograms.removeIf(Hologram::isDeleted);
+
+                    Hologram hologram = HologramsAPI.createHologram(DFPlugin.plugin, loc);
+                    hologram.getVisibilityManager().setVisibleByDefault(false);
+                    hologram.appendTextLine(text);
+
+                    hologram.getVisibilityManager().showTo((Player) target);
+                    playerData.holograms.add(hologram);
                     break;
                 }
             }

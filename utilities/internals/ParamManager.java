@@ -249,6 +249,11 @@ public class ParamManager {
            new Parameter("blocks", DFType.ITEM, null, true)
         });
 
+        put("DisplayHologram", new Parameter[]{
+                new Parameter("location", DFType.LOC, null, false),
+                new Parameter("text", DFType.TXT, null, false)
+        });
+
         // ↑ Player Action ////////////////////////////////////////////////////////////////////////
         // ↓ Set Variable  ////////////////////////////////////////////////////////////////////////
 
