@@ -1,16 +1,9 @@
 package me.wonk2.utilities;
 
-//import eu.endercentral.crazy_advancements.JSONMessage;
-//import eu.endercentral.crazy_advancements.NameKey;
-//import eu.endercentral.crazy_advancements.advancement.Advancement;
-//import eu.endercentral.crazy_advancements.advancement.AdvancementDisplay;
-//import eu.endercentral.crazy_advancements.advancement.AdvancementVisibility;
-//import eu.endercentral.crazy_advancements.advancement.criteria.Criteria;
-//import eu.endercentral.crazy_advancements.manager.AdvancementManager;
-
 import me.wonk2.utilities.internals.FileManager;
 import me.wonk2.utilities.internals.PlayerData;
 import me.wonk2.utilities.values.DFValue;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -114,4 +107,7 @@ public class DFUtilities implements Listener {
         varConfig = new FileManager(plugin, "varData.yml");
     }
 
+    public static boolean locationEquals(Location loc, Location loc2, boolean ignoreRotation) {
+        return loc.getX() == loc2.getX() && loc.getY() == loc2.getY() && loc.getZ() == loc2.getZ() && (ignoreRotation || loc.getYaw() == loc2.getYaw() && loc.getPitch() == loc2.getPitch());
+    }
 }

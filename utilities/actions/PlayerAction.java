@@ -1,5 +1,7 @@
 package me.wonk2.utilities.actions;
 
+import com.gmail.filoghost.holographicdisplays.api.Hologram;
+import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import me.wonk2.DFPlugin;
 import me.wonk2.utilities.DFUtilities;
@@ -469,6 +471,29 @@ public class PlayerAction {
 
                     if(args.get("blocks").getVal() == null) playerData.allowedBlocks = new ArrayList<>();
                     else playerData.allowedBlocks.removeAll(Arrays.asList(getStackTypes(DFValue.castItem((DFValue[]) args.get("blocks").getVal()))));
+                    break;
+                }
+
+                case "DisplayHologram": {
+                    if(!(target instanceof Player))
+                        break;
+
+                    PlayerData playerData = PlayerData.getPlayerData(target.getUniqueId());
+                    Location loc = (Location) args.get("location").getVal();
+                    String text = (String) args.get("text").getVal();
+
+                    for (Hologram hologram : (Hologram[]) playerData.holograms.stream().filter(hologram -> DFUtilities.locationEquals(hologram.getLocation(), loc, true)).toArray()) {
+                        hologram.delete();
+                    }
+
+                    playerData.holograms.removeIf(Hologram::isDeleted);
+
+                    Hologram hologram = HologramsAPI.createHologram(DFPlugin.plugin, loc);
+                    hologram.getVisibilityManager().setVisibleByDefault(false);
+                    hologram.appendTextLine(text);
+
+                    hologram.getVisibilityManager().showTo((Player) target);
+                    playerData.holograms.add(hologram);
                     break;
                 }
             }
