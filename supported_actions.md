@@ -134,6 +134,8 @@
 
 ✅ DisableBlocks
 
+✅ DisplayHologram
+
 # Set Variable
 
 ✅ =
