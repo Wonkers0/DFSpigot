@@ -62,7 +62,7 @@ This will open a menu on the right side with some buttons at the top. Find the "
 ![mvnGoal](https://user-images.githubusercontent.com/106038003/179752913-1f8f6f33-62d6-49ae-b161-5d20b1d90c7a.png)
 
 
-In the terminal, you need to type `mvn clean package`. Press enter, and wait for it to compile. You will then find your plugin jar at <br> 
+In the terminal, you need to type `mvn clean package shade:shade`. Press enter, and wait for it to compile. You will then find your plugin jar at <br> 
 `<intelliJ install directory>/IdeaProjects/<project name>/target/`
 
 **The jar name is based off of the artifactId and version tags in your pom.xml** `(<artifactId>-<version>)`
