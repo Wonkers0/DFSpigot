@@ -8,6 +8,6 @@ public enum DFType {
     ITEM,
     POT,
     VAR,
-    ANY, // This is only used internally for parameter types.
-    REPEATING // This will only be used for creating new DFValues internally, there won't be any input with this!
+    LIST,
+    ANY // This is only used internally for parameter types.
 }
