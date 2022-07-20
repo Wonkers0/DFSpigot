@@ -4,11 +4,15 @@ import me.wonk2.utilities.DFUtilities;
 import me.wonk2.utilities.enums.DFType;
 import me.wonk2.utilities.values.DFValue;
 import me.wonk2.utilities.values.DFVar;
+import org.apache.commons.lang.StringUtils;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.LivingEntity;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SetVariable {
     public static void invokeAction(Object[] inputArray, String action, LivingEntity[] targets, HashMap<String, DFValue> localStorage){
@@ -150,7 +154,7 @@ public class SetVariable {
                 case "ClampNumber": {
                     double numToClamp;
                     DFVar var = (DFVar) args.get("var").getVal();
-                    numToClamp = args.containsKey("clampNum") ? (double) args.get("clampNum").getVal() : (double) DFVar.getVar(var, localStorage).getVal();
+                    numToClamp = args.get("clampNum") != null ? (double) args.get("clampNum").getVal() : (double) DFVar.getVar(var, localStorage).getVal();
 
                     DFValue val = new DFValue(DFUtilities.clampNum(numToClamp, (double) args.get("min").getVal(), (double) args.get("max").getVal()), DFType.NUM);
                     DFVar.setVar(var, val, localStorage);
@@ -203,7 +207,152 @@ public class SetVariable {
                     }
 
                     DFVar.setVar(var, new DFValue(value, DFType.NUM), localStorage);
+                    break;
+                }
+
+                case "Text": {
+                    DFVar var = (DFVar) args.get("var").getVal();
+                    DFValue[] parseVals;
+                    if(args.get("parseVal").getVal() == null){
+                        DFValue varVal = DFVar.getVar(var, localStorage);
+                        parseVals = varVal.getVal().getClass().isArray() ? (DFValue[]) varVal.getVal() : new DFValue[]{varVal};
+                    }
+                    else parseVals = (DFValue[]) args.get("txts").getVal();
+
+
+                    String delimeter = tags.get("Text Value Merging").equals("No spaces") ? "" : " ";
+                    DFValue val = new DFValue(String.join(delimeter, DFUtilities.parseTxt(parseVals)), DFType.TXT);
+
+                    DFVar.setVar(var, val, localStorage);
+                    break;
+                }
+
+                case "ReplaceText": {
+                    DFVar var = (DFVar) args.get("var").getVal();
+                    String txt = (String) args.get("txt").getVal();
+                    String replaceable = (String) args.get("replaceable").getVal();
+                    String replacement = (String) args.get("replacement").getVal();
+
+                    String replaced = tags.get("Replacement Type") == "First occurrence" ? txt.replaceFirst(replaceable, replacement) : txt.replaceAll(replaceable, replacement);
+                    DFVar.setVar(var, new DFValue(replaced, DFType.TXT), localStorage);
+                    break;
+                }
+
+                case "RemoveText": {
+                    DFVar var = (DFVar) args.get("var").getVal();
+                    String txt = (String) (args.get("txt").getVal() != null ? args.get("txt").getVal() : DFVar.getVar(var, localStorage).getVal());
+                    String[] removables = DFValue.castTxt((DFValue[]) args.get("removables").getVal());
+
+                    for(String remove : removables) txt = txt.replaceAll(remove, "");
+                    DFVar.setVar(var, new DFValue(txt, DFType.TXT), localStorage);
+                    break;
+                }
+
+                case "TrimText": {
+                    DFVar var = (DFVar) args.get("var").getVal();
+                    String trimTxt = (String) (args.get("txt") != null ? args.get("txt").getVal() : DFVar.getVar(var, localStorage).getVal());
+                    int endIndex = args.get("endIndex") != null ? args.get("endIndex").getInt() : trimTxt.length();
+
+                    DFValue val = new DFValue(trimTxt.substring(args.get("beginIndex").getInt(), endIndex), DFType.TXT);
+                    DFVar.setVar(var, val, localStorage);
+                    break;
+                }
+
+                case "SplitText": {
+                    DFVar var = (DFVar) args.get("var").getVal();
+                    String splitTxt = (String) args.get("splitTxt").getVal();
+                    String splitter = (String) args.get("splitter").getVal();
+
+                    String[] result = splitTxt.split(splitter);
+                    for(int i = 0; i < result.length; i++) result[i] = result[i].replaceAll("^ | $", "");
+                    // ↑ Remove leading and trailing spaces, this is apparently a feature when splitting text in DF ↑
+
+                    DFVar.setVar(var, new DFValue(result, DFType.LIST), localStorage);
+                    break;
+                }
+
+                case "JoinText": {
+                    // TODO: Implement this action (both the logic and parameter information). I am delaying this for now
+                    // TODO: because it requires "CreateList" support.
+                    break;
+                }
+
+                case "SetCase": {
+                    DFVar var = (DFVar) args.get("var").getVal();
+                    String text = (String) (args.get("txt").getVal() == null ? DFVar.getVar(var, localStorage).getVal() : args.get("txt").getVal());
+
+                    switch(tags.get("Capitalization Type")){
+                        case "UPPERCASE":
+                            text = text.toUpperCase(); break;
+                        case "lowercase":
+                            text = text.toLowerCase(); break;
+                        case "Proper Case":
+                            StringUtils.capitalize(text); break;
+                        case "iNVERT CASE":
+                            StringUtils.swapCase(text); break;
+                        case "RAnDoM cASe":
+                            text = randomCase(text);
+                    }
+
+                    DFVar.setVar(var, new DFValue(text, DFType.TXT), localStorage);
+                    break;
+                }
+
+                case "TranslateColors": {
+                    DFVar var = (DFVar) args.get("var").getVal();
+                    String text = (String) (args.get("txt").getVal() == null ? DFVar.getVar(var, localStorage).getVal() : args.get("txt").getVal());
+
+                    switch(tags.get("Translation Type")){
+                        case "From hex to color": {
+                            Pattern p = Pattern.compile("#[a-fA-F0-9]{6}");
+                            Matcher matcher = p.matcher("#ffffff");
+                            while(matcher.find()) text = text.replace(matcher.group(), hexToCode(matcher.group()));
+                        }
+                        case "From & to color": {
+                            text = ChatColor.translateAlternateColorCodes('&', text);
+                        }
+                        case "From color to &": {
+                            Matcher matcher = Pattern.compile("(?i)" + ChatColor.COLOR_CHAR + "[0-9A-FK-ORX]").matcher(text);
+                            while(matcher.find()) text = text.replace(matcher.group(), "&" + matcher.group().replace(ChatColor.COLOR_CHAR, Character.MIN_VALUE));
+                        }
+                        case "Strip color": {
+                            text = ChatColor.stripColor(text);
+                        }
+                    }
+
+                    DFVar.setVar(var, new DFValue(text, DFType.TXT), localStorage);
+                }
+
+                case "TextLength": {
+                    DFVar var = (DFVar) args.get("var").getVal();
+                    String text = (String) args.get("txt").getVal();
+
+                    DFVar.setVar(var, new DFValue((double) text.length(), DFType.NUM), localStorage);
+                }
+
+                case "RepeatText": {
+                    DFVar var = (DFVar) args.get("var").getVal();
+                    String text = (String) args.get("txt").getVal();
+                    int amount = args.get("amount").getInt();
+
+                    StringBuilder result = new StringBuilder();
+                    for(int i = 0; i < amount; i++) result.append(text);
+                    DFVar.setVar(var, new DFValue(result.toString(), DFType.TXT), localStorage);
                 }
             }
+    }
+
+    private static String randomCase(String text){
+        char[] result = new char[text.length()];
+        for(int i = 0; i < result.length; i++) result[i] = Math.random() <= 0.5d ? Character.toUpperCase(result[i]) : result[i];
+        return String.valueOf(result);
+    }
+
+    private static String hexToCode(String hex){
+        StringBuilder builder = new StringBuilder();
+        for(String c : hex.toLowerCase().replace("#", "x").split(""))
+            builder.append("&").append(c);
+
+        return builder.toString();
     }
 }

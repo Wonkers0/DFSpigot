@@ -1137,6 +1137,197 @@
           "defaultValue": 1
         }
       ]
+    ],
+    "Text": [
+      [
+        {
+          "name": "var",
+          "type": "VAR",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "parseVal",
+          "type": "ANY",
+          "repeating": false,
+          "defaultValue": null
+        }
+      ]
+    ],
+    "ReplaceText": [
+      [
+        {
+          "name": "var",
+          "type": "VAR",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "txt",
+          "type": "TXT",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "replaceable",
+          "type": "TXT",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "replacement",
+          "type": "TXT",
+          "repeating": false,
+          "defaultValue": null
+        }
+      ]
+    ],
+    "RemoveText": [
+      [
+        {
+          "name": "var",
+          "type": "VAR",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "txt",
+          "type": "TXT",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "removables",
+          "type": "TXT",
+          "repeating": true,
+          "defaultValue": null
+        }
+      ]
+    ],
+    "TrimText": [
+      [
+        {
+          "name": "var",
+          "type": "VAR",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "txt",
+          "type": "TXT",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "beginIndex",
+          "type": "NUM",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "endIndex",
+          "type": "NUM",
+          "repeating": false,
+          "defaultValue": null
+        }
+      ]
+    ],
+    "SplitText": [
+      [
+        {
+          "name": "var",
+          "type": "VAR",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "splitTxt",
+          "type": "TXT",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "splitter",
+          "type": "TXT",
+          "repeating": " ",
+          "defaultValue": null
+        }
+      ]
+    ],
+    "JoinText": [
+      [
+        
+      ]
+    ],
+    "SetCase": [
+      [
+        {
+          "name": "var",
+          "type": "VAR",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "txt",
+          "type": "TXT",
+          "repeating": false,
+          "defaultValue": null
+        }
+      ]
+    ],
+    "TranslateColors": [
+      [
+        {
+          "name": "var",
+          "type": "VAR",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "txt",
+          "type": "TXT",
+          "repeating": false,
+          "defaultValue": null
+        }
+      ]
+    ],
+    "TextLength": [
+      [
+        {
+          "name": "var",
+          "type": "VAR",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "txt",
+          "type": "TXT",
+          "repeating": false,
+          "defaultValue": null
+        }
+      ]
+    ],
+    "RepeatText": [
+      [
+        {
+          "name": "var",
+          "type": "VAR",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "txt",
+          "type": "TXT",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "amount",
+          "type": "NUM",
+          "repeating": false,
+          "defaultValue": null
+        }
+      ]
     ]
   }
 }
