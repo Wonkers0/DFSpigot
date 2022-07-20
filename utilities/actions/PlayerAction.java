@@ -475,16 +475,14 @@ public class PlayerAction {
                 }
 
                 case "DisplayHologram": {
-                    if(!(target instanceof Player))
-                        break;
+                    if(!(target instanceof Player)) break;
 
                     PlayerData playerData = PlayerData.getPlayerData(target.getUniqueId());
                     Location loc = (Location) args.get("location").getVal();
                     String text = (String) args.get("text").getVal();
 
-                    for (Hologram hologram : (Hologram[]) playerData.holograms.stream().filter(hologram -> DFUtilities.locationEquals(hologram.getLocation(), loc, true)).toArray()) {
+                    for (Hologram hologram : (Hologram[]) playerData.holograms.stream().filter(hologram -> DFUtilities.locationEquals(hologram.getLocation(), loc, true)).toArray())
                         hologram.delete();
-                    }
 
                     playerData.holograms.removeIf(Hologram::isDeleted);
 
@@ -499,7 +497,7 @@ public class PlayerAction {
             }
     }
 
-    public static void setBossBar(Player barPlayer, String title, Integer id, double barHealth, BarColor color, BarStyle style, BarFlag[] flags){
+    private static void setBossBar(Player barPlayer, String title, Integer id, double barHealth, BarColor color, BarStyle style, BarFlag[] flags){
         HashMap<String, TreeMap<Integer, BossBar>> handler = DFPlugin.bossbarHandler;
 
         BossBar bar = Bukkit.createBossBar(title, color, style);
@@ -517,7 +515,7 @@ public class PlayerAction {
         handler.put(barPlayer.getName(), currentBars);
     }
 
-    public static void removeBossbar(Player p, Integer id){
+    private static void removeBossbar(Player p, Integer id){
         HashMap<String, TreeMap<Integer, BossBar>> handler = DFPlugin.bossbarHandler;
 
         TreeMap<Integer, BossBar> bars = new TreeMap<>();
@@ -541,7 +539,7 @@ public class PlayerAction {
         handler.put(p.getName(), bars);
     }
 
-    public static void sendMessageSeq(Player[] players, String[] msgs, long delay, JavaPlugin plugin){
+    private static void sendMessageSeq(Player[] players, String[] msgs, long delay, JavaPlugin plugin){
         new BukkitRunnable() {
             int index = 0;
             @Override
@@ -553,7 +551,7 @@ public class PlayerAction {
         }.runTaskTimerAsynchronously(plugin, 0, delay);
     }
 
-    public static void playSoundSeq(Player[] players, DFSound[] sounds, Location loc, long delay, JavaPlugin plugin){
+    private static void playSoundSeq(Player[] players, DFSound[] sounds, Location loc, long delay, JavaPlugin plugin){
         new BukkitRunnable(){
             int index = 0;
             @Override
@@ -569,13 +567,13 @@ public class PlayerAction {
         }.runTaskTimer(plugin, 0, delay);
     }
 
-    public static void sendHover(Player p, String msg, String hoverMsg){
+    private static void sendHover(Player p, String msg, String hoverMsg){
         TextComponent component = new TextComponent(msg);
         component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(hoverMsg)));
         p.spigot().sendMessage(component);
     }
 
-    public static void stopSounds(Player p, DFSound[] sounds, SoundCategory category){
+    private static void stopSounds(Player p, DFSound[] sounds, SoundCategory category){
         if(category == SoundCategory.MASTER && sounds.length == 0) {
             p.stopAllSounds();
             return;
@@ -597,7 +595,7 @@ public class PlayerAction {
 //        Bukkit.getOnlinePlayers().forEach(manager::addPlayer);
 //    }
 
-    public static ItemStack parseItemNBT(String rawNBT){
+    private static ItemStack parseItemNBT(String rawNBT){
         if(rawNBT == "null") return null;
         CompoundTag nbt = null;
         try{nbt = TagParser.parseTag(rawNBT);}
@@ -607,13 +605,13 @@ public class PlayerAction {
         return CraftItemStack.asBukkitCopy(nmsItem);
     }
 
-    public static Material[] getStackTypes(ItemStack[] items){
+    private static Material[] getStackTypes(ItemStack[] items){
         Material[] result = new Material[items.length];
         for(int i = 0; i < items.length; i++) result[i] = items[i].getType();
         return result;
     }
 
-    public static void replaceItems(Player p, ItemStack[] replaceables, ItemStack replaceItem, byte amount){
+    private static void replaceItems(Player p, ItemStack[] replaceables, ItemStack replaceItem, byte amount){
         ItemStack[] items = p.getInventory().getContents();
         ItemStack removalItem;
 
@@ -640,7 +638,7 @@ public class PlayerAction {
     }
 
 
-    public static void clearItems(Player p, ItemStack[] items){
+    private static void clearItems(Player p, ItemStack[] items){
         ItemStack[] invContents = p.getInventory().getContents();
         for(int i = 0; i < invContents.length; i++){
             for(int j = 0; j < items.length; j++){
@@ -649,7 +647,7 @@ public class PlayerAction {
         }
     }
 
-    public static void clearInv(Player p, int min, int max, boolean clearCrafting){
+    private static void clearInv(Player p, int min, int max, boolean clearCrafting){
         for(int i = min; i < max; i++){
             p.getInventory().clear(i);
         }
@@ -661,7 +659,7 @@ public class PlayerAction {
         }
     }
 
-    public static void saveInv(Player p){
+    private static void saveInv(Player p){
         ItemStack[] inv = p.getInventory().getContents();
         String[] result = new String[inv.length];
         for(int i = 0; i < inv.length; i++){
@@ -681,7 +679,7 @@ public class PlayerAction {
         DFUtilities.playerConfig.saveConfig();
     }
 
-    public static void loadInv(Player p){
+    private static void loadInv(Player p){
         if(!DFUtilities.playerConfig.getConfig().contains("players." + p.getUniqueId() + ".inventory")) return;
         String[] inv = DFUtilities.playerConfig.getConfig().getString("players." + p.getUniqueId() + ".inventory").split("\\|");
         for(int i = 0; i < inv.length; i++){
@@ -690,13 +688,13 @@ public class PlayerAction {
         }
     }
 
-    public static String formatCompoundTags(ItemStack item, String tags){
+    private static String formatCompoundTags(ItemStack item, String tags){
         String result = "{Count:" + item.getAmount() + "b, id:\"minecraft:" + item.getType().toString().toLowerCase() + "\",";
         result += "tag:{" + tags.substring(1, tags.length() - 1) + "}}"; // Remove opening and ending brackets from the CompoundTag, then add closing bracket of main nbt.
         return result;
     }
 
-    public static Inventory createInventory(Player p, DFValue[] items, Integer length){
+    private static Inventory createInventory(Player p, DFValue[] items, Integer length){
         Inventory inv = Bukkit.createInventory(p, length, "Menu");
 
         for (DFValue item : items){
@@ -707,7 +705,7 @@ public class PlayerAction {
         return inv;
     }
 
-    public static void expandInv(Player p, DFValue[] items, Integer expandLength){
+    private static void expandInv(Player p, DFValue[] items, Integer expandLength){
         if(p.getOpenInventory().getType() == InventoryType.PLAYER) return; // Cannot expand player inventory!
         ItemStack[] invItems = (ItemStack[]) ArrayUtils.addAll(p.getOpenInventory().getTopInventory().getContents(), createInventory(p, items, expandLength).getContents());
         byte length = (byte) Math.min(invItems.length, 54);
@@ -718,7 +716,7 @@ public class PlayerAction {
         p.openInventory(newInv);
     }
 
-    public static void setInvName(Player p, String name){
+    private static void setInvName(Player p, String name){
         if(p.getOpenInventory().getType() == InventoryType.PLAYER) return;
         ItemStack[] currentInvItems = p.getOpenInventory().getTopInventory().getContents();
         Inventory newInv = Bukkit.createInventory(p, currentInvItems.length, name);
@@ -726,7 +724,7 @@ public class PlayerAction {
         p.openInventory(newInv);
     }
 
-    public static void removeInvRow(Player p, Integer rows){
+    private static void removeInvRow(Player p, Integer rows){
         if(!DFUtilities.inCustomInv(p)) return;
 
         InventoryView inv = p.getOpenInventory();
@@ -738,7 +736,7 @@ public class PlayerAction {
         p.openInventory(newInv);
     }
 
-    public static void openContainerInv(Player p, Location loc){
+    private static void openContainerInv(Player p, Location loc){
         if(loc == null) return;
         Block block = p.getWorld().getBlockAt(loc);
         switch(block.getType()){
@@ -794,7 +792,7 @@ public class PlayerAction {
         }
     }
 
-    public static void removePotions(Player p, PotionEffect[] effects){
+    private static void removePotions(Player p, PotionEffect[] effects){
         for(PotionEffect effect : effects) p.removePotionEffect(effect.getType());
     }
 }
