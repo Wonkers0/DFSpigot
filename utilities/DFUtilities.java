@@ -78,6 +78,10 @@ public class DFUtilities implements Listener {
                 && inv.getType() != InventoryType.CRAFTING
                 && inv.getLocation() == null;
     }
+    
+    public static boolean locationEquals(Location loc, Location loc2, boolean ignoreRotation) {
+        return loc.getX() == loc2.getX() && loc.getY() == loc2.getY() && loc.getZ() == loc2.getZ() && (ignoreRotation || loc.getYaw() == loc2.getYaw() && loc.getPitch() == loc2.getPitch());
+    }
 
     public static double clampNum(double num, double min, double max){
         if(num > max) num = max;
