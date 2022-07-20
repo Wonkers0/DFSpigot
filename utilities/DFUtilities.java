@@ -1,8 +1,19 @@
 package me.wonk2.utilities;
 
+//import eu.endercentral.crazy_advancements.JSONMessage;
+//import eu.endercentral.crazy_advancements.NameKey;
+//import eu.endercentral.crazy_advancements.advancement.Advancement;
+//import eu.endercentral.crazy_advancements.advancement.AdvancementDisplay;
+//import eu.endercentral.crazy_advancements.advancement.AdvancementVisibility;
+//import eu.endercentral.crazy_advancements.advancement.criteria.Criteria;
+//import eu.endercentral.crazy_advancements.manager.AdvancementManager;
+
 import me.wonk2.utilities.internals.FileManager;
 import me.wonk2.utilities.internals.PlayerData;
+import me.wonk2.utilities.values.DFSound;
 import me.wonk2.utilities.values.DFValue;
+import me.wonk2.utilities.values.DFVar;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,10 +24,17 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.codehaus.plexus.util.StringUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
@@ -60,7 +78,7 @@ public class DFUtilities implements Listener {
                 && inv.getType() != InventoryType.CRAFTING
                 && inv.getLocation() == null;
     }
-    
+
     public static double clampNum(double num, double min, double max){
         if(num > max) num = max;
         else if (num < min) num = min;
@@ -75,12 +93,55 @@ public class DFUtilities implements Listener {
         return num;
     }
 
+    public static String parseTxt(DFValue val){
+        switch(val.type){
+            case LIST: {
+                DFValue[] elements = (DFValue[]) val.getVal();
+                String[] result = new String[elements.length];
+                for(int i = 0; i < elements.length; i++) result[i] = parseTxt(elements[i]);
+                return "[" +  String.join(", ", result) + "]";
+            }
+            case ITEM: {
+                ItemMeta meta = ((ItemStack) val.getVal()).getItemMeta();
+
+                if(meta != null && meta.hasDisplayName())
+                    return meta.getDisplayName();
+                else return "";
+            }
+            case POT: {
+                PotionEffect effect = (PotionEffect) val.getVal();
+                String name = StringUtils.capitalise(effect.getType().getName().replace('_', ' '));
+                long timestamp = effect.getDuration() / 20 * 1000L;
+                SimpleDateFormat dateFormat = new SimpleDateFormat("mm:s");
+
+                return name + " " + effect.getAmplifier() + " - " + dateFormat.format(new Date(timestamp));
+            }
+            case LOC: {
+                Location loc = (Location) val.getVal();
+                if(loc.getYaw() == 0f && loc.getPitch() == 0f)
+                    return "[" + loc.getX() + ", " + loc.getY() + ", " + loc.getZ() + "]";
+                else return "[" + loc.getX() + ", " + loc.getY() + ", " + loc.getZ() + ", " + loc.getPitch() + ", " + loc.getYaw() + "]";
+            }
+            case SND: {
+                DFSound sound = (DFSound) val.getVal();
+                return sound.getName() + "[" + sound.pitch + "]" + "[" + sound.volume + "]";
+            }
+            default: {
+                return String.valueOf(val.getVal());
+            }
+        }
+    }
     public static HashMap<String, DFValue> getArgs(Object obj){
         return (HashMap<String, DFValue>) obj;
     }
 
     public static HashMap<String, String> getTags(Object obj){
         return (HashMap<String, String>) obj;
+    }
+
+    @EventHandler
+    public static void PlayerLeave(PlayerQuitEvent event){
+        if(Bukkit.getOnlinePlayers().size() == 1) DFVar.globalVars = new HashMap<>(); // Purge all global vars when all players leave
     }
 
     @EventHandler
@@ -121,7 +182,4 @@ public class DFUtilities implements Listener {
         varConfig = new FileManager(plugin, "varData.yml");
     }
 
-    public static boolean locationEquals(Location loc, Location loc2, boolean ignoreRotation) {
-        return loc.getX() == loc2.getX() && loc.getY() == loc2.getY() && loc.getZ() == loc2.getZ() && (ignoreRotation || loc.getYaw() == loc2.getYaw() && loc.getPitch() == loc2.getPitch());
-    }
 }
