@@ -63,7 +63,7 @@ public class ParamManager {
                     i++;
                 }
                 // Set array as the value for this repeating parameter.
-                args.put(params[paramIndex].paramName, new DFValue(repeatedValues.toArray(new DFValue[0]), i, DFType.REPEATING));
+                args.put(params[paramIndex].paramName, new DFValue(repeatedValues.toArray(new DFValue[0]), i, DFType.LIST));
             }
             else args.put(params[paramIndex].paramName, currentArg);
 
