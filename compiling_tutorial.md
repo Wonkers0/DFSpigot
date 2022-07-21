@@ -1,4 +1,4 @@
-### 📙 How to compile your plugin
+# 📙 How to compile your plugin
 To compile all this to a jar for use on your server, you will need an IDE. You should've already installed one from the steps above, but if you've skipped them, we recommend [IntelliJ](https://www.jetbrains.com/idea/download/download-thanks.html?platform=windows&code=IIC). 
 <br>
 <br>
