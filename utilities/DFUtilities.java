@@ -135,6 +135,14 @@ public class DFUtilities implements Listener {
             }
         }
     }
+    
+    public static String[] parseTxt(DFValue[] vals){
+        String[] result = new String[vals.length];
+        for(int i = 0; i < vals.length; i++) result[i] = parseTxt(vals[i]);
+        
+        return result;
+    }
+    
     public static HashMap<String, DFValue> getArgs(Object obj){
         return (HashMap<String, DFValue>) obj;
     }
