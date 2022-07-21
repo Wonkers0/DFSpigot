@@ -1,1333 +1,1331 @@
 {
-  "argMap": {
-    "SetHotbar": [
-      [
-        {
-          "name": "items",
-          "type": "ITEM",
-          "repeating": true,
-          "defaultValue": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ]
-        }
-      ]
-    ],
-    "CloseInv": [
-      []
-    ],
-    "GiveItems": [
-      [
-        {
-          "name": "items",
-          "type": "ITEM",
-          "repeating": true,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "SetAtkSpeed": [
-      [
-        {
-          "name": "amount",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "SetMenuItem": [
-      [
-        {
-          "name": "slot",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "item",
-          "type": "ITEM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "SetArmor": [
-      [
-        {
-          "name": "head",
-          "type": "ITEM",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "chest",
-          "type": "ITEM",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "leggings",
-          "type": "ITEM",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "feet",
-          "type": "ITEM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "AddInvRow": [
-      [
-        {
-          "name": "items",
-          "type": "ITEM",
-          "repeating": true,
-          "defaultValue": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ]
-        }
-      ]
-    ],
-    "GiveExp": [
-      [
-        {
-          "name": "amount",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "PurgeVars": [
-      [
-        {
-          "name": "varNames",
-          "type": "TXT",
-          "repeating": true,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "Damage": [
-      [
-        {
-          "name": "amount",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "source",
-          "type": "TXT",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "SetExp": [
-      [
-        {
-          "name": "amount",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "ReplaceItems": [
-      [
-        {
-          "name": "replaceables",
-          "type": "ITEM",
-          "repeating": true,
-          "defaultValue": [
-            null
-          ]
-        },
-        {
-          "name": "replacement",
-          "type": "ITEM",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "amount",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": 1
-        }
-      ]
-    ],
-    "ActionBar": [
-      [
-        {
-          "name": "msg",
-          "type": "TXT",
-          "repeating": true,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "SendMessage": [
-      [
-        {
-          "name": "msg",
-          "type": "TXT",
-          "repeating": true,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "PlaySoundSeq": [
-      [
-        {
-          "name": "sounds",
-          "type": "SND",
-          "repeating": true,
-          "defaultValue": null
-        },
-        {
-          "name": "delay",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": 60
-        },
-        {
-          "name": "playbackLoc",
-          "type": "LOC",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "SetSlotItem": [
-      [
-        {
-          "name": "item",
-          "type": "ITEM",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "slot",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "AbsoluteValue": [
-      [
-        {
-          "name": "var",
-          "type": "VAR",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "num",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "Root": [
-      [
-        {
-          "name": "var",
-          "type": "VAR",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "num",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "rootIndex",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": 2
-        }
-      ]
-    ],
-    "%": [
-      [
-        {
-          "name": "var",
-          "type": "VAR",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "dividend",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "divisor",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "SetInventory": [
-      [
-        {
-          "name": "items",
-          "type": "ITEM",
-          "repeating": true,
-          "defaultValue": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ]
-        }
-      ]
-    ],
-    "Heal": [
-      [
-        {
-          "name": "amount",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "SetSpeed": [
-      [
-        {
-          "name": "speed",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "+": [
-      [
-        {
-          "name": "var",
-          "type": "VAR",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "nums",
-          "type": "NUM",
-          "repeating": true,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "ExpandInv": [
-      [
-        {
-          "name": "items",
-          "type": "ITEM",
-          "repeating": true,
-          "defaultValue": []
-        }
-      ]
-    ],
-    "SetInvName": [
-      [
-        {
-          "name": "invName",
-          "type": "TXT",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "-": [
-      [
-        {
-          "name": "var",
-          "type": "VAR",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "nums",
-          "type": "NUM",
-          "repeating": true,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "/": [
-      [
-        {
-          "name": "var",
-          "type": "VAR",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "nums",
-          "type": "NUM",
-          "repeating": true,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "-=": [
-      [
-        {
-          "name": "var",
-          "type": "VAR",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "nums",
-          "type": "NUM",
-          "repeating": true,
-          "defaultValue": [
-            1
-          ]
-        }
-      ]
-    ],
-    "SetInventoryKept": [
-      []
-    ],
-    "SetAllowFlight": [
-      []
-    ],
-    "SetItemCooldown": [
-      [
-        {
-          "name": "item",
-          "type": "ITEM",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "ticks",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "SendHover": [
-      [
-        {
-          "name": "msg",
-          "type": "TXT",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "hover",
-          "type": "TXT",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "SetMaxHealth": [
-      [
-        {
-          "name": "amount",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "SetAirTicks": [
-      [
-        {
-          "name": "ticks",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "=": [
-      [
-        {
-          "name": "var",
-          "type": "VAR",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "value",
-          "type": "ANY",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "LoadInv": [
-      []
-    ],
-    "GivePotion": [
-      [
-        {
-          "name": "effects",
-          "type": "POT",
-          "repeating": true,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "ParseNumber": [
-      [
-        {
-          "name": "var",
-          "type": "VAR",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "txt",
-          "type": "TXT",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "ClearPotions": [
-      []
-    ],
-    "Exponent": [
-      [
-        {
-          "name": "var",
-          "type": "VAR",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "num",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "exponent",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": 2
-        }
-      ]
-    ],
-    "PlaySound": [
-      [
-        {
-          "name": "sounds",
-          "type": "SND",
-          "repeating": true,
-          "defaultValue": null
-        },
-        {
-          "name": "playbackLoc",
-          "type": "LOC",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "RemoveItems": [
-      [
-        {
-          "name": "removals",
-          "type": "ITEM",
-          "repeating": true,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "SetTabListInfo": [
-      [
-        {
-          "name": "tabInfo",
-          "type": "TXT",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "SaveInv": [
-      []
-    ],
-    "SetHealth": [
-      [
-        {
-          "name": "amount",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "EnableBlocks": [
-      [
-        {
-          "name": "blocks",
-          "type": "ITEM",
-          "repeating": true,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "OpenBlockInv": [
-      [
-        {
-          "name": "loc",
-          "type": "LOC",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "SetCollidable": [
-      []
-    ],
-    "RemoveBossBar": [
-      [
-        {
-          "name": "index",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "SetFallDistance": [
-      [
-        {
-          "name": "distance",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "Logarithm": [
-      [
-        {
-          "name": "var",
-          "type": "VAR",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "num",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "base",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "SetEquipment": [
-      [
-        {
-          "name": "item",
-          "type": "ITEM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "ClampNumber": [
-      [
-        {
-          "name": "var",
-          "type": "VAR",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "clampNum",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "min",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "max",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ],
-      [
-        {
-          "name": "var",
-          "type": "VAR",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "min",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "max",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "SetInvulTicks": [
-      [
-        {
-          "name": "ticks",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "SetCursorItem": [
-      [
-        {
-          "name": "item",
-          "type": "ITEM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "SetDropsEnabled": [
-      []
-    ],
-    "RemovePotion": [
-      [
-        {
-          "name": "effects",
-          "type": "POT",
-          "repeating": true,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "SetAbsorption": [
-      [
-        {
-          "name": "amount",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "RandomValue": [
-      [
-        {
-          "name": "var",
-          "type": "VAR",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "values",
-          "type": "ANY",
-          "repeating": true,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "SetBossBar": [
-      [
-        {
-          "name": "title",
-          "type": "TXT",
-          "repeating": false,
-          "defaultValue": ""
-        },
-        {
-          "name": "health",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": 100
-        },
-        {
-          "name": "maxHealth",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": 100
-        },
-        {
-          "name": "index",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": 1
-        }
-      ]
-    ],
-    "SetFireTicks": [
-      [
-        {
-          "name": "ticks",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "ShowInv": [
-      [
-        {
-          "name": "items",
-          "type": "ITEM",
-          "repeating": true,
-          "defaultValue": []
-        }
-      ]
-    ],
-    "RemoveInvRow": [
-      [
-        {
-          "name": "rows",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": 1
-        }
-      ]
-    ],
-    "SetSlot": [
-      [
-        {
-          "name": "slot",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "DisableBlocks": [
-      [
-        {
-          "name": "blocks",
-          "type": "ITEM",
-          "repeating": true,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "SetFoodLevel": [
-      [
-        {
-          "name": "amount",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "SendMessageSeq": [
-      [
-        {
-          "name": "msgs",
-          "type": "TXT",
-          "repeating": true,
-          "defaultValue": null
-        },
-        {
-          "name": "delay",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": 60
-        }
-      ]
-    ],
-    "ClearInv": [
-      []
-    ],
-    "SetFreezeTicks": [
-      [
-        {
-          "name": "ticks",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "+=": [
-      [
-        {
-          "name": "var",
-          "type": "VAR",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "nums",
-          "type": "NUM",
-          "repeating": true,
-          "defaultValue": [
-            1
-          ]
-        }
-      ]
-    ],
-    "SetSaturation": [
-      [
-        {
-          "name": "amount",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "x": [
-      [
-        {
-          "name": "var",
-          "type": "VAR",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "nums",
-          "type": "NUM",
-          "repeating": true,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "SendTitle": [
-      [
-        {
-          "name": "title",
-          "type": "TXT",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "subtitle",
-          "type": "TXT",
-          "repeating": false,
-          "defaultValue": ""
-        },
-        {
-          "name": "duration",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": 60
-        },
-        {
-          "name": "fadeIn",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": 20
-        },
-        {
-          "name": "fadeOut",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": 20
-        }
-      ]
-    ],
-    "InstantRespawn": [
-      []
-    ],
-    "StopSound": [
-      [
-        {
-          "name": "sounds",
-          "type": "SND",
-          "repeating": true,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "ClearItems": [
-      [
-        {
-          "name": "items",
-          "type": "ITEM",
-          "repeating": true,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "DisplayHologram": [
+  "SetHotbar": [
+    [
       {
-        "name": "text",
+        "name": "items",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      }
+    ]
+  ],
+  "CloseInv": [
+    []
+  ],
+  "GiveItems": [
+    [
+      {
+        "name": "items",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SetAtkSpeed": [
+    [
+      {
+        "name": "amount",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SetMenuItem": [
+    [
+      {
+        "name": "slot",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "item",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SetArmor": [
+    [
+      {
+        "name": "head",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "chest",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "leggings",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "feet",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "AddInvRow": [
+    [
+      {
+        "name": "items",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      }
+    ]
+  ],
+  "GiveExp": [
+    [
+      {
+        "name": "amount",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "PurgeVars": [
+    [
+      {
+        "name": "varNames",
+        "type": "TXT",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "Damage": [
+    [
+      {
+        "name": "amount",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "source",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SetExp": [
+    [
+      {
+        "name": "amount",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ReplaceItems": [
+    [
+      {
+        "name": "replaceables",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": [
+          null
+        ]
+      },
+      {
+        "name": "replacement",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "amount",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 1
+      }
+    ]
+  ],
+  "ActionBar": [
+    [
+      {
+        "name": "msg",
+        "type": "TXT",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SendMessage": [
+    [
+      {
+        "name": "msg",
+        "type": "TXT",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "PlaySoundSeq": [
+    [
+      {
+        "name": "sounds",
+        "type": "SND",
+        "repeating": true,
+        "defaultValue": null
+      },
+      {
+        "name": "delay",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 60
+      },
+      {
+        "name": "playbackLoc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SetSlotItem": [
+    [
+      {
+        "name": "item",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "slot",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "AbsoluteValue": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "num",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "Root": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "num",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "rootIndex",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 2
+      }
+    ]
+  ],
+  "%": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "dividend",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "divisor",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SetInventory": [
+    [
+      {
+        "name": "items",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      }
+    ]
+  ],
+  "Heal": [
+    [
+      {
+        "name": "amount",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SetSpeed": [
+    [
+      {
+        "name": "speed",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "+": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "nums",
+        "type": "NUM",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ExpandInv": [
+    [
+      {
+        "name": "items",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": []
+      }
+    ]
+  ],
+  "SetInvName": [
+    [
+      {
+        "name": "invName",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "-": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "nums",
+        "type": "NUM",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "/": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "nums",
+        "type": "NUM",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "-=": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "nums",
+        "type": "NUM",
+        "repeating": true,
+        "defaultValue": [
+          1
+        ]
+      }
+    ]
+  ],
+  "SetInventoryKept": [
+    []
+  ],
+  "SetAllowFlight": [
+    []
+  ],
+  "SetItemCooldown": [
+    [
+      {
+        "name": "item",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "ticks",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SendHover": [
+    [
+      {
+        "name": "msg",
         "type": "TXT",
         "repeating": false,
         "defaultValue": null
       },
       {
-        "name": "location",
+        "name": "hover",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SetMaxHealth": [
+    [
+      {
+        "name": "amount",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SetAirTicks": [
+    [
+      {
+        "name": "ticks",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "=": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "value",
+        "type": "ANY",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "LoadInv": [
+    []
+  ],
+  "GivePotion": [
+    [
+      {
+        "name": "effects",
+        "type": "POT",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ParseNumber": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "txt",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ClearPotions": [
+    []
+  ],
+  "Exponent": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "num",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "exponent",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 2
+      }
+    ]
+  ],
+  "PlaySound": [
+    [
+      {
+        "name": "sounds",
+        "type": "SND",
+        "repeating": true,
+        "defaultValue": null
+      },
+      {
+        "name": "playbackLoc",
         "type": "LOC",
         "repeating": false,
         "defaultValue": null
       }
-    ],
-    "WrapNumber": [
-      [
-        {
-          "name": "var",
-          "type": "VAR",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "wrapNum",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "min",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "max",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ],
-      [
-        {
-          "name": "var",
-          "type": "VAR",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "min",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "max",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "Average": [
-      [
-        {
-          "name": "var",
-          "type": "VAR",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "nums",
-          "type": "NUM",
-          "repeating": true,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "RandomNumber": [
-      [
-        {
-          "name": "var",
-          "type": "VAR",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "min",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "max",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "Round": [
-      [
-        {
-          "name": "var",
-          "type": "VAR",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "roundNum",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "multiple",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": 1
-        }
-      ]
-    ],
-    "Text": [
-      [
-        {
-          "name": "var",
-          "type": "VAR",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "parseVal",
-          "type": "ANY",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "ReplaceText": [
-      [
-        {
-          "name": "var",
-          "type": "VAR",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "txt",
-          "type": "TXT",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "replaceable",
-          "type": "TXT",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "replacement",
-          "type": "TXT",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "RemoveText": [
-      [
-        {
-          "name": "var",
-          "type": "VAR",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "txt",
-          "type": "TXT",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "removables",
-          "type": "TXT",
-          "repeating": true,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "TrimText": [
-      [
-        {
-          "name": "var",
-          "type": "VAR",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "txt",
-          "type": "TXT",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "beginIndex",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "endIndex",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "SplitText": [
-      [
-        {
-          "name": "var",
-          "type": "VAR",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "splitTxt",
-          "type": "TXT",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "splitter",
-          "type": "TXT",
-          "repeating": " ",
-          "defaultValue": null
-        }
-      ]
-    ],
-    "JoinText": [
-      [
-        
-      ]
-    ],
-    "SetCase": [
-      [
-        {
-          "name": "var",
-          "type": "VAR",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "txt",
-          "type": "TXT",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "TranslateColors": [
-      [
-        {
-          "name": "var",
-          "type": "VAR",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "txt",
-          "type": "TXT",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "TextLength": [
-      [
-        {
-          "name": "var",
-          "type": "VAR",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "txt",
-          "type": "TXT",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
-    ],
-    "RepeatText": [
-      [
-        {
-          "name": "var",
-          "type": "VAR",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "txt",
-          "type": "TXT",
-          "repeating": false,
-          "defaultValue": null
-        },
-        {
-          "name": "amount",
-          "type": "NUM",
-          "repeating": false,
-          "defaultValue": null
-        }
-      ]
     ]
-  }
+  ],
+  "RemoveItems": [
+    [
+      {
+        "name": "removals",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SetTabListInfo": [
+    [
+      {
+        "name": "tabInfo",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SaveInv": [
+    []
+  ],
+  "SetHealth": [
+    [
+      {
+        "name": "amount",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "EnableBlocks": [
+    [
+      {
+        "name": "blocks",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "OpenBlockInv": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SetCollidable": [
+    []
+  ],
+  "RemoveBossBar": [
+    [
+      {
+        "name": "index",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SetFallDistance": [
+    [
+      {
+        "name": "distance",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "Logarithm": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "num",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "base",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SetEquipment": [
+    [
+      {
+        "name": "item",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ClampNumber": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "clampNum",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "min",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "max",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ],
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "min",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "max",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SetInvulTicks": [
+    [
+      {
+        "name": "ticks",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SetCursorItem": [
+    [
+      {
+        "name": "item",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SetDropsEnabled": [
+    []
+  ],
+  "RemovePotion": [
+    [
+      {
+        "name": "effects",
+        "type": "POT",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SetAbsorption": [
+    [
+      {
+        "name": "amount",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "RandomValue": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "values",
+        "type": "ANY",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SetBossBar": [
+    [
+      {
+        "name": "title",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": ""
+      },
+      {
+        "name": "health",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 100
+      },
+      {
+        "name": "maxHealth",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 100
+      },
+      {
+        "name": "index",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 1
+      }
+    ]
+  ],
+  "SetFireTicks": [
+    [
+      {
+        "name": "ticks",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ShowInv": [
+    [
+      {
+        "name": "items",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": []
+      }
+    ]
+  ],
+  "RemoveInvRow": [
+    [
+      {
+        "name": "rows",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 1
+      }
+    ]
+  ],
+  "SetSlot": [
+    [
+      {
+        "name": "slot",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "DisableBlocks": [
+    [
+      {
+        "name": "blocks",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SetFoodLevel": [
+    [
+      {
+        "name": "amount",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SendMessageSeq": [
+    [
+      {
+        "name": "msgs",
+        "type": "TXT",
+        "repeating": true,
+        "defaultValue": null
+      },
+      {
+        "name": "delay",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 60
+      }
+    ]
+  ],
+  "ClearInv": [
+    []
+  ],
+  "SetFreezeTicks": [
+    [
+      {
+        "name": "ticks",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "+=": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "nums",
+        "type": "NUM",
+        "repeating": true,
+        "defaultValue": [
+          1
+        ]
+      }
+    ]
+  ],
+  "SetSaturation": [
+    [
+      {
+        "name": "amount",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "x": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "nums",
+        "type": "NUM",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SendTitle": [
+    [
+      {
+        "name": "title",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "subtitle",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": ""
+      },
+      {
+        "name": "duration",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 60
+      },
+      {
+        "name": "fadeIn",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 20
+      },
+      {
+        "name": "fadeOut",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 20
+      }
+    ]
+  ],
+  "InstantRespawn": [
+    []
+  ],
+  "StopSound": [
+    [
+      {
+        "name": "sounds",
+        "type": "SND",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ClearItems": [
+    [
+      {
+        "name": "items",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "DisplayHologram": [
+    {
+      "name": "text",
+      "type": "TXT",
+      "repeating": false,
+      "defaultValue": null
+    },
+    {
+      "name": "location",
+      "type": "LOC",
+      "repeating": false,
+      "defaultValue": null
+    }
+  ],
+  "WrapNumber": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "wrapNum",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "min",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "max",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ],
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "min",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "max",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "Average": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "nums",
+        "type": "NUM",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "RandomNumber": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "min",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "max",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "Round": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "roundNum",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "multiple",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 1
+      }
+    ]
+  ],
+  "Text": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "parseVal",
+        "type": "ANY",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ReplaceText": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "txt",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "replaceable",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "replacement",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "RemoveText": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "txt",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "removables",
+        "type": "TXT",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "TrimText": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "txt",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "beginIndex",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "endIndex",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SplitText": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "splitTxt",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "splitter",
+        "type": "TXT",
+        "repeating": " ",
+        "defaultValue": null
+      }
+    ]
+  ],
+  "JoinText": [
+    [
+
+    ]
+  ],
+  "SetCase": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "txt",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "TranslateColors": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "txt",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "TextLength": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "txt",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "RepeatText": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "txt",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "amount",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ]
 }

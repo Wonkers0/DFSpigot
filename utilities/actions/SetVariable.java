@@ -38,8 +38,8 @@ public class SetVariable {
                     String matchReq = tags.get("Match Requirement");
                     boolean ignoreCase = tags.get("Ignore Case") == "True";
 
-                    DFUtilities.purgeKeys(varNames, DFVar.globalVars, matchReq, ignoreCase);
-                    DFUtilities.purgeKeys(varNames, localStorage, matchReq, ignoreCase);
+                    purgeKeys(varNames, DFVar.globalVars, matchReq, ignoreCase);
+                    purgeKeys(varNames, localStorage, matchReq, ignoreCase);
                     /*TODO: Purge save vars once implemented*/
                     break;
                 }
@@ -354,5 +354,34 @@ public class SetVariable {
             builder.append("&").append(c);
 
         return builder.toString();
+    }
+
+    public static HashMap<String, DFValue> purgeKeys(String[] varNames, HashMap<String, DFValue> storage, String matchReq, boolean ignoreCase){
+        String[] storageKeys = storage.keySet().toArray(new String[0]);
+        String[] matchedKeys = new String[0];
+
+        for(String name : varNames)
+            switch(matchReq) {
+                case "Entire name":
+                    if (!ignoreCase)
+                        matchedKeys = (String[]) Arrays.stream(storageKeys).filter(val -> val.equalsIgnoreCase(name)).toArray();
+                    else matchedKeys = (String[]) Arrays.stream(storageKeys).filter(val -> val.equals(name)).toArray();
+                    break;
+                case "Full word(s) in name":
+                    String regex = DFUtilities.escapeRegex(name) + "($| )";
+                    Pattern pattern = !ignoreCase ? Pattern.compile(regex) : Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+
+                    matchedKeys = (String[]) Arrays.stream(storageKeys).filter(val -> pattern.matcher(val).find()).toArray();
+                    break;
+                case "Any part of name":
+                    if(!ignoreCase) matchedKeys = (String[]) Arrays.stream(storageKeys).filter(val -> val.contains(name)).toArray();
+                    else matchedKeys = (String[]) Arrays.stream(storageKeys).filter(val -> val.toLowerCase().contains(name.toLowerCase())).toArray();
+                    break;
+            }
+
+        for(String key : matchedKeys) storage.remove(key);
+        /*TODO: Purge global & saved vars*/
+
+        return storage;
     }
 }

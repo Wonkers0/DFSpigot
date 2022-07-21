@@ -43,35 +43,6 @@ public class DFUtilities implements Listener {
     public static FileManager playerConfig;
     public static FileManager varConfig;
 
-    public static HashMap<String, DFValue> purgeKeys(String[] varNames, HashMap<String, DFValue> storage, String matchReq, boolean ignoreCase){
-        String[] storageKeys = storage.keySet().toArray(new String[0]);
-        String[] matchedKeys = new String[0];
-
-        for(String name : varNames)
-            switch(matchReq) {
-                case "Entire name":
-                    if (!ignoreCase)
-                        matchedKeys = (String[]) Arrays.stream(storageKeys).filter(val -> val.equalsIgnoreCase(name)).toArray();
-                    else matchedKeys = (String[]) Arrays.stream(storageKeys).filter(val -> val.equals(name)).toArray();
-                    break;
-                case "Full word(s) in name":
-                    String regex = name.replaceAll("[$^.+*?{}()|\\[\\]\\\\]", "\\\\$0") + "($| )";
-                    Pattern pattern = !ignoreCase ? Pattern.compile(regex) : Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-
-                    matchedKeys = (String[]) Arrays.stream(storageKeys).filter(val -> pattern.matcher(val).find()).toArray();
-                    break;
-                case "Any part of name":
-                    if(!ignoreCase) matchedKeys = (String[]) Arrays.stream(storageKeys).filter(val -> val.contains(name)).toArray();
-                    else matchedKeys = (String[]) Arrays.stream(storageKeys).filter(val -> val.toLowerCase().contains(name.toLowerCase())).toArray();
-                    break;
-            }
-
-        for(String key : matchedKeys) storage.remove(key);
-        /*TODO: Purge global & saved vars*/
-
-        return storage;
-    }
-
     public static boolean inCustomInv(Player p){
         Inventory inv = p.getOpenInventory().getTopInventory();
         return inv.getType() != InventoryType.PLAYER
@@ -141,6 +112,10 @@ public class DFUtilities implements Listener {
         for(int i = 0; i < vals.length; i++) result[i] = parseTxt(vals[i]);
         
         return result;
+    }
+    
+    public static String escapeRegex(String input){
+        return input.replaceAll("[-.+*?\\[^\\]$(){}=!<>|:\\\\]", "\\\\$0");
     }
     
     public static HashMap<String, DFValue> getArgs(Object obj){
