@@ -30,8 +30,8 @@ While holding the enderchest in your hand, run the command `/i nbt` in chat. Thi
 
 
 <img src="https://user-images.githubusercontent.com/106038003/179759270-3ab19a91-d937-4e7d-9895-906abb05672d.png" height=350px; alt="nbtMsg">
-Open your chat and click on `"Click to copy unformatted NBT"`. This will copy the data to your clipboard. Next, visit the [project's website](https://dfspigot.wonk2.repl.co/), and scroll down until you see an input field saying `"Insert Template Data Here..."`:
 
+Open your chat and click on `"Click to copy unformatted NBT"`. This will copy the data to your clipboard. Next, visit the [project's website](https://dfspigot.wonk2.repl.co/), and scroll down until you see an input field saying `"Insert Template Data Here..."`:
 
 ![nbtInput](https://user-images.githubusercontent.com/106038003/179760177-955f575e-23c7-47bc-8d73-f0d9bd90974b.png)
 
