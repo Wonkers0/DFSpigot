@@ -1017,18 +1017,20 @@
       ]
     ],
     "DisplayHologram": [
-      {
-        "name": "text",
-        "type": "TXT",
-        "repeating": false,
-        "defaultValue": null
-      },
-      {
-        "name": "location",
-        "type": "LOC",
-        "repeating": false,
-        "defaultValue": null
-      }
+      [
+        {
+          "name": "text",
+          "type": "TXT",
+          "repeating": false,
+          "defaultValue": null
+        },
+        {
+          "name": "location",
+          "type": "LOC",
+          "repeating": false,
+          "defaultValue": null
+        }
+      [
     ],
     "WrapNumber": [
       [
