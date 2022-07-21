@@ -11,10 +11,7 @@ import java.util.Arrays;
 public class DFValue {
 
     public static String[] castTxt(DFValue[] arr){
-        String[] result = new String[arr.length];
-        for(int i = 0; i < arr.length; i++) result[i] = DFUtilities.parseTxt(arr[i]);
-        
-        return result;
+        return DFUtilities.parseTxt(arr);
     }
 
     public static double[] castNum(DFValue[] arr){
