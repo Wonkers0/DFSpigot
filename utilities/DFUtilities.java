@@ -143,6 +143,10 @@ public class DFUtilities implements Listener {
         return result;
     }
     
+    public static String escapeRegex(String input){
+        return input.replaceAll("[-.+*?\\[^\\]$(){}=!<>|:\\\\]", "\\\\$0");
+    }
+    
     public static HashMap<String, DFValue> getArgs(Object obj){
         return (HashMap<String, DFValue>) obj;
     }
