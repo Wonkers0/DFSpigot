@@ -21,6 +21,8 @@ After downloading, Click on `"Open or Import"` from the welcome screen and impor
 <br>
 Alternatively, if you've left the welcome screen or this isn't your first time using IntelliJ, navigate to `File -> Open` and import the project from there.
 
+#### TODO: Mention reloading dependencies & add a "Downloading spigot" section
+
 ### 📦 Generating your DFPlugin.java class
 In order to generate the code for your plugin, you first need to copy the template data from the line of code that you want to import. To do this, go up to the starting block of your code line, and break it while shifting. This will give you an enderchest containing the template data that you need, but before continuing, **make sure to place back the enderchest** to avoid losing the code. You will keep the item even after placing it back.
 <br><br>
