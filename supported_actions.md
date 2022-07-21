@@ -177,3 +177,25 @@
 ✅ RandomNumber
 
 ✅ Round
+
+✅ Text
+
+✅ ReplaceText
+
+✅ RemoveText
+
+✅ TrimText
+
+✅ SplitText
+
+❌  JoinText
+
+✅  SetCase
+
+✅  TranslateColors
+
+✅  TextLength
+
+✅  RepeatText
+
+❌  FormatTime
