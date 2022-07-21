@@ -18,7 +18,8 @@ public class ParamManager {
 
     static {
         try {
-            argInfo = new ObjectMapper().readValue(DownloadUtils.getString("https://raw.githubusercontent.com/Wonkers0/DFSpigot/main/DONT%20IMPORT/actionparams.json"), ActionParams.class).argMap;
+            ObjectMapper mapper = new ObjectMapper();
+            argInfo = mapper.readValue(new URL("https://raw.githubusercontent.com/Wonkers0/DFSpigot/main/DONT%20IMPORT/actionparams.json"), new TypeReference<>() {});
         } catch (IOException ignored) {}
     }
 
