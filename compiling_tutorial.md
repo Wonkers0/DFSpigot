@@ -4,7 +4,7 @@ To compile all this to a jar for use on your server, you will need an IDE. You s
 <br>
 <br>
 *(The following instructions are for **IntelliJ**)*
-#### Compiling for Maven Ⓜ️
+## Compiling for Maven Ⓜ️
 If you are using maven, navigate to the right hand side of your screen, and click the button with the maven logo & trademark on it.
 
 
@@ -21,5 +21,5 @@ In the terminal, you need to type `mvn clean package shade:shade`. Press enter, 
 
 **The jar name is based off of the artifactId and version tags in your pom.xml** `(<artifactId>-<version>)`
 
-#### Compiling for Gradle 🐘
+## Compiling for Gradle 🐘
 (TODO: Publish dependencies and project setup instructions for gradle.)
