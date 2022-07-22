@@ -1,4 +1,6 @@
-# Player Action
+# Player
+
+## Player Action
 
 ✅ SendMessage
 
@@ -136,7 +138,105 @@
 
 ✅ DisplayHologram
 
-# Set Variable
+## Player Event
+
+❌ CloseInv
+
+❌ StartFly
+
+❌ PickupItem
+
+❌ BreakBlock
+
+❌ StartSprint
+
+❌ MobKillPlayer
+
+❌ ShootBow
+
+❌ StopFly
+
+✅ LeftClick
+
+❌ PlayerTakeDmg
+
+❌ ProjHit
+
+❌ KillPlayer
+
+❌ ClickInvSlot
+
+❌ Respawn
+
+✅ SwapHands
+
+❌ DamageEntity
+
+✅ Sneak
+
+❌ PlayerHeal
+
+❌ ClickPlayer
+
+❌ Consume
+
+❌ Death
+
+❌ PlaceBlock
+
+❌ Walk
+
+❌ Dismount
+
+❌ CloudImbuePlayer
+
+✅ Leave
+
+❌ DropItem
+
+❌ ChangeSlot
+
+❌ ClickEntity
+
+❌ HorseJump
+
+❌ ShootProjectile
+
+❌ Unsneak
+
+❌ Fish
+
+❌ BreakItem
+
+✅ RightClick
+
+❌ ClickMenuSlot
+
+❌ Riptide
+
+❌ KillMob
+
+✅ Join
+
+❌ EntityDmgPlayer
+
+❌ StopSprint
+
+❌ Jump
+
+❌ ProjDmgPlayer
+
+❌ Command
+
+❌ PlayerDmgPlayer
+
+❌ ~~FallDamage~~
+
+❌ ~~LoopEvent~~
+
+# Variable
+
+## Set Variable
 
 ✅ =
 
