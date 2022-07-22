@@ -4,14 +4,14 @@ function decodeTemplate(data) { // Permanently borrowed from Ottelino
         return e.charCodeAt(0);
     });
     let binData = new Uint8Array(compressData);
-    let inflatedata = inflate(binData);
+    let inflatedata = pako.inflate(binData);
     return JSON.parse(String.fromCharCode.apply(null, new Uint16Array(inflatedata)));
 }
 
 let mainFunc, libraries, root, eventTypes, code;
 
-function generate() {
-    let decodedJson = decodeTemplate(document.getElementsByClassName("NBTInput")[0].value.match(/h4sI(A{5,20})[a-z0-9+_/=]+/i)[0]);
+export function generate() {
+    let decodedJson = decodeTemplate(document.getElementById("NBTInput").value.match(/h4sI(A{5,20})[a-z0-9+_/=]+/i)[0]);
     console.log(decodedJson);
 
     root = decodedJson.blocks[0];

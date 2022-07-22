@@ -1,3 +1,5 @@
+import {generate} from "./script.js";
+
 document.querySelector('#generate').onclick = () => {generate()}
 document.querySelector('#NBTInput').onkeyup = function(e) {
     // when enter
