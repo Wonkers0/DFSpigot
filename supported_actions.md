@@ -299,7 +299,9 @@
 ✅  RepeatText
 
 ✅  FormatTime
-<br><br>
+
+# Legend
+
 ❌ = No Support
 
 ⚠️ = Incomplete support
