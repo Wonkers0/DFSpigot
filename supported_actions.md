@@ -156,7 +156,7 @@
 
 ❌ StopFly
 
-✅ LeftClick
+⚠️ LeftClick
 
 ❌ PlayerTakeDmg
 
@@ -208,7 +208,7 @@
 
 ❌ BreakItem
 
-✅ RightClick
+⚠️ RightClick
 
 ❌ ClickMenuSlot
 
@@ -299,3 +299,9 @@
 ✅  RepeatText
 
 ✅  FormatTime
+<br><br>
+❌ = No Support
+
+⚠️ = Incomplete support
+
+✅ = Full support
