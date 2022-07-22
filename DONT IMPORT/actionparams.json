@@ -1329,5 +1329,27 @@
         "defaultValue": null
       }
     ]
+  ],
+  "FormatTime": [
+    [ 
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "time",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "format",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]  
   ]
 }
