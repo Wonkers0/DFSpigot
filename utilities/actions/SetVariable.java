@@ -339,6 +339,27 @@ public class SetVariable {
                     for(int i = 0; i < amount; i++) result.append(text);
                     DFVar.setVar(var, new DFValue(result.toString(), DFType.TXT), localStorage);
                 }
+                    
+                case "FormatTime": {
+                    DFVar var = (DFVar) args.get("var").getVal();
+                    double seconds = (double) args.get("time").getVal();
+                    String customFormat = (String) args.get("format").getVal();
+
+                    HashMap<String, String> timeFormats = new HashMap<>(){{
+                        put("Custom", customFormat);
+                        put("2020/08/17 17:20:54", "yyyy/MM/dd HH:mm:s");
+                        put("2020/08/17", "yyyy/MM/dd");
+                        put("Mon, August 17", "E, MMMM d");
+                        put("Monday", "EEEE");
+                        put("17:20:54", "HH:mm:s");
+                        put("5:20 PM", "HH:mma");
+                        put("17h20m54s", "H'h'M'm's's'");
+                        put("54.229 seconds", "s.S seconds");
+                    }};
+
+                    DFValue val = new DFValue(DFUtilities.formatTime(timeFormats.get(tags.get("Format")), seconds), DFType.TXT);
+                    DFVar.setVar(var, val, localStorage);
+                }
             }
     }
 
