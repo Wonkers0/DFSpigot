@@ -298,4 +298,4 @@
 
 ✅  RepeatText
 
-❌  FormatTime
+✅  FormatTime
