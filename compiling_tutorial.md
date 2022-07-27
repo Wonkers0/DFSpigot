@@ -20,6 +20,3 @@ In the terminal, you need to type `mvn clean package shade:shade`. Press enter, 
 `<intelliJ install directory>/IdeaProjects/<project name>/target/`
 
 **The jar name is based off of the artifactId and version tags in your pom.xml** `(<artifactId>-<version>)`
-
-## Compiling for Gradle 🐘
-(TODO: Publish dependencies and project setup instructions for gradle.)
