@@ -21,9 +21,34 @@ After downloading, Click on `"Open or Import"` from the welcome screen and impor
 <br>
 Alternatively, if you've left the welcome screen or this isn't your first time using IntelliJ, navigate to `File -> Open` and import the project from there.
 
-#### TODO: Mention reloading dependencies & add a "Downloading spigot" section
+## ⭐ Downloading Spigot
+At first, IntelliJ might not recognize some of the dependencies in your project. We'll worry about that later. Spigot, which is the main API powering minecraft plugins is not like other maven dependencies, as it's not part of the maven public repository, which means you will need to have it locally stored on your computer in order to compile properly.
 
-### 📦 Generating your DFPlugin.java class
+To get started, download [BuildTools](https://www.spigotmc.org/wiki/buildtools/). This will let you download spigot later on. After you've downloaded it, it'll probably be lying somewhere in your *Downloads* folder.
+
+Open up the windows command prompt (or any equivalent on other operating systems), and type `cd <BuildTools Directory Path`. The directory path should be pointing to the folder that BuildTools.jar is in, not BuildTools itself. So for example: `C:\Users\Wonk\Downloads` instead of `C:\Users\Wonk\Downloads\BuildTools.jar`
+
+If you don't know where your BuildTools ended up, you can view so from your browser's downloads tab. On most browsers, the shortcut CTRL + J will open it up.
+
+Once you've typed the command, you should see that your command directory has changed. Next, type `java -jar BuildTools.jar --rev 1.19`
+Downnloading might take a few minutes, but don't close the tab until it's done.
+
+### 🔄 Reloading Maven Dependencies
+Now in order to load your dependencies, navigate to the right hand side of your screen, and click the button with the maven logo & trademark on it.
+
+<img src="https://user-images.githubusercontent.com/106038003/179745648-7885d6f1-25dd-45fa-b743-60bb19eabd8e.png" height=500px; alt="mvnButton">
+
+This will open a menu on the right, in which you need to click the arrows spinning counterclockwise which say "Reload All Maven Projects", fouund in the top left of the menu.
+
+<img src="https://user-images.githubusercontent.com/106038003/181191826-ce61cf87-fdbd-4baf-9c80-ab8fcd4e6104.png" height=300px; alt="mvnReload">
+
+Reloading could take a bit on lower-end machines, but you can view the progress in the bottom right.
+
+<img src="https://user-images.githubusercontent.com/106038003/181192690-5bb6174d-6581-4907-a83f-ba3f9fc5a206.png" height=60px;>
+<br>
+
+
+## 📦 Generating your DFPlugin.java class
 In order to generate the code for your plugin, you first need to copy the template data from the line of code that you want to import. To do this, go up to the starting block of your code line, and break it while shifting. This will give you an enderchest containing the template data that you need, but before continuing, **make sure to place back the enderchest** to avoid losing the code. You will keep the item even after placing it back.
 <br><br>
 While holding the enderchest in your hand, run the command `/i nbt` in chat. This will send a large message with some gray text at the bottom.
@@ -33,7 +58,7 @@ While holding the enderchest in your hand, run the command `/i nbt` in chat. Thi
 
 Open your chat and click on `"Click to copy unformatted NBT"`. This will copy the data to your clipboard. Next, visit the [project's website](https://dfspigot.wonk2.repl.co/), and scroll down until you see an input field saying `"Insert Template Data Here..."`:
 
-![nbtInput](https://user-images.githubusercontent.com/106038003/179760177-955f575e-23c7-47bc-8d73-f0d9bd90974b.png)
+<img src="https://user-images.githubusercontent.com/106038003/179760177-955f575e-23c7-47bc-8d73-f0d9bd90974b.png" alt="nbtInput">
 
 Paste the template data that you've previously copied by `Right Clicking -> Paste`. Now click "Generate Code". The code will appear in the text area below. Copy & Paste this in your DFPlugin.java file inside your IDE.
 <br>
