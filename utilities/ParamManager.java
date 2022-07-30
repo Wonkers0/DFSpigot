@@ -40,7 +40,7 @@ public class ParamManager {
 			if(!keySet.contains(i) || (currentArg.type != paramType && paramType != DFType.ANY)){
 				// If there is no argument for this parameter, OR the argument is invalid (type doesn't match),
 				// use the default value.
-				args.put(params[paramIndex].paramName, new DFValue(params[paramIndex].defaultValue, i--, params[paramIndex].type));
+				args.put(params[paramIndex].name, new DFValue(params[paramIndex].defaultValue, i--, params[paramIndex].type));
 				continue;
 			}
 			
@@ -64,9 +64,9 @@ public class ParamManager {
 					i++;
 				}
 				// Set array as the value for this repeating parameter.
-				args.put(params[paramIndex].paramName, new DFValue(repeatedValues.toArray(new DFValue[0]), i, DFType.LIST));
+				args.put(params[paramIndex].name, new DFValue(repeatedValues.toArray(new DFValue[0]), i, DFType.LIST));
 			}
-			else args.put(params[paramIndex].paramName, currentArg);
+			else args.put(params[paramIndex].name, currentArg);
 			
 			paramIndex++;
 		}
