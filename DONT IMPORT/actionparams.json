@@ -939,6 +939,10 @@
             {
               "val": 1,
               "type": "NUM"
+            },
+            {
+              "val": 1,
+              "type": "NUM"
             }
           ],
           "type": "LIST"
