@@ -433,7 +433,10 @@
         "type": "NUM",
         "repeating": true,
         "defaultValue": [
-          1
+          {
+            "val": 1,
+            "type": "NUM"
+          }
         ]
       }
     ]
@@ -927,7 +930,10 @@
         "type": "NUM",
         "repeating": true,
         "defaultValue": [
-          1
+          {
+            "val": 1,
+            "type": "NUM"
+          }
         ]
       }
     ]
