@@ -432,12 +432,16 @@
         "name": "nums",
         "type": "NUM",
         "repeating": true,
-        "defaultValue": [
-          {
-            "val": 1,
-            "type": "NUM"
-          }
-        ]
+        "defaultValue": {
+          "val":
+          [
+            {
+              "val": 1,
+              "type": "NUM"
+            }
+          ],
+          "type": "LIST"
+        }
       }
     ]
   ],
@@ -929,12 +933,16 @@
         "name": "nums",
         "type": "NUM",
         "repeating": true,
-        "defaultValue": [
-          {
-            "val": 1,
-            "type": "NUM"
-          }
-        ]
+        "defaultValue": {
+          "val":
+          [
+            {
+              "val": 1,
+              "type": "NUM"
+            }
+          ],
+          "type": "LIST"
+        }
       }
     ]
   ],
