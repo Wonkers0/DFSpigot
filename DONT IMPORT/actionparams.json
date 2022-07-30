@@ -432,16 +432,13 @@
         "name": "nums",
         "type": "NUM",
         "repeating": true,
-        "defaultValue": {
-          "val":
-          [
-            {
-              "val": 1,
-              "type": "NUM"
-            }
-          ],
-          "type": "LIST"
-        }
+        "defaultValue":
+        [
+          {
+            "val": 1,
+            "type": "NUM"
+          }
+        ]
       }
     ]
   ],
@@ -933,20 +930,13 @@
         "name": "nums",
         "type": "NUM",
         "repeating": true,
-        "defaultValue": {
-          "val":
-          [
-            {
-              "val": 1,
-              "type": "NUM"
-            },
-            {
-              "val": 1,
-              "type": "NUM"
-            }
-          ],
-          "type": "LIST"
-        }
+        "defaultValue":
+        [
+          {
+            "val": 1,
+            "type": "NUM"
+          }
+        ]
       }
     ]
   ],
