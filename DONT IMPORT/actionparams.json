@@ -1360,6 +1360,136 @@
       }
     ]  
   ],
+  "CreateList": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "list",
+        "type": "ANY",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "AppendValue": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "values",
+        "type": "ANY",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "AppendList": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "lists",
+        "type": "VAR",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "GetListValue": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "list",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "index",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SetListValue": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "index",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "value",
+        "type": "ANY",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "GetValueIndex": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "list",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "value",
+        "type": "ANY",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ListLength": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "list",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ]
   "SpawnMob": [
     [
       {
