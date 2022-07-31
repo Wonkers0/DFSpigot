@@ -170,9 +170,9 @@ function javafyParam(arg,slot) {
         case "txt":
             return `"${removeQuotes(textCodes(arg.data.name))}"`;
         case "num":
-            return arg.data.name + "f";
+            return arg.data.name + "d";
         case "snd":
-            return `new DFSound("${arg.data.sound}", ${arg.data.pitch}f, ${arg.data.vol}f)`;
+            return `new DFSound("${arg.data.sound}", ${arg.data.pitch}d, ${arg.data.vol}d)`;
         case "loc":
             let loc = arg.data.loc;
             return `new Location(Bukkit.getServer().getWorlds().get(0), ${loc.x}, ${loc.y}, ${loc.z}, ${loc.yaw}, ${loc.pitch})`;
