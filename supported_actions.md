@@ -300,6 +300,26 @@
 
 ✅  FormatTime
 
+✅ CreateList
+
+✅ AppendValue
+
+✅ AppendList
+
+✅ GetListValue
+
+✅ SetListValue
+
+✅ GetValueIndex
+
+✅ ListLength
+
+# Game
+
+# Game Action
+
+✅ SpawnMob
+
 # Legend
 
 ❌ = No Support
