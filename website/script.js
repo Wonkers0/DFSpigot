@@ -157,7 +157,7 @@ function textCodes(str) {
         str = str.replace(new RegExp(temp, "g"), `" + ${codes[temp]} + "`);
     }
 
-    return str;
+    return str.replaceAll("Â§", "§");
 }
 
 
@@ -172,7 +172,7 @@ function javafyParam(arg,slot) {
         case "num":
             return arg.data.name + "d";
         case "snd":
-            return `new DFSound("${arg.data.sound}", ${arg.data.pitch}d, ${arg.data.vol}d)`;
+            return `new DFSound("${arg.data.sound}", ${arg.data.pitch}f, ${arg.data.vol}f)`;
         case "loc":
             let loc = arg.data.loc;
             return `new Location(Bukkit.getServer().getWorlds().get(0), ${loc.x}, ${loc.y}, ${loc.z}, ${loc.yaw}, ${loc.pitch})`;
@@ -234,7 +234,8 @@ function varScopes() {
 function blockClasses(){
     return {
         "player_action": "PlayerAction",
-        "set_var": "SetVariable"
+        "set_var": "SetVariable",
+        "game_action": "GameAction"
     }
 }
 
@@ -242,7 +243,8 @@ function blockParams(codeBlock){
     console.log(codeBlock);
     return{
         "player_action": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", new LivingEntity[]{${selectionSyntax(codeBlock.target)}}`,
-        "set_var": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", new LivingEntity[]{${selectionSyntax(codeBlock.target)}}, localVars`
+        "set_var": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", new LivingEntity[]{${selectionSyntax(codeBlock.target)}}, localVars`,
+        "game_action": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", new LivingEntity[]{${selectionSyntax(codeBlock.target)}}`
     }
 }
 
