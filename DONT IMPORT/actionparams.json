@@ -1156,9 +1156,9 @@
         "defaultValue": null
       },
       {
-        "name": "parseVal",
+        "name": "parseVals",
         "type": "ANY",
-        "repeating": false,
+        "repeating": true,
         "defaultValue": null
       }
     ]
