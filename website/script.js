@@ -1,5 +1,5 @@
 function decodeTemplate(data){ // Permanently borrowed from grog 😊
-    const compressData = atob(base64data);
+    const compressData = atob(data);
     const uint = compressData.split('').map(function(e) {
         return e.charCodeAt(0);
     });
