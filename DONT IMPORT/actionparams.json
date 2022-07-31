@@ -1359,5 +1359,45 @@
         "defaultValue": null
       }
     ]  
+  ],
+  "SpawnMob": [
+    [
+      {
+        "name": "mob",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "health",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "customName",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "effects",
+        "type": "POT",
+        "repeating": true,
+        "defaultValue": null
+      },
+      {
+        "name": "equipment",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": [null, null, null, null, null, null]
+      }
+    ]
   ]
 }
