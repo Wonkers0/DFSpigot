@@ -1,11 +1,11 @@
-function decodeTemplate(data) { // Permanently borrowed from Ottelino
-    let compressData = atob(data);
-    compressData = compressData.split("").map(function(e) {
+function decodeTemplate(data){ // Permanently borrowed from grog 😊
+    const compressData = atob(base64data);
+    const uint = compressData.split('').map(function(e) {
         return e.charCodeAt(0);
     });
-    let binData = new Uint8Array(compressData);
-    let inflatedata = pako.inflate(binData);
-    return JSON.parse(String.fromCharCode.apply(null, new Uint16Array(inflatedata)));
+    const binData = new Uint8Array(uint);
+    const string = pako.inflate(binData,{to: 'string'});
+    return JSON.parse(string);
 }
 
 let mainFunc, libraries, root, eventTypes, code;
