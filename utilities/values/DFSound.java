@@ -15,6 +15,7 @@ public class DFSound {
 	/** Big thanks to Infernity for helping with sounds      **
 	 ** Big thanks to shermy_the_cat for helping with sounds **/
 	static HashMap<String, String> soundMap = new HashMap<String, String>(){{
+		// Blocks
 		put("Pling", "block.note_block.pling");
 		put("Chime", "block.note_block.chime");
 		put("Bit", "block.note_block.bit");
@@ -487,7 +488,7 @@ public class DFSound {
 		put("Respawn Anchor Charge", "block.respawn_anchor.charge");
 		put("Respawn Anchor Deplete", "block.respawn_anchor.deplete");
 		put("Respawn Anchor Set Spawnpoint", "block.respawn_anchor.set_spawn");
-		// End of Blocks, Ambience below
+		// End of Blocks, Environment below
 		put("Cave Ambience", "ambient.cave");
 		put("Lightning Impact", "entity.lightning_bolt.impact");
 		put("Lightning Thunder", "entity.lightning_bolt.thunder");
@@ -498,7 +499,23 @@ public class DFSound {
 		put("Underwater Ambience Additions (Ultra Rare)", "ambient.underwater.loop.additions.ultra_rare");
 		put("Weather Rain", "weather.rain");
 		put("Weather Rain Above", "weather.rain.above");
-		// End of Ambience, Item Sounds below
+		put("Basalt Deltas Ambience", "ambient.basalt_deltas.loop")
+		put("Basalt Deltas Ambience Additions", "ambient.basalt_deltas.additions")
+		put("Basalt Deltas Ambience (Mood)", "ambient.basalt_deltas.mood")
+		put("Crimson Forest Ambience", "ambient.crimson_forest.loop")
+		put("Crimson Forest Ambience Additions", "ambient.crimson_forest.additions")
+		put("Crimson Forest Ambience (Mood)", "ambient.crimson_forest.mood")
+		put("Nether Wastes Ambience", "ambient.nether_wastes.loop")
+		put("Nether Wastes Ambience Additions", "ambient.nether_wastes.additions")
+		put("Nether Wastes Ambience (Mood)", "ambient.nether_wastes.mood")
+		put("Soul Escape", "particle.soul_escape")
+		put("Soul Sand Valley Ambience", "ambient.soul_sand_valley.loop")
+		put("Soul Sand Valley Ambience Additions", "ambient.soul_sand_valley.additions")
+		put("Soul Sand Valley Ambience  (Mood)", "ambient.soul_sand_valley.mood")
+		put("Warped Forest Ambience", "ambient.warped_forest.loop")
+		put("Warped Forest Ambience Additions", "ambient.warped_forest.additions")
+		put("Warped Forest Ambience (Mood)", "ambient.warped_forest.mood")
+		// End of Environment, Item Sounds below
 		put("Player Attack (Critical)", "entity.player.attack.crit");
 		put("Player Attack (Knockback)", "entity.player.attack.knockback");
 		put("Player Attack (No Damage)", "entity.player.attack.nodamage");
