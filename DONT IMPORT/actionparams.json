@@ -1489,7 +1489,7 @@
         "defaultValue": null
       }
     ]
-  ]
+  ],
   "SpawnMob": [
     [
       {
@@ -1527,6 +1527,132 @@
         "type": "ITEM",
         "repeating": true,
         "defaultValue": [null, null, null, null, null, null]
+      }
+    ]
+  ],
+  "SpawnItem": [
+    [
+      {
+        "name": "items",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": null
+      },
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "customName",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SpawnVehicle": [
+    [
+      {
+        "name": "vehicle",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "customName",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SpawnExpOrb": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "amount",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 1
+      },
+      {
+        "name": "customName",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "Explosion": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "power",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 4
+      }
+    ]
+  ],
+  "SpawnTNT": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "power",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 4
+      },
+      {
+        "name": "fuse",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 80
+      },
+      {
+        "name": "customName",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SpawnFangs": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "customName",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
       }
     ]
   ]
