@@ -320,6 +320,22 @@
 
 ✅ SpawnMob
 
+✅ SpawnItem
+
+✅ SpawnVehicle
+
+✅ SpawnExpOrb
+
+✅ Explosion
+
+✅ SpawnTNT
+
+✅ SpawnFangs
+
+❌ Firework
+
+❌ LaunchProj
+
 # Legend
 
 ❌ = No Support
