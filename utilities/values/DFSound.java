@@ -499,22 +499,22 @@ public class DFSound {
 		put("Underwater Ambience Additions (Ultra Rare)", "ambient.underwater.loop.additions.ultra_rare");
 		put("Weather Rain", "weather.rain");
 		put("Weather Rain Above", "weather.rain.above");
-		put("Basalt Deltas Ambience", "ambient.basalt_deltas.loop")
-		put("Basalt Deltas Ambience Additions", "ambient.basalt_deltas.additions")
-		put("Basalt Deltas Ambience (Mood)", "ambient.basalt_deltas.mood")
-		put("Crimson Forest Ambience", "ambient.crimson_forest.loop")
-		put("Crimson Forest Ambience Additions", "ambient.crimson_forest.additions")
-		put("Crimson Forest Ambience (Mood)", "ambient.crimson_forest.mood")
-		put("Nether Wastes Ambience", "ambient.nether_wastes.loop")
-		put("Nether Wastes Ambience Additions", "ambient.nether_wastes.additions")
-		put("Nether Wastes Ambience (Mood)", "ambient.nether_wastes.mood")
-		put("Soul Escape", "particle.soul_escape")
-		put("Soul Sand Valley Ambience", "ambient.soul_sand_valley.loop")
-		put("Soul Sand Valley Ambience Additions", "ambient.soul_sand_valley.additions")
-		put("Soul Sand Valley Ambience  (Mood)", "ambient.soul_sand_valley.mood")
-		put("Warped Forest Ambience", "ambient.warped_forest.loop")
-		put("Warped Forest Ambience Additions", "ambient.warped_forest.additions")
-		put("Warped Forest Ambience (Mood)", "ambient.warped_forest.mood")
+		put("Basalt Deltas Ambience", "ambient.basalt_deltas.loop");
+		put("Basalt Deltas Ambience Additions", "ambient.basalt_deltas.additions");
+		put("Basalt Deltas Ambience (Mood)", "ambient.basalt_deltas.mood");
+		put("Crimson Forest Ambience", "ambient.crimson_forest.loop");
+		put("Crimson Forest Ambience Additions", "ambient.crimson_forest.additions");
+		put("Crimson Forest Ambience (Mood)", "ambient.crimson_forest.mood");
+		put("Nether Wastes Ambience", "ambient.nether_wastes.loop");
+		put("Nether Wastes Ambience Additions", "ambient.nether_wastes.additions");
+		put("Nether Wastes Ambience (Mood)", "ambient.nether_wastes.mood");
+		put("Soul Escape", "particle.soul_escape");
+		put("Soul Sand Valley Ambience", "ambient.soul_sand_valley.loop");
+		put("Soul Sand Valley Ambience Additions", "ambient.soul_sand_valley.additions");
+		put("Soul Sand Valley Ambience  (Mood)", "ambient.soul_sand_valley.mood");
+		put("Warped Forest Ambience", "ambient.warped_forest.loop");
+		put("Warped Forest Ambience Additions", "ambient.warped_forest.additions");
+		put("Warped Forest Ambience (Mood)", "ambient.warped_forest.mood");
 		// End of Environment, Item Sounds below
 		put("Player Attack (Critical)", "entity.player.attack.crit");
 		put("Player Attack (Knockback)", "entity.player.attack.knockback");
