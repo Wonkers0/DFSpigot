@@ -93,7 +93,6 @@ function spigotify(thread) {
     }
 
     let actionSyntax = `${blockClasses()[codeBlock.block]}.invokeAction(${blockParams(codeBlock)[codeBlock.block]})`
-    console.log(actionSyntax.replaceAll("{indent}", "  "))
     if (!ifStatements.includes(codeBlock.block))
       mainFunc.push(`${actionSyntax};\n`)
     else {
@@ -104,8 +103,6 @@ function spigotify(thread) {
 
       mainTarget = codeBlock.target
     }
-    
-    console.log(code)
     
     newImport([`me.wonk2.utilities.actions.${blockClasses()[codeBlock.block]}`])
     
@@ -267,8 +264,6 @@ function blockClasses() {
 }
 
 function blockParams(codeBlock) {
-  console.log("CODE BLOCK:")
-  console.log(codeBlock)
   return {
     "player_action": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", ${selectionSyntax(codeBlock.target)}`,
     "set_var": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", ${selectionSyntax(codeBlock.target)}, localVars`,
@@ -283,7 +278,7 @@ function selectionSyntax(target) {
     AllPlayers: "Bukkit.getOnlinePlayers().toArray(new LivingEntity[0])"
   };
 
-  if(target == mainTarget) return `new LivingEntity[]{target}`
+  if(target == mainTarget && mainTarget != null) return `new LivingEntity[]{target}`
   
   return target == null ?
     targetTypes["default"] :
@@ -294,8 +289,6 @@ function findParent(parentArray, arr){
   for(let i = 0; i < parentArray.length; i++){
     if(!Array.isArray(parentArray[i])) continue
     
-    console.log(`PARENT ARRAY: ${parentArray[i]}`)
-    console.log(`ARR: ${JSON.stringify(arr)}`)
     if(JSON.stringify(parentArray[i]) == JSON.stringify(arr)) return parentArray
     else if (Array.isArray(parentArray[i])){
       let potentialReturn = findParent(parentArray[i], arr)
