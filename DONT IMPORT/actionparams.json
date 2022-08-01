@@ -1402,7 +1402,7 @@
       },
       {
         "name": "lists",
-        "type": "VAR",
+        "type": "LIST",
         "repeating": true,
         "defaultValue": null
       }
@@ -1418,7 +1418,7 @@
       },
       {
         "name": "list",
-        "type": "VAR",
+        "type": "LIST",
         "repeating": false,
         "defaultValue": null
       },
@@ -1462,7 +1462,7 @@
       },
       {
         "name": "list",
-        "type": "VAR",
+        "type": "LIST",
         "repeating": false,
         "defaultValue": null
       },
@@ -1484,7 +1484,7 @@
       },
       {
         "name": "list",
-        "type": "VAR",
+        "type": "LIST",
         "repeating": false,
         "defaultValue": null
       }
