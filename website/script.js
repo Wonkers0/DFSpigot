@@ -174,6 +174,8 @@ function javafyParam(arg,slot) {
         case "snd":
             return `new DFSound("${arg.data.sound}", ${arg.data.pitch}f, ${arg.data.vol}f)`;
         case "loc":
+            newImport(["org.bukkit.Location", "org.bukkit.Bukkit"])
+            
             let loc = arg.data.loc;
             return `new Location(Bukkit.getServer().getWorlds().get(0), ${loc.x}, ${loc.y}, ${loc.z}, ${loc.yaw}, ${loc.pitch})`;
         case "item":
