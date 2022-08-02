@@ -70,29 +70,8 @@ public class IfPlayer {
 				Location tL = target.getLocation();
 				double radius = (double) args.get("radius").getVal();
 				
-				for(Location loc : locs){
-					switch(tags.get("Shape")){
-						case "Sphere": {
-							if(Math.sqrt(Math.pow(tL.getX(), 2) + Math.pow(tL.getY(), 2) + Math.pow(tL.getZ(), 2)) <= radius) return true;
-							break;
-						}
-						case "Circle": {
-							if(Math.sqrt(Math.pow(tL.getX(), 2) + Math.pow(tL.getZ(), 2)) <= radius) return true;
-							break;
-						}
-						case "Cube": {
-							if(Math.abs(tL.getX() - loc.getX()) <= radius) return true;
-							if(Math.abs(tL.getY() - loc.getY()) <= radius) return true;
-							if(Math.abs(tL.getZ() - loc.getZ()) <= radius) return true;
-							break;
-						}
-						case "Square": {
-							if(Math.abs(tL.getX() - loc.getX()) <= radius) return true;
-							if(Math.abs(tL.getZ() - loc.getZ()) <= radius) return true;
-							break;
-						}
-					}
-				}
+				for(Location loc : locs)
+				   DFUtilities.locIsNear(loc, radius, tags.get("Shape"));
 				
 				return false;
 			}
