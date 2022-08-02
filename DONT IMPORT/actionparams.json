@@ -1,5 +1,5 @@
 {
-  "SetHotbar": [
+  "PLAYERACTION:SetHotbar": [
     [
       {
         "name": "items",
@@ -19,10 +19,8 @@
       }
     ]
   ],
-  "CloseInv": [
-    []
-  ],
-  "GiveItems": [
+  "PLAYERACTION:CloseInv": [[]],
+  "PLAYERACTION:GiveItems": [
     [
       {
         "name": "items",
@@ -32,7 +30,7 @@
       }
     ]
   ],
-  "SetAtkSpeed": [
+  "PLAYERACTION:SetAtkSpeed": [
     [
       {
         "name": "amount",
@@ -42,7 +40,7 @@
       }
     ]
   ],
-  "SetMenuItem": [
+  "PLAYERACTION:SetMenuItem": [
     [
       {
         "name": "slot",
@@ -58,7 +56,7 @@
       }
     ]
   ],
-  "SetArmor": [
+  "PLAYERACTION:SetArmor": [
     [
       {
         "name": "head",
@@ -86,7 +84,7 @@
       }
     ]
   ],
-  "AddInvRow": [
+  "PLAYERACTION:AddInvRow": [
     [
       {
         "name": "items",
@@ -106,7 +104,7 @@
       }
     ]
   ],
-  "GiveExp": [
+  "PLAYERACTION:GiveExp": [
     [
       {
         "name": "amount",
@@ -116,7 +114,7 @@
       }
     ]
   ],
-  "PurgeVars": [
+  "SETVAR:PurgeVars": [
     [
       {
         "name": "varNames",
@@ -126,7 +124,7 @@
       }
     ]
   ],
-  "Damage": [
+  "PLAYERACTION:Damage": [
     [
       {
         "name": "amount",
@@ -142,7 +140,7 @@
       }
     ]
   ],
-  "SetExp": [
+  "PLAYERACTION:SetExp": [
     [
       {
         "name": "amount",
@@ -152,7 +150,7 @@
       }
     ]
   ],
-  "ReplaceItems": [
+  "PLAYERACTION:ReplaceItems": [
     [
       {
         "name": "replaceables",
@@ -176,7 +174,7 @@
       }
     ]
   ],
-  "ActionBar": [
+  "PLAYERACTION:ActionBar": [
     [
       {
         "name": "msg",
@@ -186,7 +184,7 @@
       }
     ]
   ],
-  "SendMessage": [
+  "PLAYERACTION:SendMessage": [
     [
       {
         "name": "msg",
@@ -196,7 +194,7 @@
       }
     ]
   ],
-  "PlaySoundSeq": [
+  "PLAYERACTION:PlaySoundSeq": [
     [
       {
         "name": "sounds",
@@ -218,7 +216,7 @@
       }
     ]
   ],
-  "SetSlotItem": [
+  "PLAYERACTION:SetSlotItem": [
     [
       {
         "name": "item",
@@ -234,7 +232,7 @@
       }
     ]
   ],
-  "AbsoluteValue": [
+  "SETVAR:AbsoluteValue": [
     [
       {
         "name": "var",
@@ -250,7 +248,7 @@
       }
     ]
   ],
-  "Root": [
+  "SETVAR:Root": [
     [
       {
         "name": "var",
@@ -272,7 +270,7 @@
       }
     ]
   ],
-  "%": [
+  "SETVAR:%": [
     [
       {
         "name": "var",
@@ -294,7 +292,7 @@
       }
     ]
   ],
-  "SetInventory": [
+  "PLAYERACTION:SetInventory": [
     [
       {
         "name": "items",
@@ -332,7 +330,7 @@
       }
     ]
   ],
-  "Heal": [
+  "PLAYERACTION:Heal": [
     [
       {
         "name": "amount",
@@ -342,7 +340,7 @@
       }
     ]
   ],
-  "SetSpeed": [
+  "PLAYERACTION:SetSpeed": [
     [
       {
         "name": "speed",
@@ -352,7 +350,7 @@
       }
     ]
   ],
-  "+": [
+  "SETVAR:+": [
     [
       {
         "name": "var",
@@ -368,7 +366,7 @@
       }
     ]
   ],
-  "ExpandInv": [
+  "PLAYERACTION:ExpandInv": [
     [
       {
         "name": "items",
@@ -378,7 +376,7 @@
       }
     ]
   ],
-  "SetInvName": [
+  "PLAYERACTION:SetInvName": [
     [
       {
         "name": "invName",
@@ -388,7 +386,7 @@
       }
     ]
   ],
-  "-": [
+  "SETVAR:-": [
     [
       {
         "name": "var",
@@ -404,7 +402,7 @@
       }
     ]
   ],
-  "/": [
+  "SETVAR:/": [
     [
       {
         "name": "var",
@@ -420,7 +418,7 @@
       }
     ]
   ],
-  "-=": [
+  "SETVAR:-=": [
     [
       {
         "name": "var",
@@ -442,13 +440,9 @@
       }
     ]
   ],
-  "SetInventoryKept": [
-    []
-  ],
-  "SetAllowFlight": [
-    []
-  ],
-  "SetItemCooldown": [
+  "PLAYERACTION:SetInventoryKept": [[]],
+  "PLAYERACTION:SetAllowFlight": [[]],
+  "PLAYERACTION:SetItemCooldown": [
     [
       {
         "name": "item",
@@ -464,7 +458,7 @@
       }
     ]
   ],
-  "SendHover": [
+  "PLAYERACTION:SendHover": [
     [
       {
         "name": "msg",
@@ -480,7 +474,7 @@
       }
     ]
   ],
-  "SetMaxHealth": [
+  "PLAYERACTION:SetMaxHealth": [
     [
       {
         "name": "amount",
@@ -490,7 +484,7 @@
       }
     ]
   ],
-  "SetAirTicks": [
+  "PLAYERACTION:SetAirTicks": [
     [
       {
         "name": "ticks",
@@ -500,7 +494,7 @@
       }
     ]
   ],
-  "=": [
+  "SETVAR:=": [
     [
       {
         "name": "var",
@@ -516,10 +510,8 @@
       }
     ]
   ],
-  "LoadInv": [
-    []
-  ],
-  "GivePotion": [
+  "PLAYERACTION:LoadInv": [[]],
+  "PLAYERACTION:GivePotion": [
     [
       {
         "name": "effects",
@@ -529,7 +521,7 @@
       }
     ]
   ],
-  "ParseNumber": [
+  "SETVAR:ParseNumber": [
     [
       {
         "name": "var",
@@ -545,10 +537,8 @@
       }
     ]
   ],
-  "ClearPotions": [
-    []
-  ],
-  "Exponent": [
+  "PLAYERACTION:ClearPotions": [[]],
+  "SETVAR:Exponent": [
     [
       {
         "name": "var",
@@ -570,7 +560,7 @@
       }
     ]
   ],
-  "PlaySound": [
+  "PLAYERACTION:PlaySound": [
     [
       {
         "name": "sounds",
@@ -586,7 +576,7 @@
       }
     ]
   ],
-  "RemoveItems": [
+  "PLAYERACTION:RemoveItems": [
     [
       {
         "name": "removals",
@@ -596,7 +586,7 @@
       }
     ]
   ],
-  "SetTabListInfo": [
+  "PLAYERACTION:SetTabListInfo": [
     [
       {
         "name": "tabInfo",
@@ -606,10 +596,8 @@
       }
     ]
   ],
-  "SaveInv": [
-    []
-  ],
-  "SetHealth": [
+  "PLAYERACTION:SaveInv": [[]],
+  "PLAYERACTION:SetHealth": [
     [
       {
         "name": "amount",
@@ -619,7 +607,7 @@
       }
     ]
   ],
-  "EnableBlocks": [
+  "PLAYERACTION:EnableBlocks": [
     [
       {
         "name": "blocks",
@@ -629,7 +617,7 @@
       }
     ]
   ],
-  "OpenBlockInv": [
+  "PLAYERACTION:OpenBlockInv": [
     [
       {
         "name": "loc",
@@ -639,10 +627,10 @@
       }
     ]
   ],
-  "SetCollidable": [
+  "PLAYERACTION:SetCollidable": [
     []
   ],
-  "RemoveBossBar": [
+  "PLAYERACTION:RemoveBossBar": [
     [
       {
         "name": "index",
@@ -652,7 +640,7 @@
       }
     ]
   ],
-  "SetFallDistance": [
+  "PLAYERACTION:SetFallDistance": [
     [
       {
         "name": "distance",
@@ -662,7 +650,7 @@
       }
     ]
   ],
-  "Logarithm": [
+  "SETVAR:Logarithm": [
     [
       {
         "name": "var",
@@ -684,7 +672,7 @@
       }
     ]
   ],
-  "SetEquipment": [
+  "PLAYERACTION:SetEquipment": [
     [
       {
         "name": "item",
@@ -694,7 +682,7 @@
       }
     ]
   ],
-  "ClampNumber": [
+  "SETVAR:ClampNumber": [
     [
       {
         "name": "var",
@@ -742,7 +730,7 @@
       }
     ]
   ],
-  "SetInvulTicks": [
+  "PLAYERACTION:SetInvulTicks": [
     [
       {
         "name": "ticks",
@@ -752,7 +740,7 @@
       }
     ]
   ],
-  "SetCursorItem": [
+  "PLAYERACTION:SetCursorItem": [
     [
       {
         "name": "item",
@@ -762,10 +750,10 @@
       }
     ]
   ],
-  "SetDropsEnabled": [
+  "PLAYERACTION:SetDropsEnabled": [
     []
   ],
-  "RemovePotion": [
+  "PLAYERACTION:RemovePotion": [
     [
       {
         "name": "effects",
@@ -775,7 +763,7 @@
       }
     ]
   ],
-  "SetAbsorption": [
+  "PLAYERACTION:SetAbsorption": [
     [
       {
         "name": "amount",
@@ -785,7 +773,7 @@
       }
     ]
   ],
-  "RandomValue": [
+  "SETVAR:RandomValue": [
     [
       {
         "name": "var",
@@ -801,7 +789,7 @@
       }
     ]
   ],
-  "SetBossBar": [
+  "PLAYERACTION:SetBossBar": [
     [
       {
         "name": "title",
@@ -829,7 +817,7 @@
       }
     ]
   ],
-  "SetFireTicks": [
+  "PLAYERACTION:SetFireTicks": [
     [
       {
         "name": "ticks",
@@ -839,7 +827,7 @@
       }
     ]
   ],
-  "ShowInv": [
+  "PLAYERACTION:ShowInv": [
     [
       {
         "name": "items",
@@ -849,7 +837,7 @@
       }
     ]
   ],
-  "RemoveInvRow": [
+  "PLAYERACTION:RemoveInvRow": [
     [
       {
         "name": "rows",
@@ -859,7 +847,7 @@
       }
     ]
   ],
-  "SetSlot": [
+  "PLAYERACTION:SetSlot": [
     [
       {
         "name": "slot",
@@ -869,7 +857,7 @@
       }
     ]
   ],
-  "DisableBlocks": [
+  "PLAYERACTION:DisableBlocks": [
     [
       {
         "name": "blocks",
@@ -879,7 +867,7 @@
       }
     ]
   ],
-  "SetFoodLevel": [
+  "PLAYERACTION:SetFoodLevel": [
     [
       {
         "name": "amount",
@@ -889,7 +877,7 @@
       }
     ]
   ],
-  "SendMessageSeq": [
+  "PLAYERACTION:SendMessageSeq": [
     [
       {
         "name": "msgs",
@@ -905,10 +893,10 @@
       }
     ]
   ],
-  "ClearInv": [
+  "PLAYERACTION:ClearInv": [
     []
   ],
-  "SetFreezeTicks": [
+  "PLAYERACTION:SetFreezeTicks": [
     [
       {
         "name": "ticks",
@@ -918,7 +906,7 @@
       }
     ]
   ],
-  "+=": [
+  "SETVAR:+=": [
     [
       {
         "name": "var",
@@ -940,7 +928,7 @@
       }
     ]
   ],
-  "SetSaturation": [
+  "PLAYERACTION:SetSaturation": [
     [
       {
         "name": "amount",
@@ -950,7 +938,7 @@
       }
     ]
   ],
-  "x": [
+  "SETVAR:x": [
     [
       {
         "name": "var",
@@ -966,7 +954,7 @@
       }
     ]
   ],
-  "SendTitle": [
+  "PLAYERACTION:SendTitle": [
     [
       {
         "name": "title",
@@ -1000,10 +988,10 @@
       }
     ]
   ],
-  "InstantRespawn": [
+  "PLAYERACTION:InstantRespawn": [
     []
   ],
-  "StopSound": [
+  "PLAYERACTION:StopSound": [
     [
       {
         "name": "sounds",
@@ -1013,7 +1001,7 @@
       }
     ]
   ],
-  "ClearItems": [
+  "PLAYERACTION:ClearItems": [
     [
       {
         "name": "items",
@@ -1023,7 +1011,7 @@
       }
     ]
   ],
-  "DisplayHologram": [
+  "PLAYERACTION:DisplayHologram": [
     [
       {
         "name": "text",
@@ -1039,7 +1027,7 @@
       }
     ]
   ],
-  "WrapNumber": [
+  "SETVAR:WrapNumber": [
     [
       {
         "name": "var",
@@ -1087,7 +1075,7 @@
       }
     ]
   ],
-  "Average": [
+  "SETVAR:Average": [
     [
       {
         "name": "var",
@@ -1103,7 +1091,7 @@
       }
     ]
   ],
-  "RandomNumber": [
+  "SETVAR:RandomNumber": [
     [
       {
         "name": "var",
@@ -1125,7 +1113,7 @@
       }
     ]
   ],
-  "Round": [
+  "SETVAR:Round": [
     [
       {
         "name": "var",
@@ -1147,7 +1135,7 @@
       }
     ]
   ],
-  "Text": [
+  "SETVAR:Text": [
     [
       {
         "name": "var",
@@ -1163,7 +1151,7 @@
       }
     ]
   ],
-  "ReplaceText": [
+  "SETVAR:ReplaceText": [
     [
       {
         "name": "var",
@@ -1191,7 +1179,7 @@
       }
     ]
   ],
-  "RemoveText": [
+  "SETVAR:RemoveText": [
     [
       {
         "name": "var",
@@ -1213,7 +1201,7 @@
       }
     ]
   ],
-  "TrimText": [
+  "SETVAR:TrimText": [
     [
       {
         "name": "var",
@@ -1241,7 +1229,7 @@
       }
     ]
   ],
-  "SplitText": [
+  "SETVAR:SplitText": [
     [
       {
         "name": "var",
@@ -1263,28 +1251,12 @@
       }
     ]
   ],
-  "JoinText": [
+  "SETVAR:JoinText": [
     [
-
+      
     ]
   ],
-  "SetCase": [
-    [
-      {
-        "name": "var",
-        "type": "VAR",
-        "repeating": false,
-        "defaultValue": null
-      },
-      {
-        "name": "txt",
-        "type": "TXT",
-        "repeating": false,
-        "defaultValue": null
-      }
-    ]
-  ],
-  "TranslateColors": [
+  "SETVAR:SetCase": [
     [
       {
         "name": "var",
@@ -1300,7 +1272,7 @@
       }
     ]
   ],
-  "TextLength": [
+  "SETVAR:TranslateColors": [
     [
       {
         "name": "var",
@@ -1316,7 +1288,23 @@
       }
     ]
   ],
-  "RepeatText": [
+  "SETVAR:TextLength": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "txt",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:RepeatText": [
     [
       {
         "name": "var",
@@ -1338,7 +1326,7 @@
       }
     ]
   ],
-  "FormatTime": [
+  "SETVAR:FormatTime": [
     [ 
       {
         "name": "var",
@@ -1360,7 +1348,7 @@
       }
     ]  
   ],
-  "CreateList": [
+  "SETVAR:CreateList": [
     [
       {
         "name": "var",
@@ -1376,7 +1364,7 @@
       }
     ]
   ],
-  "AppendValue": [
+  "SETVAR:AppendValue": [
     [
       {
         "name": "var",
@@ -1392,7 +1380,7 @@
       }
     ]
   ],
-  "AppendList": [
+  "SETVAR:AppendList": [
     [
       {
         "name": "var",
@@ -1408,7 +1396,7 @@
       }
     ]
   ],
-  "GetListValue": [
+  "SETVAR:GetListValue": [
     [
       {
         "name": "var",
@@ -1430,7 +1418,7 @@
       }
     ]
   ],
-  "SetListValue": [
+  "SETVAR:SetListValue": [
     [
       {
         "name": "var",
@@ -1452,7 +1440,7 @@
       }
     ]
   ],
-  "GetValueIndex": [
+  "SETVAR:GetValueIndex": [
     [
       {
         "name": "var",
@@ -1474,7 +1462,7 @@
       }
     ]
   ],
-  "ListLength": [
+  "SETVAR:ListLength": [
     [
       {
         "name": "var",
@@ -1490,7 +1478,7 @@
       }
     ]
   ],
-  "SpawnMob": [
+  "GAMEACTION:SpawnMob": [
     [
       {
         "name": "mob",
@@ -1530,7 +1518,7 @@
       }
     ]
   ],
-  "SpawnItem": [
+  "GAMEACTION:SpawnItem": [
     [
       {
         "name": "items",
@@ -1552,7 +1540,7 @@
       }
     ]
   ],
-  "SpawnVehicle": [
+  "GAMEACTION:SpawnVehicle": [
     [
       {
         "name": "vehicle",
@@ -1574,7 +1562,7 @@
       }
     ]
   ],
-  "SpawnExpOrb": [
+  "GAMEACTION:SpawnExpOrb": [
     [
       {
         "name": "loc",
@@ -1596,7 +1584,7 @@
       }
     ]
   ],
-  "Explosion": [
+  "GAMEACTION:Explosion": [
     [
       {
         "name": "loc",
@@ -1612,7 +1600,7 @@
       }
     ]
   ],
-  "SpawnTNT": [
+  "GAMEACTION:SpawnTNT": [
     [
       {
         "name": "loc",
@@ -1640,7 +1628,7 @@
       }
     ]
   ],
-  "SpawnFangs": [
+  "GAMEACTION:SpawnFangs": [
     [
       {
         "name": "loc",
@@ -1656,14 +1644,14 @@
       }
     ]
   ],
-  "IsSneaking": [[]],
-  "IsSprinting": [[]],
-  "IsGliding": [[]],
-  "IsFlying": [[]],
-  "IsGrounded": [[]],
-  "IsSwimming": [[]],
-  "IsBlocking": [[]],
-  "IsLookingAt": [
+  "IFPLAYER:IsSneaking": [[]],
+  "IFPLAYER:IsSprinting": [[]],
+  "IFPLAYER:IsGliding": [[]],
+  "IFPLAYER:IsFlying": [[]],
+  "IFPLAYER:IsGrounded": [[]],
+  "IFPLAYER:IsSwimming": [[]],
+  "IFPLAYER:IsBlocking": [[]],
+  "IFPLAYER:IsLookingAt": [
     [
       {
         "name": "blocks",
@@ -1693,7 +1681,7 @@
       }
     ]
   ],
-  "StandingOn": [
+  "IFPLAYER:StandingOn": [
     [
       {
         "name": "blocks",
@@ -1711,7 +1699,7 @@
       }
     ]
   ],
-  "IsNear": [
+  "IFPLAYER:IsNear": [
     [
       {
         "name": "locs",
@@ -1727,7 +1715,7 @@
       }
     ]
   ],
-  "InWorldBorder": [
+  "IFPLAYER:InWorldBorder": [
     [
       {
         "name": "loc",
@@ -1737,7 +1725,7 @@
       }
     ]
   ],
-  "IsHolding": [
+  "IFPLAYER:IsHolding": [
     [
       {
         "name": "items",
@@ -1747,7 +1735,7 @@
       }
     ]
   ],
-  "HasItem": [
+  "IFPLAYER:HasItem": [
     [
       {
         "name": "items",
@@ -1757,7 +1745,7 @@
       }
     ]
   ],
-  "IsWearing": [
+  "IFPLAYER:IsWearing": [
     [
       {
         "name": "items",
@@ -1767,7 +1755,7 @@
       }
     ]
   ],
-  "NoItemCooldown": [
+  "IFPLAYER:NoItemCooldown": [
     [
       {
         "name": "items",
@@ -1777,23 +1765,7 @@
       }
     ]
   ],
-  "HasSlotItem": [
-    [
-      {
-        "name": "slots",
-        "type": "NUM",
-        "repeating": true,
-        "defaultValue": null
-      },
-      {
-        "name": "items",
-        "type": "ITEM",
-        "repeating": true,
-        "defaultValue": null
-      }
-    ]
-  ],
-  "MenuSlotEquals": [
+  "IFPLAYER:HasSlotItem": [
     [
       {
         "name": "slots",
@@ -1809,7 +1781,23 @@
       }
     ]
   ],
-  "CursorItem": [
+  "IFPLAYER:MenuSlotEquals": [
+    [
+      {
+        "name": "slots",
+        "type": "NUM",
+        "repeating": true,
+        "defaultValue": null
+      },
+      {
+        "name": "items",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "IFPLAYER:CursorItem": [
     [
       {
         "name": "items",
@@ -1819,7 +1807,7 @@
       }
     ]
   ],
-  "NameEquals": [
+  "IFPLAYER:NameEquals": [
     [
       {
         "name": "names",
@@ -1829,12 +1817,294 @@
       }
     ]
   ],
-  "SlotEquals": [
+  "IFPLAYER:SlotEquals": [
     [
       {
         "name": "slot",
         "type": "NUM",
         "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "IFVAR:=": [
+    [
+      {
+        "name": "value",
+        "type": "ANY",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "checks",
+        "type": "ANY",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "IFVAR:!=": [
+    [
+      {
+        "name": "value",
+        "type": "ANY",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "checks",
+        "type": "ANY",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "IFVAR:>": [
+    [
+      {
+        "name": "num",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "check",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "IFVAR:>=": [
+    [
+      {
+        "name": "num",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "check",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "IFVAR:<": [
+    [
+      {
+        "name": "num",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "check",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "IFVAR:<=": [
+    [
+      {
+        "name": "num",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "check",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "IFVAR:InRange": [
+    [
+      {
+        "name": "value",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "lower",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "upper",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ],
+    [
+      {
+        "name": "value",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "lower",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "upper",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "IFVAR:LocIsNear": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "checkLocs",
+        "type": "LOC",
+        "repeating": true,
+        "defaultValue": null
+      },
+      {
+        "name": "radius",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "IFVAR:Contains": [
+    [
+      {
+        "name": "txt",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "checkTxts",
+        "type": "TXT",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "IFVAR:StartsWith": [
+    [
+      {
+        "name": "txt",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "checkTxts",
+        "type": "TXT",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "IFVAR:EndsWith": [
+    [
+      {
+        "name": "txt",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "checkTxts",
+        "type": "TXT",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "IFVAR:VarExists": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "IFVAR:VarIsType": [
+    [    
+      {
+        "name": "value",
+        "type": "ANY",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "IFVAR:ItemEquals": [
+    [
+      {
+        "name": "item",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "checkItems",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "IFVAR:ListContains": [
+    [
+      {
+        "name": "list",
+        "type": "LIST",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "values",
+        "type": "ANY",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "IFVAR:ListValueEq": [
+    [
+      {
+        "name": "list",
+        "type": "LIST",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "index",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "values",
+        "type": "ANY",
+        "repeating": true,
         "defaultValue": null
       }
     ]
