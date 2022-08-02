@@ -1655,5 +1655,188 @@
         "defaultValue": null
       }
     ]
+  ],
+  "IsSneaking": [[]],
+  "IsSprinting": [[]],
+  "IsGliding": [[]],
+  "IsFlying": [[]],
+  "IsGrounded": [[]],
+  "IsSwimming": [[]],
+  "IsBlocking": [[]],
+  "IsLookingAt": [
+    [
+      {
+        "name": "blocks",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": null
+      },
+      {
+        "name": "100",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ],
+    [
+      {
+        "name": "locs",
+        "type": "LOC",
+        "repeating": true,
+        "defaultValue": null
+      },
+      {
+        "name": "100",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "StandingOn": [
+    [
+      {
+        "name": "blocks",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ],
+    [
+      {
+        "name": "locs",
+        "type": "LOC",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "IsNear": [
+    [
+      {
+        "name": "locs",
+        "type": "LOC",
+        "repeating": true,
+        "defaultValue": null
+      },
+      {
+        "name": "radius",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 5
+      }
+    ]
+  ],
+  "InWorldBorder": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "IsHolding": [
+    [
+      {
+        "name": "items",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "HasItem": [
+    [
+      {
+        "name": "items",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "IsWearing": [
+    [
+      {
+        "name": "items",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "NoItemCooldown": [
+    [
+      {
+        "name": "items",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "HasSlotItem": [
+    [
+      {
+        "name": "slots",
+        "type": "NUM",
+        "repeating": true,
+        "defaultValue": null
+      },
+      {
+        "name": "items",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "MenuSlotEquals": [
+    [
+      {
+        "name": "slots",
+        "type": "NUM",
+        "repeating": true,
+        "defaultValue": null
+      },
+      {
+        "name": "items",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "CursorItem": [
+    [
+      {
+        "name": "items",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "NameEquals": [
+    [
+      {
+        "name": "names",
+        "type": "TXT",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SlotEquals": [
+    [
+      {
+        "name": "slot",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
   ]
 }
