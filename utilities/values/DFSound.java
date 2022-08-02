@@ -12,8 +12,8 @@ public class DFSound {
 	public Float pitch = 1f;
 	public Float volume = 2f;
 	
-	/** HASHMAP CONTRIBUTORS: RedCommand, Infernity, shermy_the_cat      **
-	 ** 													TY 🥰 																 **/
+	/** 	HASHMAP CONTRIBUTORS: RedCommand, Infernity, shermy_the_cat      **
+	 **		 													TY 🥰 																 **/
 	static HashMap<String, String> soundMap = new HashMap<>() {{
 		// Blocks
 		put("Pling", "block.note_block.pling");
@@ -560,9 +560,9 @@ public class DFSound {
 		put("Wax Off", "item.axe.wax_off");
 		put("Hoe Till", "item.hoe.till");
 		put("Shovel Flatten", "item.shovel.flatten");
-		put("Fishing Retrieve", "entity.fishing_bobber.retrieve");
-		put("Fishing Splash", "entity.fishing_bobber.splash");
-		put("Fishing Throw", "entity.fishing_bobber.throw");
+		put("Fishing Bobber Retrieve", "entity.fishing_bobber.retrieve");
+		put("Fishing Bobber Splash", "entity.fishing_bobber.splash");
+		put("Fishing Bobber Throw", "entity.fishing_bobber.throw");
 		put("Bottle Empty", "item.bottle.empty");
 		put("Bottle Fill", "item.bottle.fill");
 		put("Dragon Breath Fill", "item.bottle.fill_dragonbreath");
@@ -583,7 +583,7 @@ public class DFSound {
 		put("Chorus Fruit Teleport", "item.chorus_fruit.teleport");
 		put("Dye Use", "item.dye.use");
 		put("Ink Sac Use", "item.ink_sac.use");
-		put("Glow Ink Sac Use", "item.minecraft.glow_ink_sac");
+		put("Glow Ink Sac Use", "item.glow_ink_sac.use");
 		put("Spyglass Use", "item.minecraft.spyglass");
 		put("Spyglass Stop Using", "item.spyglass.stop_using");
 		put("Bundle Drop Contents", "item.bundle.drop_contents");
@@ -591,6 +591,79 @@ public class DFSound {
 		put("Bundle Item Insert", "item.bundle.insert");
 		put("Totem Use", "item.totem.use");
 		put("Wax Copper", "item.honeycomb.wax_on");
+		// End of Item Sounds, Entity Sounds below
+		put("Player Breathe", "entity.player.breath");
+		put("Player Burn", "entity.player.hurt_on_fire");
+		put("Player Freeze", "entity.player.hurt_freeze");
+		put("Player Burp", "entity.player.burp");
+		put("Player Drown", "entity.player.hurt_drown");
+		put("Player Hurt (Sweet Berry Bush)", "entity.player.hurt_sweet_berry_bush");
+		put("Player Level Up", "entity.player.levelup");
+		put("Player Splash (High Speed)", "entity.player.splash.high_speed");
+		put("Death", "entity.player.death");
+		put("Extinguish", "entity.player.extinguish");
+		put("Fall", "entity.player.small_fall");
+		put("Fall (Big)", "entity.player.big_fall");
+		put("Hurt", "entity.player.hurt");
+		put("Splash", "entity.player.splash");
+		put("Swim", "entity.player.swim");
+		put("Challenge Complete", "ui.toast.challenge_complete");
+		put("UI Button Click", "ui.button.click");
+		put("UI Toast In", "ui.toast.in");
+		put("UI Toast Out", "ui.toast.out");
+		put("Witch Throw", "entity.witch.throw");
+		put("Blaze Shoot", "entity.blaze.shoot");
+		put("Wither Shoot", "entity.wither.shoot");
+		put("Shulker Shoot", "entity.shulker.shoot");
+		put("Shulker Bullet Explode", "entity.shulker_bullet.hurt");
+		put("Shulker Bullet Break", "entity.shulker_bullet.hurt");
+		put("Arrow Hit", "entity.arrow.hit");
+		put("Arrow Hit Player", "entity.arrow.hit_player");
+		put("Arrow Shoot", "entity.arrow.shoot");
+		put("Egg Throw", "entity.egg.throw");
+		put("Ender Eye Death", "entity.ender_eye.death");
+		put("Ender Eye Launch", "entity.ender_eye.launch");
+		put("Enderpearl Throw", "entity.ender_pearl.throw");
+		put("Experience Bottle Throw", "entity.experience_bottle.throw");
+		put("Lingering Potion Throw", "entity.lingering_potion.throw");
+		put("Splash Potion Break", "entity.splash_potion.break");
+		put("Splash Potion Throw", "entity.splash_potion.throw");
+		put("Snowball Throw", "entity.snowball.throw");
+		put("Firework Blast", "entity.firework_rocket.blast");
+		put("Firework Blast Far", "entity.firework_rocket.blast_far");
+		put("Firework Large Blast", "entity.firework_rocket.large_blast");
+		put("Firework Large Blast Far", "entity.firework_rocket.large_blast_far");
+		put("Firework Launch", "entity.firework_rocket.launch");
+		put("Firework Shoot", "entity.firework_rocket.shoot");
+		put("Firework Twinkle", "entity.firework_rocket.twinkle");
+		put("Firework Twinkle Far", "entity.firework_rocket.twinkle_far");
+		put("Glow Item Frame Add Item", "entity.glow_item_frame.add_item");
+		put("Glow Item Frame Break", "entity.glow_item_frame.break");
+		put("Glow Item Frame Place", "entity.glow_item_frame.place");
+		put("Glow Item Frame Remove Item", "entity.glow_item_frame.remove_item");
+		put("Glow Item Frame Rotate Item", "entity.glow_item_frame.rotate_item");
+		put("Item Frame Add Item", "entity.item_frame.add_item");
+		put("Item Frame Break", "entity.item_frame.break");
+		put("Item Frame Place", "entity.item_frame.place");
+		put("Item Frame Remove Item", "entity.item_frame.remove_item");
+		put("Item Frame Rotate Item", "entity.item_frame.rotate_item");
+		put("Painting Break", "entity.painting.break");
+		put("Painting Place", "entity.painting.place");
+		put("Boat Paddle Land", "entity.boat.paddle_land");
+		put("Boat Paddle Water", "entity.boat.paddle_water");
+		put("Minecart Inside", "entity.minecart.inside");
+		put("Minecart Inside Water", "entity.minecart.inside.underwater");
+		put("Rolling Minecart", "entity.minecart.riding");
+		put("Explode", "entity.generic.explode");
+		put("Armor Stand Break", "entity.armor_stand.break");
+		put("Armor Stand Fall", "entity.armor_stand.fall");
+		put("Armor Stand Hit", "entity.armor_stand.hit");
+		put("Armor Stand Place", "entity.armor_stand.place");
+		put("Burn", "entity.generic.burn");
+		put("Experience Orb Pickup", "entity.experience_orb.pickup");
+		put("Leash Knot Break", "entity.leash_knot.break");
+		put("Leash Knot Place", "entity.leash_knot.place");
+		put("TNT Primed", "entity.tnt.primed");
 	}};
 	
 	public DFSound(String sound, Float pitch, Float volume){
