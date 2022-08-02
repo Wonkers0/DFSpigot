@@ -8,7 +8,6 @@ import org.bukkit.WorldBorder;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
@@ -71,7 +70,7 @@ public class IfPlayer {
 				double radius = (double) args.get("radius").getVal();
 				
 				for(Location loc : locs)
-				   DFUtilities.locIsNear(loc, radius, tags.get("Shape"));
+					if(DFUtilities.locIsNear(loc, radius, tags.get("Shape"))) return true;
 				
 				return false;
 			}
