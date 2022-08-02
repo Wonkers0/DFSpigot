@@ -33,6 +33,7 @@ export function generate() {
     "org.bukkit.command.Command",
     "org.bukkit.command.CommandExecutor",
     "org.bukkit.entity.LivingEntity",
+    "org.bukkit.entity.Player", // If Player
     "org.bukkit.event.Listener",
     "org.bukkit.event.EventHandler",
     "org.bukkit.plugin.java.JavaPlugin",
@@ -76,7 +77,7 @@ export function generate() {
 let mainTarget = null
 function spigotify(thread) {
   let bannedBlocks = ["event", "process", "function", "entity_event"]
-  let ifStatements = ["if_player"]
+  let ifStatements = ["if_player", "if_var"]
   for (let i = 1; i < thread.length; i++) {
     let codeBlock = thread[i]
     if (bannedBlocks.includes(codeBlock.block)) {
@@ -157,8 +158,9 @@ function getCodeArgs(codeBlock) {
   }
   argMap = slots.length == 0 ? `new HashMap<>(){}` : `new HashMap<>(){{${argMap}\n{indent}}}`
   tagMap = tagKeys.length == 0 ? `new HashMap<>(){}` : `new HashMap<>(){{${tagMap}\n{indent}}}`
+  let actionName = `${codeBlock.block.replaceAll("_", "").toUpperCase()}:${codeBlock.action.replaceAll(/( $)|^ /gi, "")}`;
 
-  return `ParamManager.formatParameters(${argMap}, \n{indent}${tagMap}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", localVars)`
+  return `ParamManager.formatParameters(${argMap}, \n{indent}${tagMap}, "${actionName}", localVars)`
 }
 
 function newImport(newLibraries) {
@@ -259,7 +261,8 @@ function blockClasses() {
     "player_action": "PlayerAction",
     "set_var": "SetVariable",
     "game_action": "GameAction",
-    "if_player": "IfPlayer"
+    "if_player": "IfPlayer",
+    "if_var": "IfVariable"
   }
 }
 
@@ -268,7 +271,8 @@ function blockParams(codeBlock) {
     "player_action": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", ${selectionSyntax(codeBlock.target)}`,
     "set_var": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", ${selectionSyntax(codeBlock.target)}, localVars`,
     "game_action": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", ${selectionSyntax(codeBlock.target)}`,
-    "if_player": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", ${selectionSyntax(codeBlock.target)}`
+    "if_player": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", (Player) target`,
+    "if_var": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", target, localVars`
   }
 }
 
@@ -298,3 +302,4 @@ function findParent(parentArray, arr){
 
   return null
 }
+  
