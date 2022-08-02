@@ -138,6 +138,52 @@
 
 ✅ DisplayHologram
 
+## If Player
+
+✅ IsSneaking
+
+✅ IsSprinting
+
+✅ IsGliding
+
+✅ IsFlying
+
+✅ IsGrounded
+
+✅ IsSwimming
+
+✅ IsBlocking
+
+✅ IsLookingAt
+
+✅ StandingOn
+
+✅ IsNear
+
+✅ InWorldBorder
+
+✅ IsHolding
+
+✅ HasItem
+
+✅ IsWearing
+
+❌ IsUsingItem
+
+✅ NoItemCooldown
+
+✅ HasSlotItem
+
+✅ MenuSlotEquals
+
+✅ CursorItem
+
+❌ HasRoomForItem
+
+✅ NameEquals
+
+✅ SlotEquals
+
 ## Player Event
 
 ❌ CloseInv
@@ -314,9 +360,47 @@
 
 ✅ ListLength
 
+## If Variable
+
+✅ =
+
+✅ !=
+
+✅ >
+
+✅ >=
+
+✅ <
+
+✅ <=
+
+✅ InRange
+
+✅ LocIsNear
+
+❌ TextMatches
+
+✅ Contains
+
+✅ StartsWith
+
+✅ EndsWith
+
+✅ VarExists
+
+✅ VarIsType
+
+✅ ItemEquals
+
+❌ ItemHasTag
+
+✅ ListContains
+
+✅ ListValueEq
+
 # Game
 
-# Game Action
+## Game Action
 
 ✅ SpawnMob
 
