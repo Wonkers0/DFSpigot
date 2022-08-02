@@ -1,6 +1,5 @@
 package me.wonk2.utilities.values;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 
 import java.util.HashMap;
@@ -9,8 +8,8 @@ public class DFSound {
 	
 	private final String name;
 	public Sound sound;
-	public Float pitch = 1f;
-	public Float volume = 2f;
+	public Float pitch;
+	public Float volume;
 	
 	/** 	HASHMAP CONTRIBUTORS: RedCommand, Infernity, shermy_the_cat      **
 	 **		 													TY 🥰 																 **/
@@ -664,6 +663,38 @@ public class DFSound {
 		put("Leash Knot Break", "entity.leash_knot.break");
 		put("Leash Knot Place", "entity.leash_knot.place");
 		put("TNT Primed", "entity.tnt.primed");
+		put("Music Disc - 11", "music_disc.11");
+		put("Music Disc - 13", "music_disc.13");
+		put("Music Disc - Blocks", "music_disc.blocks");
+		put("Music Disc - Cat", "music_disc.cat");
+		put("Music Disc - Chirp", "music_disc.chirp");
+		put("Music Disc - Far", "music_disc.far");
+		put("Music Disc - Mall", "music_disc.mall");
+		put("Music Disc - Mellohi", "music_disc.mellohi");
+		put("Music Disc - Pigstep", "music_disc.pigstep");
+		put("Music Disc - Stal", "music_disc.stal");
+		put("Music Disc - Strad", "music_disc.strad");
+		put("Music Disc - Ward", "music_disc.ward");
+		put("Music Disc - Wait", "music_disc.wait");
+		put("Music Disc - Otherside", "music_disc.otherside");
+		put("Creative Music", "music.creative");
+		put("Credits Music", "music.credits");
+		put("End Music", "music.end");
+		put("Menu Music", "music.menu");
+		put("Overworld Music", "music.overworld");
+		put("Dripstone Caves Music", "music.overworld.dripstone_caves");
+		put("Frozen Peaks Music", "music.overworld.frozen_peaks");
+		put("Grove Music", "music.overworld.grove");
+		put("Jagged Peaks Music", "music.overworld.jagged_peaks");
+		put("Lush Caves Music", "music.overworld.lush_caves");
+		put("Meadow Music", "music.overworld.meadow");
+		put("Snowy Slopes Music", "music.overworld.snowy_slopes");
+		put("Stony Peaks Music", "music.overworld.stony_peaks");
+		put("Basalt Deltas Music", "music.nether.basalt_deltas");
+		put("Crimson Forest Music", "music.nether.crimson_forest");
+		put("Nether Wastes Music", "music.nether.nether_wastes");
+		put("Soul Sand Valley Music", "music.nether.soul_sand_valley");
+		put("Underwater Music", "music.under_water");
 	}};
 	
 	public DFSound(String sound, Float pitch, Float volume){
