@@ -188,7 +188,7 @@
     [
       {
         "name": "msg",
-        "type": "TXT",
+        "type": "ANY",
         "repeating": true,
         "defaultValue": null
       }
