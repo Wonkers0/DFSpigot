@@ -1,4 +1,4 @@
-# 💎 DFSpigot
+# 💎 [DFSpigot](https://dfspigot.wonk2.repl.co)
 A tool for translating DiamondFire templates into Java Spigot Dependency Code.&nbsp;
 
 If you wish to contribute, go ahead, but please follow the code standards laid out by the existing project files, and use the current systems I've created.
