@@ -70,7 +70,7 @@ public class IfPlayer {
 				double radius = (double) args.get("radius").getVal();
 				
 				for(Location loc : locs)
-					if(DFUtilities.locIsNear(loc, radius, tags.get("Shape"))) return true;
+					if(DFUtilities.locIsNear(target.getWorld(), target.getLocation(), loc, radius, tags.get("Shape"))) return true;
 				
 				return false;
 			}

@@ -19,6 +19,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -151,25 +152,25 @@ public class DFUtilities implements Listener {
 		return CraftItemStack.asBukkitCopy(nmsItem);
 	}
 	
-	public static boolean locIsNear(Location loc, double radius, String shape){
+	public static boolean locIsNear(World world, Location checkLoc, Location loc, double radius, String shape){
 		switch(shape){
 			case "Sphere": {
-				if(Math.sqrt(Math.pow(loc.getX(), 2) + Math.pow(loc.getY(), 2) + Math.pow(loc.getZ(), 2)) <= radius) return true;
+				if(Math.sqrt(Math.pow(loc.getX() - checkLoc.getX(), 2) + Math.pow(loc.getY() - checkLoc.getY(), 2) + Math.pow(loc.getZ() - checkLoc.getZ(), 2)) <= radius) return true;
 				break;
 			}
 			case "Circle": {
-				if(Math.sqrt(Math.pow(loc.getX(), 2) + Math.pow(loc.getZ(), 2)) <= radius) return true;
+				if(Math.sqrt(Math.pow(loc.getX() - checkLoc.getX(), 2) + Math.pow(loc.getZ() - checkLoc.getZ(), 2)) <= radius) return true;
 				break;
 			}
 			case "Cube": {
-				if(Math.abs(loc.getX() - loc.getX()) <= radius) return true;
-				if(Math.abs(loc.getY() - loc.getY()) <= radius) return true;
-				if(Math.abs(loc.getZ() - loc.getZ()) <= radius) return true;
+				if(Math.abs(loc.getX() - checkLoc.getX()) <= radius) return true;
+				if(Math.abs(loc.getY() - checkLoc.getY()) <= radius) return true;
+				if(Math.abs(loc.getZ() - checkLoc.getZ()) <= radius) return true;
 				break;
 			}
 			case "Square": {
-				if(Math.abs(loc.getX() - loc.getX()) <= radius) return true;
-				if(Math.abs(loc.getZ() - loc.getZ()) <= radius) return true;
+				if(Math.abs(loc.getX() - checkLoc.getX()) <= radius) return true;
+				if(Math.abs(loc.getZ() - checkLoc.getZ()) <= radius) return true;
 				break;
 			}
 		}

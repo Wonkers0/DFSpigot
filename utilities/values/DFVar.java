@@ -31,12 +31,21 @@ public class DFVar {
 	
 	public static DFValue getVar(DFVar var, HashMap<String, DFValue> localStorage){
 		// Use this method to get the value of a variable
+		return varExists(var, localStorage) ? determineStorage(var.scope, localStorage).get(var.name) : DFValue.nullVar();
+	}
+	
+	public static boolean varExists(DFVar var, HashMap<String, DFValue> localStorage){
+		HashMap<String, DFValue> varStorage = determineStorage(var.scope, localStorage);
+		return varStorage.containsKey(var.name);
+	}
+	
+	private static HashMap<String, DFValue> determineStorage(Scope varScope, HashMap<String, DFValue> localStorage){
 		HashMap<String, DFValue> varStorage = new HashMap<>();
-		if(var.scope == Scope.GLOBAL) varStorage = globalVars;
-		else if (var.scope == Scope.LOCAL) varStorage = localStorage;
-		else if (var.scope == Scope.SAVE) /*TODO: Grab saved variable storage from .yml file*/;
+		if(varScope == Scope.GLOBAL) varStorage = globalVars;
+		else if (varScope == Scope.LOCAL) varStorage = localStorage;
+		else if (varScope == Scope.SAVE) /*TODO: Grab saved variable storage from .yml file*/;
 		
-		return varStorage.containsKey(var.name) ? varStorage.get(var.name) : DFValue.nullVar();
+		return varStorage;
 	}
 	
 	private static final String DOT = "§";
