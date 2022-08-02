@@ -151,6 +151,32 @@ public class DFUtilities implements Listener {
 		return CraftItemStack.asBukkitCopy(nmsItem);
 	}
 	
+	public static boolean locIsNear(Location loc, double radius, String shape){
+		switch(shape){
+			case "Sphere": {
+				if(Math.sqrt(Math.pow(loc.getX(), 2) + Math.pow(loc.getY(), 2) + Math.pow(loc.getZ(), 2)) <= radius) return true;
+				break;
+			}
+			case "Circle": {
+				if(Math.sqrt(Math.pow(loc.getX(), 2) + Math.pow(loc.getZ(), 2)) <= radius) return true;
+				break;
+			}
+			case "Cube": {
+				if(Math.abs(loc.getX() - loc.getX()) <= radius) return true;
+				if(Math.abs(loc.getY() - loc.getY()) <= radius) return true;
+				if(Math.abs(loc.getZ() - loc.getZ()) <= radius) return true;
+				break;
+			}
+			case "Square": {
+				if(Math.abs(loc.getX() - loc.getX()) <= radius) return true;
+				if(Math.abs(loc.getZ() - loc.getZ()) <= radius) return true;
+				break;
+			}
+		}
+		
+		return false;
+	}
+	
 	@EventHandler
 	public static void PlayerLeave(PlayerQuitEvent event){
 		if(Bukkit.getOnlinePlayers().size() == 1) DFVar.globalVars = new HashMap<>(); // Purge all global vars when all players leave
