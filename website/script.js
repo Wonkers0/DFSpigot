@@ -37,6 +37,7 @@ export function generate() {
     "org.bukkit.event.Listener",
     "org.bukkit.event.EventHandler",
     "org.bukkit.plugin.java.JavaPlugin",
+    "org.bukkit.Bukkit",
     "java.util.*"
   ]
   libraries.push(`org.bukkit.event.player.${eventTypes[root.action]}`)
@@ -191,14 +192,13 @@ function removeQuotes(text) {
 function javafyParam(arg, slot) {
   switch (arg.id) {
     case "txt":
-      return `"${removeQuotes(textCodes(arg.data.name))}"`
+      return `"${textCodes(removeQuotes(arg.data.name))}"`
     case "num":
       return arg.data.name + "d"
     case "snd":
       return `new DFSound("${arg.data.sound}", ${arg.data.pitch}f, ${arg.data.vol}f)`
     case "loc":
-      newImport(["org.bukkit.Location", "org.bukkit.Bukkit"])
-
+      newImport(["org.bukkit.Location"])
       let loc = arg.data.loc
       return `new Location(Bukkit.getServer().getWorlds().get(0), ${loc.x}, ${loc.y}, ${loc.z}, ${loc.yaw}, ${loc.pitch})`
     case "item":
@@ -207,7 +207,7 @@ function javafyParam(arg, slot) {
       let potion = arg.data
       return `new PotionEffect(PotionEffectType.${potionEffects()[potion.pot]}, ${potion.dur}, ${potion.amp}, ${slot})`
     case "var":
-      return `new DFVar("${removeQuotes(arg.data.name)}", ${varScopes()[arg.data.scope]})`
+      return `new DFVar("${textCodes(removeQuotes(arg.data.name))}", ${varScopes()[arg.data.scope]})`
   }
 }
 
