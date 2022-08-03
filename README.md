@@ -15,7 +15,7 @@ Once installed, you should see this welcome screen when opening the IDE for the 
 
 <img src="https://user-images.githubusercontent.com/106038003/179754749-bd1dd846-dc9e-4969-adad-cf449aefd0ec.png" width=500px; height=350px; alt="welcomeMenu">
 
-I have provided a starter project with all the boilerplate code you need. Download it [here](https://drive.google.com/drive/folders/17_R8zd2wP7fS9Sk1wV10HNqDKZxBQKew?usp=sharing).<br>
+I have provided a starter project with all the boilerplate code you need. Download it [here](https://drive.google.com/drive/folders/17_R8zd2wP7fS9Sk1wV10HNqDKZxBQKew?usp=sharing). **[OUTDATED]**<br>
 
 After downloading, Click on `"Open or Import"` from the welcome screen and import the project from the google drive.
 <br>
