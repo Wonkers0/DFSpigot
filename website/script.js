@@ -16,12 +16,50 @@ export function generate() {
 
   root = decodedJson.blocks[0];
   eventTypes = {
-    Leave: "PlayerQuitEvent",
-    Join: "PlayerJoinEvent",
-    RightClick: "PlayerInteractEvent",
-    LeftClick: "PlayerInteractEvent",
-    Sneak: "PlayerToggleSneakEvent",
-    SwapHands: "PlayerSwapHandItemsEvent"
+    Leave: ["PlayerQuitEvent"],
+    Join: ["PlayerJoinEvent"],
+    RightClick: ["PlayerInteractEvent", "event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR"],
+    LeftClick: ["PlayerInteractEvent", "event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR"],
+    Sneak: ["PlayerToggleSneakEvent", "event.isSneaking()"],
+    SwapHands: ["PlayerSwapHandItemsEvent"],
+    CloseInv: ["InventoryCloseEvent"],
+		StartFly: ["PlayerToggleFlightEvent", "event.isFlying()"],
+		PickupItem: ["InventoryPickupItemEvent"],
+		BreakBlock: ["BlockBreakEvent"],
+		StartSprint: ["PlayerToggleSprintEvent", "event.isSprinting()"],
+		ShootBow: ["EntityShootBowEvent"],
+		StopFly: ["PlayerToggleFlightEvent", "!event.isFlying()"],
+		PlayerTakeDmg: ["EntityDamageEvent", "event.getEntity() instanceof Player"],
+		ProjHit: ["ProjectileHitEvent"],
+		KillPlayer: ["PlayerDeathEvent"],
+		ClickInvSlot: ["InventoryClickEvent", "event.getInventory() == event.getWhoClicked().getOpenInventory().getBottomInventory()"],
+		Respawn: ["PlayerRespawnEvent"],
+		DamageEntity: ["EntityDamageByEntityEvent", "event.getDamager() instanceof Player && !(event.getEntity() instanceof Player)"],
+		PlayerHeal: ["EntityRegainHealthEvent", "event.getEntity() instanceof Player"],
+		ClickPlayer: ["PlayerInteractEntityEvent", "event.getRightClicked() instanceof Player"],
+		Consume: ["PlayerItemConsumeEvent"],
+		Death: ["PlayerDeathEvent"],
+		PlaceBlock: ["BlockPlaceEvent"],
+		Walk: ["PlayerMoveEvent", "!DFUtilities.playerDidJump(event)"],
+		Dismount: ["EntityDismountEvent", "event.getEntity() instanceof Player"],
+		CloudImbuePlayer: ["AreaEffectCloudApplyEvent", "DFUtilities.cloudAffectedPlayer(event.getAffectedEntities())"], 
+    // TODO: This event may need to change the code equivalent of the Default target from one target to multiple
+		DropItem: ["PlayerDropItemEvent"],
+		ChangeSlot: ["PlayerItemHeldEvent"],
+		ClickEntity: ["PlayerInteractEntityEvent", "!(event.getRightClicked() instanceof Player)"],
+		HorseJump: ["HorseJumpEvent"],
+		ShootProjectile: ["ProjectileLaunchEvent"],
+		Unsneak: ["PlayerToggleSneakEvent", "!event.isSneaking()"],
+		Fish: ["PlayerFishEvent"],
+		BreakItem: ["PlayerItemBreakEvent"],
+		ClickMenuSlot: ["InventoryClickEvent", "event.getInventory() == event.getWhoClicked().getOpenInventory().getTopInventory()"],
+		Riptide: ["PlayerRiptideEvent"],
+		KillMob: ["EntityDamageByEntityEvent", "event.getDamager() instanceof Player && event.getEntity().isDead()"],
+		EntityDmgPlayer: ["EntityDamageByEntityEvent", "event.getEntity() instanceof Player && !(event.getDamager() instanceof Player)"],
+		StopSprint: ["PlayerToggleSprintEvent", "!event.isSprinting()"],
+		Jump: ["PlayerMoveEvent", "DFUtilities.playerDidJump(event)"],
+		ProjDmgPlayer: ["ProjectileHitEvent", "event.getHitEntity() instanceof Player"],
+		PlayerDmgPlayer: ["EntityDamageByEntityEvent", "event.getEntity() instanceof Player && event.getDamager() instanceof Player"]
   }
 
   libraries = [
@@ -33,14 +71,14 @@ export function generate() {
     "org.bukkit.command.Command",
     "org.bukkit.command.CommandExecutor",
     "org.bukkit.entity.LivingEntity",
-    "org.bukkit.entity.Player", // If Player
+    "org.bukkit.entity.Player", // IfPlayer.invokeAction takes in a Player, not a LivingEntity
     "org.bukkit.event.Listener",
     "org.bukkit.event.EventHandler",
     "org.bukkit.plugin.java.JavaPlugin",
     "org.bukkit.Bukkit",
     "java.util.*"
   ]
-  libraries.push(`org.bukkit.event.player.${eventTypes[root.action]}`)
+  libraries.push(`org.bukkit.event.player.${eventTypes[root.action][0]}`)
 
   code = [
     "public class DFPlugin extends JavaPlugin implements Listener, CommandExecutor",
@@ -49,7 +87,7 @@ export function generate() {
     "",
     "@EventHandler",
     [
-      "public void " + root.action + "(" + eventTypes[root.action] + " event)",
+      "public void " + root.action + "(" + eventTypes[root.action][0] + " event)",
       "HashMap<String, DFValue> localVars = new HashMap<>();",
     ],
     "",
@@ -71,13 +109,20 @@ export function generate() {
   ]
 
   mainFunc = code[5]
+  if(eventTypes[root.action][1] != null){
+    let temp = [`if(${eventTypes[root.action][1]})`]
+    mainFunc.push(temp)
+    mainFunc = temp
+
+    newImport(["org.bukkit.event.block.Action"])
+  }
   spigotify(decodedJson.blocks)
 }
 
 
 let mainTarget = null
 function spigotify(thread) {
-  let bannedBlocks = ["event", "process", "function", "entity_event"]
+  let bannedBlocks = [["event"], "process", "function", "entity_event"]
   let ifStatements = ["if_player", "if_var"]
   for (let i = 1; i < thread.length; i++) {
     let codeBlock = thread[i]
