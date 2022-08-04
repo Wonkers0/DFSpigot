@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1.0, width=device-width">
+  <title>DF Spigotifier</title>
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="DF Spigotifier" />
+  <meta name="twitter:description" content="Convert your DiamondFire games into server plugins!" />
+  <meta name="twitter:image" content="./images/spigotDF.png" />
+  <meta content="https://i.ibb.co/WKn5Jn7/spigotDF.png" property="og:image">
+  <meta content="#fcba03" data-react-helmet="true" name="theme-color">
+
+  <link href="./style.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" type="image/x-icon" href="./images/spigotDF.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;400;600;700;800;900&family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Readex+Pro:wght@200;300;400;500;600;700&family=Nanum+Gothic+Coding&display=swap"
+    rel="stylesheet">
+  
+  <script src="./codemirror-5.65.7/lib/codemirror.js"></script>
+  <link href="./codemirror.css" rel="stylesheet"/>
+  <script src="./codemirror-5.65.7/mode/javascript/javascript.js"></script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.0.4/pako_inflate.js"></script>
+  <script defer src="https://kit.fontawesome.com/1fc4046318.js"></script>
+  <script defer src="./index.js" type="module"></script>
+</head>
+
+<body>
+  <nav>
+    <div id="navHeader">
+      <img src="images/spigotDF.png" id="navIcon" style="margin: 0px 10px 0px 20px;">
+      <a class="navLink" id="navTitle" style="text-transform: uppercase;float: right;font-weight: 600;" href=".">DF
+        Spigotifier</a>
+    </div>
+
+    <div class="sideNav">
+      <a href="" class="navLink"><i class="fa-solid fa-circle-dollar-to-slot"></i> Donate</a>
+
+      <a href="https://github.com/Wonkers0/DFSpigot" class="navLink"><i class="fa-brands fa-github-square"></i> Github
+        Repo</a>
+
+      <button class="discordBtn">
+        <i class="fa-brands fa-discord" style="margin-right: 8px;"></i>
+        Discord
+      </button>
+    </div>
+  </nav>
+  <main>
+    <section class="main1">
+      <div class="logoSection">
+        <div class="logo">
+          <img src="images/spigotDF.png" id="logoImg">
+          <img src="images/logoTitle.png" id="logoTitle">
+        </div>
+        <div class="logoButtons">
+          <button class="generate" id="topGen">Generate</button>
+          <button class="help">Need Help?</button>
+        </div>
+      </div>
+      <div class="textSection">
+        <h1 class="mainPageH">Convert your
+          <span class="gradientText"
+            style="background-image: linear-gradient(90deg, #4295fa, #40ff8c);">DiamondFire</span> games into
+          <span class="gradientText" style="background-image: linear-gradient(90deg, #fa8142, #ff4088);">server
+            plugins!</span>
+        </h1>
+
+        <h2 class="mainPageSub">DF Spigotifier is a tool to help bring your ideas to life outside of DiamondFire's
+          limitations.</h2>
+      </div>
+    </section>
+
+    <section class="main2">
+      <div class="custom-shape-divider-bottom-1657565110">
+        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+          <path
+            d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z"
+            opacity=".25" class="shape-fill"></path>
+          <path
+            d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z"
+            opacity=".5" class="shape-fill"></path>
+          <path
+            d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z"
+            class="shape-fill"></path>
+        </svg>
+      </div>
+
+      <ul>
+        <li>
+          <div>
+            <img src="./images/repeatingCommandBlock.webp" class="gridImage" alt="">
+            <h1 class="infoHeader">Input Your Template Data</h1>
+            <p>Copy the template data using<br>/item nbt, or run /command<br>while holding the
+              template.<br>(Requires CodeUtilities)</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <img src="./images/anvil.webp" class="gridImage" alt="">
+            <h1 class="infoHeader">Import The Utility Classes</h1>
+            <p>Download the Utility Classes we've<br><a href="https://github.com/Wonkers0/DFSpigot">provided</a>, and
+              import the classes into your <br>project, along with the generated code.</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <img src="./images/endFrame.webp" class="gridImage" alt="">
+            <h1 class="infoHeader">Compile Your Plugin</h1>
+            <p>Compile your plugin, and<br>use it on your minecraft server!</p>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="main3">
+      <div class="custom-shape-divider-bottom-1657569794">
+        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+          <path
+            d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"
+            class="shape-fill"></path>
+        </svg>
+      </div>
+
+      <div class="templateInput">
+        <em class="fa-solid fa-floppy-disk" style="color:#9da2a6;margin-left: 10px;"></em>
+        <input type="text" placeholder="Insert Template Data Here..." class="NBTInput" id="NBTInput">
+        <div class="enter">Enter</div>
+      </div>
+      <button class="generate" id="generate" style="width: 200px;margin-top: 10px;border-radius:5px;">Generate
+        Code</button>
+
+      <div id="code"></div>
+    </section>
+  </main>
+</body>
+
+</html>
