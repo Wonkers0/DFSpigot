@@ -10,6 +10,7 @@ public final class PlayerData { // Permanently borrowed PlayerData class from Ch
 	public boolean deathDrops = false;
 	public boolean keepInv = false;
 	public boolean instantRespawn = false;
+	public boolean wasGrounded = true;
 	public ArrayList<Material> allowedBlocks = new ArrayList<>();
 	public LinkedList<Hologram> holograms = new LinkedList<>();
 	
