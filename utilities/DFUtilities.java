@@ -19,30 +19,35 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.*;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.regex.Pattern;
+import java.util.List;
 
 // Class to store general-use methods and implement event handlers to assist other action implementations
 public class DFUtilities implements Listener {
@@ -222,6 +227,28 @@ public class DFUtilities implements Listener {
 		Entity entity = event.getEntity();
 		
 		entity.getWorld().createExplosion(entity.getLocation(), EntityData.getEntityData(entity.getUniqueId()).tntPower);
+	}
+	
+	public static boolean playerDidJump(PlayerMoveEvent e){
+		Player player = e.getPlayer();
+		PlayerData playerData = PlayerData.getPlayerData(player.getUniqueId());
+		if (player.getVelocity().getY() > 0) {
+			double jumpVelocity = 0.42F;
+			if (player.hasPotionEffect(PotionEffectType.JUMP))
+				jumpVelocity += (float) (player.getPotionEffect(PotionEffectType.JUMP).getAmplifier() + 1) * 0.1F;
+			
+			if (e.getPlayer().getLocation().getBlock().getType() != Material.LADDER && playerData.wasGrounded)
+				if (!((LivingEntity) player).isOnGround() && Double.compare(player.getVelocity().getY(), jumpVelocity) == 0)
+					return true;
+		}
+		
+		playerData.wasGrounded = ((LivingEntity) player).isOnGround();
+		return false;
+	}
+	
+	public static boolean cloudAffectedPlayer(List<LivingEntity> entities){
+		for(LivingEntity entity : entities) if(entity instanceof Player) return true;
+		return false;
 	}
 	
 	public static void getManagers(JavaPlugin plugin){
