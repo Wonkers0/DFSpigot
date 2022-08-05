@@ -1,3 +1,17 @@
+var codeEditor;
+
+window.onload = () => {
+  codeEditor = CodeMirror.fromTextArea(
+    document.querySelector("#code"),
+    {
+      theme: "dracula",
+      lineNumbers: true,
+      mode: "text/x-java",
+      autoCloseBrackets: true
+    }
+  )
+}
+
 function decodeTemplate(data) { // Permanently borrowed from grog 😊
   const compressData = atob(data)
   const uint = compressData.split('').map(function(e) {
@@ -8,7 +22,7 @@ function decodeTemplate(data) { // Permanently borrowed from grog 😊
   return JSON.parse(string)
 }
 
-let mainFunc, libraries, root, eventTypes, code
+var mainFunc, libraries, root, eventTypes, code
 
 export function generate() {
   let decodedJson = decodeTemplate(document.getElementById("NBTInput").value.match(/h4sI(A{5,20})[a-z0-9+_/=]+/i)[0])
@@ -48,7 +62,7 @@ export function generate() {
 		ChangeSlot: ["PlayerItemHeldEvent"],
 		ClickEntity: ["PlayerInteractEntityEvent", "!(event.getRightClicked() instanceof Player)"],
 		HorseJump: ["HorseJumpEvent"],
-		ShootProjectile: ["ProjectileLaunchEvent"],
+		ShootProjectile: ["ProjectileLaunchEvent", "event.getEntity().getShooter() instanceof Player"],
 		Unsneak: ["PlayerToggleSneakEvent", "!event.isSneaking()"],
 		Fish: ["PlayerFishEvent"],
 		BreakItem: ["PlayerItemBreakEvent"],
@@ -72,6 +86,7 @@ export function generate() {
     "org.bukkit.command.CommandExecutor",
     "org.bukkit.entity.LivingEntity",
     "org.bukkit.entity.Player", // IfPlayer.invokeAction takes in a Player, not a LivingEntity
+    "org.bukkit.Location",
     "org.bukkit.event.Listener",
     "org.bukkit.event.EventHandler",
     "org.bukkit.plugin.java.JavaPlugin",
@@ -116,12 +131,15 @@ export function generate() {
 
     newImport(["org.bukkit.event.block.Action"])
   }
+
+  console.log(root)
   spigotify(decodedJson.blocks)
 }
 
 
 let mainTarget = null
 function spigotify(thread) {
+  console.log(root)
   let bannedBlocks = [["event"], "process", "function", "entity_event"]
   let ifStatements = ["if_player", "if_var"]
   for (let i = 1; i < thread.length; i++) {
@@ -141,7 +159,17 @@ function spigotify(thread) {
 
     let actionSyntax = `${blockClasses()[codeBlock.block]}.invokeAction(${blockParams(codeBlock)[codeBlock.block]})`
     if (!ifStatements.includes(codeBlock.block))
-      mainFunc.push(`${actionSyntax};\n`)
+      if(mainTarget == null){
+        let temp = [`for(LivingEntity target : ${selectionSyntax(codeBlock.target)})`]
+        mainFunc.push(temp)
+        mainFunc = temp
+        
+        mainTarget = codeBlock.target
+        mainFunc.push(`${actionSyntax};\n`)
+      }
+      else
+        mainFunc.push(`${actionSyntax};\n`)
+        
     else {
       let temp = [`if(${actionSyntax})`]
       mainFunc.push([`for(LivingEntity target : ${selectionSyntax(codeBlock.target)})`, temp])
@@ -156,14 +184,17 @@ function spigotify(thread) {
     let formattedLibraries = ""
     for (let k = 0; k < libraries.length; k++) 
       formattedLibraries += `import ${libraries[k]};\n`
+
+    codeEditor.getDoc().setValue(`package me.wonk2;\n\n${formattedLibraries}\n${formatChildren(code[0], code, "  ")}`);
     
-    document.getElementById("code").innerHTML =
-      `package me.wonk2;\n\n${formattedLibraries}\n${formatChildren(code[0], code, "  ")}`
   }
 }
 
 function formatChildren(element, children, indent) {
-  element += "{"
+  // Second check is for methods
+  if(children.length > 2 || findParent(code, children) == code) element += "{" 
+  // Don't do brackets for if statements/for loops with only 1 element inside
+  
   for (let i = 1; i < children.length; i++) {
     if (Array.isArray(children[i])) {
       element +=
@@ -174,7 +205,9 @@ function formatChildren(element, children, indent) {
     }
   }
 
-  return (element + "\n" + indent.replace("  ", "") + "}")
+  return children.length > 2 || findParent(code, children) == code ? 
+    element + "\n" + indent.replace("  ", "") + "}" :
+    element + "\n" + indent.replace("  ", "")
 }
 
 function getCodeArgs(codeBlock) {
@@ -186,7 +219,11 @@ function getCodeArgs(codeBlock) {
     let slot = codeBlock.args.items[i].slot
 
     if (arg.id != "bl_tag") {
-      args.push(`new DFValue(${javafyParam(arg, slot)}, ${slot}, DFType.${arg.id.toUpperCase()})`)
+      if(arg.id != "g_val") args.push(`new DFValue(${javafyParam(arg, slot)}, ${slot}, DFType.${arg.id.toUpperCase()})`)
+      else{
+        let paramInfo = javafyParam(arg, slot)
+        args.push(`new DFValue(${paramInfo[0]}, DFType.${paramInfo[1]})`)
+      } 
       slots.push(slot)
     } else tags[arg.data.tag] = arg.data.option
   }
@@ -243,7 +280,6 @@ function javafyParam(arg, slot) {
     case "snd":
       return `new DFSound("${arg.data.sound}", ${arg.data.pitch}f, ${arg.data.vol}f)`
     case "loc":
-      newImport(["org.bukkit.Location"])
       let loc = arg.data.loc
       return `new Location(Bukkit.getServer().getWorlds().get(0), ${loc.x}, ${loc.y}, ${loc.z}, ${loc.yaw}, ${loc.pitch})`
     case "item":
@@ -253,6 +289,8 @@ function javafyParam(arg, slot) {
       return `new PotionEffect(PotionEffectType.${potionEffects()[potion.pot]}, ${potion.dur}, ${potion.amp}, ${slot})`
     case "var":
       return `new DFVar("${textCodes(removeQuotes(arg.data.name))}", ${varScopes()[arg.data.scope]})`
+    case "g_val":
+      return gameValues(arg.data)
   }
 }
 
@@ -313,12 +351,45 @@ function blockClasses() {
 
 function blockParams(codeBlock) {
   return {
-    "player_action": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", ${selectionSyntax(codeBlock.target)}`,
-    "set_var": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", ${selectionSyntax(codeBlock.target)}, localVars`,
-    "game_action": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", ${selectionSyntax(codeBlock.target)}`,
+    "player_action": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", target`,
+    "set_var": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", target, localVars`,
+    "game_action": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", target`,
     "if_player": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", (Player) target`,
     "if_var": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", target, localVars`
   }
+}
+
+function gameValues(gVal){
+  let selection = {
+    Default: "event.getPlayer()",
+    AllPlayers: "target"
+  }[gVal.target == null ? "default" : gVal.target]
+
+  return {
+    "Location": [`${selection}.getLocation()`, "LOC"],
+    "Current Health": [`${selection}.getHealth()`, "NUM"],
+    "Maximum Health": [`${selection}.getAttribute(Attribute.GENERIC_MAX_HEALTH)`, "NUM"],
+    "Absorption Health": [`${selection}.getAbsorptionAmount()`, "NUM"],
+    "Food Level": [`${selection}.getFoodLevel()`, "NUM"],
+    "Food Saturation": [`${selection}.getSaturation`, "NUM"],
+    "Food Exhaustion": [`${selection}.getExhaustion()`, "NUM"],
+    "Attack Damage": [`${selection}.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)`, "NUM"],
+    "Attack Speed": [`${selection}.getAttribute(Attribute.GENERIC_ATTACK_SPEED)`, "NUM"],
+    "Armor Points": [`${selection}.getAttribute(Attribute.GENERIC_ARMOR)`, "NUM"],
+    "Armor Toughness": [`${selection}.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS)`, "NUM"],
+    "Invulnerability Ticks": [`${selection}.getNoDamageTicks()`, "NUM"],
+    "Experience Level": [`${selection}.getLevel()`, "NUM"],
+    "Experience Progress": [`${selection}.getExp() * 100`, "NUM"],
+    "Fire Ticks": [`${selection}.getFireTicks()`, "NUM"],
+    "Freeze Ticks": [`${selection}.getFreezeTicks()`, "NUM"],
+    "Remaining Air": [`${selection}.getRemainingAir()`, "NUM"],
+    "Fall Distance": [`${selection}.getFallDistance()`, "NUM"],
+    "Held Slot": [`${selection}.getInventory().getHeldItemSlot()`, "NUM"],
+    "Ping": [`${selection}.getPing()`, "NUM"],
+    "Item Usage Progress": [``, "NUM"], //TODO
+    "Steer Sideways Movement": [``, "NUM"], //TODO: This might require ProtocolLib!
+    "Steer Forward Movement": [``, "NUM"] //TODO: This might require ProtocolLib!
+  }[gVal.type]
 }
 
 function selectionSyntax(target) {
@@ -347,4 +418,3 @@ function findParent(parentArray, arr){
 
   return null
 }
-  
