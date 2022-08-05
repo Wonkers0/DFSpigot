@@ -2164,7 +2164,7 @@
        {
         "name": "potion",
         "type": "POT",
-        "repeating": false,
+        "repeating": true,
         "defaultValue": null
       },
        {
