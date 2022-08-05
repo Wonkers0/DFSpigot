@@ -2108,5 +2108,49 @@
         "defaultValue": null
       }
     ]
+  ],
+   "GAMEACTION:Lightning": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "GAMEACTION:LaunchProj": [
+    [
+      {
+        "name": "projectile",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "customName",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "speed",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 1
+      },
+      {
+        "name": "inaccuracy",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 1
+      }
+    ]
   ]
 }
