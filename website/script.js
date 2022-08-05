@@ -142,6 +142,7 @@ function spigotify(thread) {
   console.log(root)
   let bannedBlocks = [["event"], "process", "function", "entity_event"]
   let ifStatements = ["if_player", "if_var"]
+  var nonTargetDependant = ["game_action"]
   for (let i = 1; i < thread.length; i++) {
     let codeBlock = thread[i]
     if (bannedBlocks.includes(codeBlock.block)) {
@@ -159,16 +160,19 @@ function spigotify(thread) {
 
     let actionSyntax = `${blockClasses()[codeBlock.block]}.invokeAction(${blockParams(codeBlock)[codeBlock.block]})`
     if (!ifStatements.includes(codeBlock.block))
-      if(mainTarget == null){
+      if(mainTarget == null && !nonTargetDependant.includes(codeBlock.block)){
         let temp = [`for(LivingEntity target : ${selectionSyntax(codeBlock.target)})`]
         mainFunc.push(temp)
         mainFunc = temp
         
         mainTarget = codeBlock.target
         mainFunc.push(`${actionSyntax};\n`)
+        mainFunc = findParent(code, temp)
+        mainTarget = null
       }
-      else
+      else{
         mainFunc.push(`${actionSyntax};\n`)
+      }
         
     else {
       let temp = [`if(${actionSyntax})`]
@@ -207,7 +211,7 @@ function formatChildren(element, children, indent) {
 
   return children.length > 2 || findParent(code, children) == code ? 
     element + "\n" + indent.replace("  ", "") + "}" :
-    element + "\n" + indent.replace("  ", "")
+    element + indent.replace("  ", "")
 }
 
 function getCodeArgs(codeBlock) {
@@ -219,9 +223,9 @@ function getCodeArgs(codeBlock) {
     let slot = codeBlock.args.items[i].slot
 
     if (arg.id != "bl_tag") {
-      if(arg.id != "g_val") args.push(`new DFValue(${javafyParam(arg, slot)}, ${slot}, DFType.${arg.id.toUpperCase()})`)
+      if(arg.id != "g_val") args.push(`new DFValue(${javafyParam(arg, slot, codeBlock)}, ${slot}, DFType.${arg.id.toUpperCase()})`)
       else{
-        let paramInfo = javafyParam(arg, slot)
+        let paramInfo = javafyParam(arg, slot, codeBlock)
         args.push(`new DFValue(${paramInfo[0]}, DFType.${paramInfo[1]})`)
       } 
       slots.push(slot)
@@ -271,7 +275,7 @@ function removeQuotes(text) {
   return text.replaceAll(`"`, `\\"`)
 }
 
-function javafyParam(arg, slot) {
+function javafyParam(arg, slot, codeBlock) {
   switch (arg.id) {
     case "txt":
       return `"${textCodes(removeQuotes(arg.data.name))}"`
@@ -290,7 +294,7 @@ function javafyParam(arg, slot) {
     case "var":
       return `new DFVar("${textCodes(removeQuotes(arg.data.name))}", ${varScopes()[arg.data.scope]})`
     case "g_val":
-      return gameValues(arg.data)
+      return gameValues(arg.data, codeBlock)
   }
 }
 
@@ -353,17 +357,20 @@ function blockParams(codeBlock) {
   return {
     "player_action": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", target`,
     "set_var": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", target, localVars`,
-    "game_action": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", target`,
+    "game_action": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", ${selectionSyntax(codeBlock.target)}[0]`,
     "if_player": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", (Player) target`,
     "if_var": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", target, localVars`
   }
 }
 
-function gameValues(gVal){
+function gameValues(gVal, codeBlock){
   let selection = {
     Default: "event.getPlayer()",
     AllPlayers: "target"
   }[gVal.target == null ? "default" : gVal.target]
+  
+  if(selection == "target" && nonTargetDependants.includes(codeBlock.block)) 
+    selection = `${selectionSyntax(codeBlock.target)}[0]`
 
   return {
     "Location": [`${selection}.getLocation()`, "LOC"],
