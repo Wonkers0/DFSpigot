@@ -2152,5 +2152,33 @@
         "defaultValue": 1
       }
     ]
+  ],
+   "GAMEACTION:SpawnPotionCloud": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+       {
+        "name": "potion",
+        "type": "POT",
+        "repeating": false,
+        "defaultValue": null
+      },
+       {
+        "name": "radius",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+       {
+        "name": "duration",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
   ]
 }
