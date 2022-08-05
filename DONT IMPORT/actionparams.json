@@ -2196,5 +2196,27 @@
         "defaultValue": null
       }
     ]
+  ],
+   "GAMEACTION:FallingBlock": [
+    [
+      {
+        "name": "block",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      },
+       {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+       {
+        "name": "blockData",
+        "type": "TXT",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
   ]
 }
