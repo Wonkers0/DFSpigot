@@ -30,10 +30,10 @@ import java.util.HashMap;
 import java.util.List;
 
 public class GameAction {
-	public static void invokeAction(Object[] inputArray, String action, LivingEntity[] targets) {
+	public static void invokeAction(Object[] inputArray, String action, LivingEntity target) {
 		HashMap<String, DFValue> args = DFUtilities.getArgs(inputArray[0]);
 		HashMap<String, String> tags = DFUtilities.getTags(inputArray[1]);
-		LivingEntity target = targets[0];
+		
 		switch (action) {
 				case "SpawnMob": {
 					HashMap<Material, EntityType> mobTypes = new HashMap<>(){{
