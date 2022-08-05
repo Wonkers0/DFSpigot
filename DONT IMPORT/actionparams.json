@@ -2171,13 +2171,13 @@
         "name": "radius",
         "type": "NUM",
         "repeating": false,
-        "defaultValue": null
+        "defaultValue": 3
       },
        {
         "name": "duration",
         "type": "NUM",
         "repeating": false,
-        "defaultValue": null
+        "defaultValue": 200
       }
     ]
   ]
