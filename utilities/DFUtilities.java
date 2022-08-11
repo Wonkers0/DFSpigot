@@ -22,6 +22,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -223,7 +224,13 @@ public class DFUtilities implements Listener {
 		
 		entity.getWorld().createExplosion(entity.getLocation(), EntityData.getEntityData(entity.getUniqueId()).tntPower);
 	}
-	
+	@EventHandler
+	public static void FallingBlockLand(EntityChangeBlockEvent event){
+		if (event.getEntity().hasMetadata("dontreform1176")){
+			event.setCancelled(true);
+			event.getEntity().remove();
+		}
+	}
 	public static void getManagers(JavaPlugin plugin){
 		playerConfig = new FileManager(plugin, "playerData.yml");
 		varConfig = new FileManager(plugin, "varData.yml");
