@@ -1,39 +1,31 @@
 package me.wonk2.utilities.actions;
 
+import me.wonk2.DFPlugin;
 import me.wonk2.utilities.DFUtilities;
 import me.wonk2.utilities.internals.EntityData;
 import me.wonk2.utilities.values.DFValue;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.TippedArrowItem;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.block.data.type.Fire;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftArrow;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftProjectile;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftSnowball;
-import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionData;
+import org.bukkit.material.MaterialData;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 public class GameAction {
 	public static void invokeAction(Object[] inputArray, String action, LivingEntity target) {
 		HashMap<String, DFValue> args = DFUtilities.getArgs(inputArray[0]);
 		HashMap<String, String> tags = DFUtilities.getTags(inputArray[1]);
-		
 		switch (action) {
 				case "SpawnMob": {
 					HashMap<Material, EntityType> mobTypes = new HashMap<>(){{
@@ -261,11 +253,16 @@ public class GameAction {
 				case "Firework": {
 					ItemStack fireworkType = (ItemStack) args.get("firework").getVal();
 					Location loc = (Location) args.get("loc").getVal();
-					
+
 					Firework firework = (Firework) target.getWorld().spawnEntity(loc, EntityType.FIREWORK);
-					FireworkMeta fireworkMeta = firework.getFireworkMeta();
+					FireworkMeta meta = (FireworkMeta) fireworkType.getItemMeta();
+					firework.setFireworkMeta(meta);
+					if (tags.get("Instant").equalsIgnoreCase("true"))
+						firework.detonate();
+					if (tags.get("Movement").equalsIgnoreCase("directional"))
+						firework.setShotAtAngle(true);
 					break;
-					//TODO: Modify firework meta or something
+
 				}
 				
 				case "LaunchProj": {
@@ -372,7 +369,49 @@ public class GameAction {
 				case "Lightning": {
 					target.getWorld().strikeLightning((Location) args.get("loc").getVal());
 				}
-				
+				case "SpawnPotionCloud": {
+				Location loc = (Location) args.get("loc").getVal();
+				double rad = (double) args.get("radius").getVal();
+				double dur = (double) args.get("duration").getVal();
+
+				AreaEffectCloud cloud = (AreaEffectCloud) target.getWorld().spawnEntity(loc,EntityType.AREA_EFFECT_CLOUD);
+				for (PotionEffect effect : DFValue.castPotion((DFValue[]) args.get("potion").getVal()))
+					cloud.addCustomEffect(effect,false);
+				cloud.setRadius((float) rad);
+				cloud.setDuration((int) dur);
+
+				}
+			case "FallingBlock":{
+				Location loc = (Location) args.get("loc").getVal();
+				Material block = ((ItemStack) args.get("block").getVal()).getType();
+				if (block == null){
+					block = loc.getBlock().getType();
+				}
+				BlockData finalData = block.createBlockData();
+				if (DFValue.castTxt((DFValue[]) args.get("blockData").getVal()) != null){
+					StringBuilder builder = new StringBuilder();
+					builder.append("[");
+					for (String dblockData : DFValue.castTxt((DFValue[]) args.get("blockData").getVal())){
+						builder.append(dblockData + ",");
+
+					}
+					builder.delete(builder.length()-1,builder.length());
+					builder.append("]");
+					BlockData data = block.createBlockData(String.valueOf(builder));
+					data.merge(finalData);
+					finalData = data;
+
+				}
+				FallingBlock fb = target.getWorld().spawnFallingBlock(loc,finalData);
+
+				if (tags.get("Reform on Impact").equalsIgnoreCase("false"))
+					fb.setMetadata("dontreform1176", new FixedMetadataValue(DFPlugin.plugin,"1"));
+				if (tags.get("Hurt Hit Entities").equalsIgnoreCase("true"))
+					fb.setHurtEntities(true);
+
+
 			}
+
+		}
 	}
 }
