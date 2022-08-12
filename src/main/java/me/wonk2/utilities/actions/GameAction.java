@@ -407,7 +407,7 @@ public class GameAction {
 				if (tags.get("Reform on Impact").equalsIgnoreCase("false"))
 					fb.setMetadata("dontreform1176", new FixedMetadataValue(DFPlugin.plugin,"1"));
 				if (tags.get("Hurt Hit Entities").equalsIgnoreCase("true"))
-					fb.setHurtEntities(true);
+					fb.setHurtEntities(false);
 
 
 			}
