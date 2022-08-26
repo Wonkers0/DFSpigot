@@ -2228,5 +2228,15 @@
         "defaultValue": null
       }
     ]
+  ],
+   "IFGAME:EventItemEquals": [
+    [
+      {
+        "name": "items",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
   ]
 }
