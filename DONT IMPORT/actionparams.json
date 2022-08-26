@@ -2218,5 +2218,15 @@
        "defaultValue": null
      }
     ]
+  ],
+   "IFGAME:EventBlockEquals": [
+    [
+      {
+        "name": "blocks",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
   ]
 }
