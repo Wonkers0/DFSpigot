@@ -2109,7 +2109,7 @@
       }
     ]
   ],
-   "GAMEACTION:Lightning": [
+  "GAMEACTION:Lightning": [
     [
       {
         "name": "loc",
@@ -2153,7 +2153,7 @@
       }
     ]
   ],
-   "GAMEACTION:SpawnPotionCloud": [
+  "GAMEACTION:SpawnPotionCloud": [
     [
       {
         "name": "loc",
@@ -2181,7 +2181,7 @@
       }
     ]
   ],
-   "GAMEACTION:Firework": [
+  "GAMEACTION:Firework": [
     [
       {
         "name": "firework",
@@ -2197,7 +2197,7 @@
       }
     ]
   ],
-   "GAMEACTION:FallingBlock": [
+  "GAMEACTION:FallingBlock": [
     [
       {
         "name": "loc",
@@ -2219,7 +2219,97 @@
      }
     ]
   ],
-   "IFGAME:EventBlockEquals": [
+  "IFGAME:BlockEquals": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "blocks",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": [null]
+      },
+      {
+        "name": "blockTags",
+        "type": "TXT",
+        "repeating": true,
+        "defaultValue": []
+      }
+    ]
+  ],
+  "IFGAME:BlockPowered": [
+    [
+      {
+        "name": "locs",
+        "type": "LOC",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "IFGAME:ContainerHas": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "items",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "IFGAME:ContainerHasAll": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "items",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "IFGAME:SignHasTxt": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "txts",
+        "type": "TXT",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "IFGAME:HasPlayer": [
+    [
+      {
+        "name": "names",
+        "type": "TXT",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "IFGAME:EventBlockEquals": [
     [
       {
         "name": "blocks",
@@ -2229,12 +2319,30 @@
       }
     ]
   ],
-   "IFGAME:EventItemEquals": [
+  "IFGAME:EventItemEquals": [
     [
       {
         "name": "items",
         "type": "ITEM",
         "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "IFGAME:EventCancelled": [[]],
+  "REPEAT:Forever": [[]],
+  "REPEAT:Multiple": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "iterations",
+        "type": "NUM",
+        "repeating": false,
         "defaultValue": null
       }
     ]
