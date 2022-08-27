@@ -2346,5 +2346,43 @@
         "defaultValue": null
       }
     ]
+  ],
+  "REPEAT:ForEach": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "list",
+        "type": "LIST",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "REPEAT:Grid": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc1",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc2",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
   ]
 }
