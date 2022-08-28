@@ -2384,5 +2384,19 @@
         "defaultValue": null
       }
     ]
-  ]
+  ],
+  "CONTROL:Wait": [
+    [
+      {
+        "name": "wait",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 1
+      }
+    ]
+  ],
+  "CONTROL:Return": [[]],
+  "CONTROL:End": [[]],
+  "CONTROL:Skip": [[]],
+  "CONTROL:StopRepeat": [[]]
 }
