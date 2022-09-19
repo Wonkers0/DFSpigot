@@ -2398,5 +2398,111 @@
   "CONTROL:Return": [[]],
   "CONTROL:End": [[]],
   "CONTROL:Skip": [[]],
-  "CONTROL:StopRepeat": [[]]
+  "CONTROL:StopRepeat": [[]],
+  "PLAYERACTION:Teleport": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "PLAYERACTION:LaunchUp": [
+    [
+      {
+        "name": "launch",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "PLAYERACTION:LaunchFwd": [
+    [
+      {
+        "name": "launch",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "PLAYERACTION:LaunchToward": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "launch",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 1
+      }
+    ]
+  ],
+  "PLAYERACTION:RideEntity": [
+    [
+      {
+        "name": "uuid",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "PLAYERACTION:SetFlying": [[]],
+  "PLAYERACTION:SetGliding": [[]],
+  "PLAYERACTION:SetRotation": [
+    [
+      {
+        "name": "pitch",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "yaw",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "PLAYERACTION:FaceLocation": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "PLAYERACTION:SetSpawnPoint": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "PLAYERACTION:SetPlayerTime": [
+    [
+      {
+        "name": "time",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "PLAYERACTION:SetPlayerWeather": [[]],
+  "PLAYERACTION:Kick": [[]]
 }
