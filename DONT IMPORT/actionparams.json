@@ -27,6 +27,12 @@
         "type": "ITEM",
         "repeating": true,
         "defaultValue": null
+      },
+      {
+        "name": "stack",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 1
       }
     ]
   ],
