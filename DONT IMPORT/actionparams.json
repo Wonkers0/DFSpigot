@@ -2510,5 +2510,27 @@
     ]
   ],
   "PLAYERACTION:SetPlayerWeather": [[]],
-  "PLAYERACTION:Kick": [[]]
+  "PLAYERACTION:Kick": [[]],
+  "SETVAR:GetItemTag": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "item",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "tag",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ]
 }
