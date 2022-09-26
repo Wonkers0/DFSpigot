@@ -19,7 +19,6 @@ import org.bukkit.util.Vector;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class GameAction {
 	public static void invokeAction(Object[] inputArray, String action, LivingEntity target) {
@@ -27,6 +26,7 @@ public class GameAction {
 		HashMap<String, DFValue> args = DFUtilities.getArgs(inputArray);
 		HashMap<String, String> tags = DFUtilities.getTags(inputArray);
 		HashMap<Integer, DFValue> primitiveInput = DFUtilities.getPrimitiveInput(inputArray);
+		Bukkit.getScheduler().callSyncMethod(DFPlugin.plugin, () -> {
 			switch (action) {
 				case "SpawnMob": {
 					HashMap<Material, EntityType> mobTypes = new HashMap<>(){{
@@ -411,5 +411,7 @@ public class GameAction {
 					break;
 				}
 			}
+			return null;
+		});
 	}
 }
