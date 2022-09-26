@@ -1,21 +1,69 @@
-import {generate} from "./script.js";
+import {generate, threads, getRoot} from "./script.js";
 
 document.querySelector('#generate').onclick = () => {generate()}
-document.querySelector('#NBTInput').onkeyup = function(e) {
-    // when enter
-    if (e.keyCode === 13) {
-        generate()
-    }
-}
-
 document.querySelector('#navIcon').onclick = () => {location.href = "."}
 document.querySelector('.help').onclick = () => {location.href = "https://github.com/Wonkers0/DFSpigot/blob/main/README.md"};
-
 document.querySelector('#topGen').onclick = () => {document.getElementsByClassName("main3")[0].scrollIntoView({behavior:"smooth"});}
 
+var templates = {};
 
-resize();
-window.onresize = resize;
+function pasteTemplate(el){
+  if(event.shiftKey){
+    el.remove()
+    return;
+  }
+  
+  navigator.clipboard.readText()
+  .then(text => {
+    let root = getRoot(text)
+    if(root != null){
+      console.log(templates[el])
+      if(templates[el] != null) threads.splice(threads.indexOf(templates[el]), 1)
+      templates[el] = text
+      threads.push(text)
+
+      let icons = {
+        "event": "fa-solid fa-cloud-bolt",
+        "func": "fa-solid fa-clock-rotate-left",
+        "process": "fa-solid fa-arrows-split-up-and-left"
+      }
+      
+      let icon = el.children[0];
+      icon.classList = icons[root.block]
+      icon.classList.add("pasteTemplate")
+      el.firstElementChild.firstElementChild.innerHTML = root.data == null ? root.action : root.data;
+    }
+    else alert(`Not a valid template:\n\n${text}`)
+  })
+  .catch(err => {alert('Failed to read clipboard contents: ' + err);});
+}
+function showTooltip(el){
+  if(el.children[0].innerHTML == "") return
+  el.children[0].style.opacity = 1
+  el.children[0].style.userSelect = "normal"
+}
+function hideTooltip(el){
+  el.children[0].style.opacity = 0
+  el.children[0].style.userSelect = "hidden"
+}
+
+let newTemplate = document.querySelector("#newTemplate")
+newTemplate.onclick = newTemplateFunc
+
+function newTemplateFunc(){
+  let div = document.createElement("div")
+  div.innerHTML = `<span class="iconWrapper" id="pasteTemplate"> <i class="fa-regular fa-paste pasteTemplate"> <p class="tooltip"></p> </i> </span>`
+  let newNode = div.firstElementChild
+  newNode.onclick = () => {pasteTemplate(newNode)}
+  newNode.onmouseover = () => {showTooltip(newNode.firstElementChild)}
+  newNode.onmouseleave = () => {hideTooltip(newNode.firstElementChild)}
+  document.querySelector(".templateGrid").insertBefore(newNode, newTemplate)
+  templates[newNode] = null;
+}
+
+newTemplateFunc()
+resize()
+window.onresize = resize
 
 function resize(){
   if(window.innerWidth < 620){
@@ -35,4 +83,43 @@ function resize(){
   }
 
   document.querySelector('.discordBtn').onclick = () => {location.href = "https://discord.gg/6j5NhPuZ6B"};
+}
+
+export default function threadCodes(root, rootEvent, specifics){
+  return {
+  "event": [
+      "@EventHandler",
+      [
+        `public void ${root.action} (${rootEvent} event)`,
+        "double threadID = new Random().nextDouble();",
+        "HashMap<String, DFValue> localVars = new HashMap<>();",
+        `HashMap<String, LivingEntity> targets = new HashMap<>(){{${Object.keys(specifics["targets"]).map(key => `\n{indent}  put("${key}", ${specifics["targets"][key]});`).join('')}\n{indent}}};`,
+        `HashMap<String, Object> specifics = new HashMap<>(){{${Object.keys(specifics).filter(key => key != "targets").map(key => `\n{indent}  put("${key}", ${specifics[key]});`).join('')}\n{indent}}};`,
+        "AtomicBoolean thread = new AtomicBoolean(false);",
+        [
+          "new Thread(() ->",
+          "thread.set(true);"
+        ],
+        ").start();",
+        "while(!thread.get()) try{Thread.sleep(1);}catch(InterruptedException ignored){}"
+      ]
+    ],
+  "func": [
+      [
+        `public boolean ${root.data} (double threadID, HashMap<String, DFValue> localVars, HashMap<String, LivingEntity> targets, HashMap<String, Object> specifics)`,
+      ]
+    ],
+  "process": [ // TODO: Add target hashmap for processes once they're implemented
+      [
+        `public void ${root.data} ()`,
+        "double threadID = new Random().nextDouble();",
+        "HashMap<String, DFValue> localVars = new HashMap<>();",
+        [
+          "threads.put(new BukkitRunnable()",
+          ["@Override public void run()", "//Processes are not supported!", "", "", ""]
+        ],
+        ".runTaskAsynchronously(this).getTaskId(), new ThreadStorage());"
+      ]
+    ]
+  }
 }
