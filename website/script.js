@@ -1,3 +1,8 @@
+import eventTypes from './eventTypes.js'
+import threadCodes from './index.js'
+
+console.log(eventTypes)
+
 var codeEditor;
 
 window.onload = () => {
@@ -22,60 +27,20 @@ function decodeTemplate(data) { // Permanently borrowed from grog 😊
   return JSON.parse(string)
 }
 
-var mainFunc, libraries, root, eventTypes, code
+var mainFunc, libraries, root, code, specifics, loopID, threadCode
+export var threads = [];
+
+export function getRoot(base64){
+  try { 
+    return decodeTemplate(base64.match(/h4sI(A{5,20})[a-z0-9+_/=]+/i)[0]).blocks[0]
+  }
+  catch(e){
+    console.log(e)
+    return null  
+  }
+}
 
 export function generate() {
-  let decodedJson = decodeTemplate(document.getElementById("NBTInput").value.match(/h4sI(A{5,20})[a-z0-9+_/=]+/i)[0])
-  console.log(decodedJson)
-
-  root = decodedJson.blocks[0];
-  eventTypes = {
-    Leave: ["PlayerQuitEvent"],
-    Join: ["PlayerJoinEvent"],
-    RightClick: ["PlayerInteractEvent", "event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR"],
-    LeftClick: ["PlayerInteractEvent", "event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR"],
-    Sneak: ["PlayerToggleSneakEvent", "event.isSneaking()"],
-    SwapHands: ["PlayerSwapHandItemsEvent"],
-    CloseInv: ["InventoryCloseEvent"],
-		StartFly: ["PlayerToggleFlightEvent", "event.isFlying()"],
-		PickupItem: ["InventoryPickupItemEvent"],
-		BreakBlock: ["BlockBreakEvent"],
-		StartSprint: ["PlayerToggleSprintEvent", "event.isSprinting()"],
-		ShootBow: ["EntityShootBowEvent", "event.getEntity() instanceof Player"],
-		StopFly: ["PlayerToggleFlightEvent", "!event.isFlying()"],
-		PlayerTakeDmg: ["EntityDamageEvent", "event.getEntity() instanceof Player"],
-		ProjHit: ["ProjectileHitEvent", "event.getEntity().getShooter() instanceof Player"],
-		KillPlayer: ["PlayerDeathEvent", "event.getEntity().isDead() && event.getDamager() instanceof Player"],
-		ClickInvSlot: ["InventoryClickEvent", "event.getInventory() == event.getWhoClicked().getOpenInventory().getBottomInventory()"],
-		Respawn: ["PlayerRespawnEvent"],
-		DamageEntity: ["EntityDamageByEntityEvent", "event.getDamager() instanceof Player && !(event.getEntity() instanceof Player)"],
-		PlayerHeal: ["EntityRegainHealthEvent", "event.getEntity() instanceof Player"],
-		ClickPlayer: ["PlayerInteractEntityEvent", "event.getRightClicked() instanceof Player"],
-		Consume: ["PlayerItemConsumeEvent"],
-		Death: ["PlayerDeathEvent"],
-		PlaceBlock: ["BlockPlaceEvent"],
-		Walk: ["PlayerMoveEvent", "!DFUtilities.playerDidJump(event)"],
-		Dismount: ["EntityDismountEvent", "event.getEntity() instanceof Player"],
-		CloudImbuePlayer: ["AreaEffectCloudApplyEvent", "DFUtilities.cloudAffectedPlayer(event.getAffectedEntities())"], 
-    // TODO: This event may need to change the code equivalent of the Default target from one target to multiple
-		DropItem: ["PlayerDropItemEvent"],
-		ChangeSlot: ["PlayerItemHeldEvent"],
-		ClickEntity: ["PlayerInteractEntityEvent", "!(event.getRightClicked() instanceof Player)"],
-		HorseJump: ["HorseJumpEvent"],
-		ShootProjectile: ["ProjectileLaunchEvent", "event.getEntity().getShooter() instanceof Player"],
-		Unsneak: ["PlayerToggleSneakEvent", "!event.isSneaking()"],
-		Fish: ["PlayerFishEvent"],
-		BreakItem: ["PlayerItemBreakEvent"],
-		ClickMenuSlot: ["InventoryClickEvent", "event.getInventory() == event.getWhoClicked().getOpenInventory().getTopInventory()"],
-		Riptide: ["PlayerRiptideEvent"],
-		KillMob: ["EntityDamageByEntityEvent", "event.getDamager() instanceof Player && event.getEntity().isDead()"],
-		EntityDmgPlayer: ["EntityDamageByEntityEvent", "event.getEntity() instanceof Player && !(event.getDamager() instanceof Player)"],
-		StopSprint: ["PlayerToggleSprintEvent", "!event.isSprinting()"],
-		Jump: ["PlayerMoveEvent", "DFUtilities.playerDidJump(event)"],
-		ProjDmgPlayer: ["ProjectileHitEvent", "event.getHitEntity() instanceof Player"],
-		PlayerDmgPlayer: ["EntityDamageByEntityEvent", "event.getEntity() instanceof Player && event.getDamager() instanceof Player"]
-  }
-
   libraries = [
     "me.wonk2.utilities.*",
     "me.wonk2.utilities.enums.*",
@@ -87,62 +52,107 @@ export function generate() {
     "org.bukkit.entity.LivingEntity",
     "org.bukkit.entity.Player", // IfPlayer.invokeAction takes in a Player, not a LivingEntity
     "org.bukkit.Location",
+    "org.bukkit.Material", // Event Item, don't remove
+    "org.bukkit.inventory.ItemStack", // Event Item, don't remove
     "org.bukkit.event.Listener",
     "org.bukkit.event.EventHandler",
+    "org.bukkit.event.block.Action",
     "org.bukkit.plugin.java.JavaPlugin",
-    "org.bukkit.Bukkit",
-    "java.util.*"
+    "org.bukkit.scheduler.BukkitRunnable",
+    "java.util.*",
+    "java.util.concurrent.atomic.AtomicBoolean"
   ]
-  libraries.push(`org.bukkit.event.player.${eventTypes[root.action][0]}`)
-
   code = [
     "public class DFPlugin extends JavaPlugin implements Listener, CommandExecutor",
     "public static HashMap<String, TreeMap<Integer, BossBar>> bossbarHandler = new HashMap<>();",
+    "public static Location origin = new Location(null, 0, 0, 0);",
     "public static JavaPlugin plugin;",
-    "",
-    "@EventHandler",
-    [
-      "public void " + root.action + "(" + eventTypes[root.action][0] + " event)",
-      "HashMap<String, DFValue> localVars = new HashMap<>();",
-    ],
-    "",
-    "@Override",
-    [
-      "public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)",
-      "return true;",
-    ],
-    "",
-    "@Override",
-    [
-      "public void onEnable()",
-      "plugin = this;",
-      "",
-      "DFUtilities.getManagers(this);",
-      "getServer().getPluginManager().registerEvents(this, this);",
-      "getServer().getPluginManager().registerEvents(new DFUtilities(), this);",
-    ],
+    ""
   ]
 
-  mainFunc = code[5]
-  if(eventTypes[root.action][1] != null){
-    let temp = [`if(${eventTypes[root.action][1]})`]
-    mainFunc.push(temp)
-    mainFunc = temp
+  for(let threadData of threads){
+    let decodedJson = decodeTemplate(threadData.match(/h4sI(A{5,20})[a-z0-9+_/=]+/i)[0])
+    console.log(decodedJson)
 
-    newImport(["org.bukkit.event.block.Action"])
+    root = decodedJson.blocks[0];
+  
+
+    
+    let isEvent = (root.block == "event" || root.block == "entity_event")
+    let rootEvent = "null"
+    let specificsDefaults = 
+    {
+      "targets":{
+        "default": "event.getPlayer()"
+      },
+      "item": "new ItemStack(Material.AIR)",
+      "cancelled": "event.isCancelled()"
+    }
+    if(isEvent){
+      rootEvent = eventTypes[root.action]["name"].split(".")
+      rootEvent = rootEvent[rootEvent.length - 1]
+      specifics = eventTypes[root.action]["specifics"]
+      
+      for(let key of Object.keys(specificsDefaults))
+        if(specifics[key] == null) specifics[key] = specificsDefaults[key]
+    }
+    else specifics = specificsDefaults
+    
+    threadCode = threadCodes(root, rootEvent, specifics)[isEvent ? "event" : root.block]
+    switch(root.block){
+      case "event":
+      case "entity_event":
+        mainFunc = threadCode[1][6]; break
+      case "func":
+        mainFunc = threadCode[0]; break
+      case "process":
+        mainFunc = threadCode[0][3][1]; break
+    }
+    console.log(specifics["targets"])
+    
+    if(isEvent){
+      if(eventTypes[root.action]["check"] != null){
+        let temp = [`if(${eventTypes[root.action]["check"]})`]
+        mainFunc.push(temp)
+        mainFunc = temp
+      }
+      libraries.push(`org.bukkit.event.${eventTypes[root.action]["name"]}`)
+    }
+
+    spigotify(decodedJson.blocks)
+    if(root.block == "func") mainFunc.push("return false;")
+    code = code.concat(threadCode)
+    code.push("")
   }
-
-  console.log(root)
-  spigotify(decodedJson.blocks)
+  code = code.concat(
+    [
+      "@Override",
+      [ 
+        "public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)",
+        "return true;"
+      ],
+      "",
+      "@Override",
+      [
+        "public void onEnable()",
+        "plugin = this;",
+        "",
+        "DFUtilities.getManagers(this);",
+        "getServer().getPluginManager().registerEvents(this, this);",
+        "getServer().getPluginManager().registerEvents(new DFListeners(), this);",
+        `this.getCommand("dfspigot").setExecutor(new DFListeners());`
+      ]
+    ]
+  )
+  codeEditor.getDoc().setValue(`package me.wonk2;\n\n${libraries.map(lib => `import ${lib};`).join("\n")}\n\n${formatChildren(code[0], code, "  ")}`)
 }
 
 
-let mainTarget = null
+let mainTarget = "none"
 function spigotify(thread) {
-  console.log(root)
-  let bannedBlocks = [["event"], "process", "function", "entity_event"]
-  let ifStatements = ["if_player", "if_var"]
-  var nonTargetDependant = ["game_action"]
+  let bannedBlocks = ["event", "process", "func", "entity_event"]
+  let ifStatements = ["if_player", "if_var", "if_game"]
+  var nonTargetDependant = ["game_action", "repeat", "control"]
   for (let i = 1; i < thread.length; i++) {
     let codeBlock = thread[i]
     if (bannedBlocks.includes(codeBlock.block)) {
@@ -152,51 +162,55 @@ function spigotify(thread) {
 
     if (codeBlock.id == "bracket") {
       if (codeBlock.direct == "close"){
-        mainFunc = findParent(code, findParent(code, mainFunc)); // Statement is wrapped in a for loop
-        mainTarget = null
+        mainFunc = findParent(threadCode, findParent(threadCode, mainFunc)); // Statement is wrapped in a for loop
+        mainTarget = "none"
       } 
       continue
     }
 
-    let actionSyntax = `${blockClasses()[codeBlock.block]}.invokeAction(${blockParams(codeBlock)[codeBlock.block]})`
-    if (!ifStatements.includes(codeBlock.block))
-      if(mainTarget == null && !nonTargetDependant.includes(codeBlock.block)){
-        let temp = [`for(LivingEntity target : ${selectionSyntax(codeBlock.target)})`]
-        mainFunc.push(temp)
-        mainFunc = temp
-        
-        mainTarget = codeBlock.target
-        mainFunc.push(`${actionSyntax};\n`)
-        mainFunc = findParent(code, temp)
-        mainTarget = null
+    if(actionSpecifics(codeBlock) == false){
+      loopID = parseFloat((Math.random() * 99999999).toFixed(3));
+      let actionSyntax = `${blockClasses()[codeBlock.block]}.invokeAction(${blockParams(codeBlock)[codeBlock.block]})`
+      if (!ifStatements.includes(codeBlock.block) && codeBlock.block != "repeat"){
+        if(mainTarget == "none" && !nonTargetDependant.includes(codeBlock.block)){
+          let temp = [`for(LivingEntity target : ${selectionSyntax(codeBlock.target)})`]
+          mainFunc.push(temp)
+          mainFunc = temp
+          
+          mainTarget = codeBlock.target
+          mainFunc.push(`${actionSyntax};\n`)
+          mainFunc = findParent(threadCode, temp)
+          mainTarget = "none"
+        }
+        else mainFunc.push(`${actionSyntax};\n`)
       }
       else{
-        mainFunc.push(`${actionSyntax};\n`)
-      }
+        let temp = codeBlock.block == "repeat" ? [`while(${actionSyntax})`] : [`if(${actionSyntax})`]
         
-    else {
-      let temp = [`if(${actionSyntax})`]
-      mainFunc.push([`for(LivingEntity target : ${selectionSyntax(codeBlock.target)})`, temp])
-      temp.push("") // When formatting this will add a newline & make the if-statement more readable
-      mainFunc = temp
+        mainFunc.push(!nonTargetDependant.includes(codeBlock.block) ? 
+        [`for(LivingEntity target : ${selectionSyntax(codeBlock.target)})`, temp] : temp)
+        
+        temp.push("") // When formatting this will add a newline & make the if-statement more readable
+        if(codeBlock.block == "repeat"){
+          newImport(["me.wonk2.utilities.internals.LoopData"])
+          mainFunc.push(`LoopData.newData(${loopID}d + threadID);`)
+        }
+        mainFunc = temp
+  
+        mainTarget = nonTargetDependant.includes(codeBlock.block) ? "none" : codeBlock.target
+      }
 
-      mainTarget = codeBlock.target
+      newImport([`me.wonk2.utilities.actions.${blockClasses()[codeBlock.block]}`]) 
     }
-    
-    newImport([`me.wonk2.utilities.actions.${blockClasses()[codeBlock.block]}`])
-    
-    let formattedLibraries = ""
-    for (let k = 0; k < libraries.length; k++) 
-      formattedLibraries += `import ${libraries[k]};\n`
-
-    codeEditor.getDoc().setValue(`package me.wonk2;\n\n${formattedLibraries}\n${formatChildren(code[0], code, "  ")}`);
-    
   }
+  let formattedLibraries = ""
+  for (let k = 0; k < libraries.length; k++) 
+    formattedLibraries += `import ${libraries[k]};\n`
 }
 
 function formatChildren(element, children, indent) {
   // Second check is for methods
-  if(children.length > 2 || findParent(code, children) == code) element += "{" 
+  if(children[0].split('(')[0] != 'for') element += "{" 
   // Don't do brackets for if statements/for loops with only 1 element inside
   
   for (let i = 1; i < children.length; i++) {
@@ -209,12 +223,14 @@ function formatChildren(element, children, indent) {
     }
   }
 
-  return children.length > 2 || findParent(code, children) == code ? 
+  return children[0].split('(')[0] != 'for' ? 
     element + "\n" + indent.replace("  ", "") + "}" :
     element + indent.replace("  ", "")
 }
 
 function getCodeArgs(codeBlock) {
+  if(codeBlock.action == null) return null;
+  
   let args = []
   let slots = []
   let tags = {}
@@ -258,16 +274,61 @@ function newImport(newLibraries) {
 }
 
 function textCodes(str) {
-  let codes = {
-    "%default": "event.getPlayer().getName()"
+  str = expressions(str)
+  
+  let targetCodes = {
+    "%default": `targets.get("default").getName()`
   };
 
-  for (let i = 0; i < Object.keys(codes).length; i++) {
-    let temp = Object.keys(codes)[i]
-    str = str.replace(new RegExp(temp, "g"), `" + ${codes[temp]} + "`)
+  for (let i = 0; i < Object.keys(targetCodes).length; i++) {
+    let temp = Object.keys(targetCodes)[i]
+    str = str.replaceAll(temp, `" + ${targetCodes[temp]} + "`)
   }
 
-  return str.replaceAll("Â§", "§")
+
+  return str.replaceAll(`"" + `, "").replaceAll(`+ ""`, "").replaceAll("Â§", "§")
+}
+
+function expressions(str){
+  let seenPercentage = false
+  let countedBrackets = 0
+  
+  let startIndex, endIndex, percentIndex
+
+  let percentCodes = ["%var"]
+  for(let i = 0; i < str.length; i++){
+    let char = str[i]
+    
+    if(char == '%' && (startIndex == -1 || (!percentCodes.includes(str.substring(percentIndex, startIndex))))){
+      seenPercentage = true
+      percentIndex = i
+      startIndex = -1
+      endIndex = -1
+    }
+
+    if((char == '(' || char == ')') && seenPercentage){
+      countedBrackets += (char == '(' ? 1 : -1)
+      if(countedBrackets == 1 && startIndex == -1){
+        startIndex = i
+      } 
+      else if(countedBrackets == 0){
+        endIndex = i
+        let prefix = str.substring(percentIndex, startIndex)
+        let content = str.substring(startIndex + 1, endIndex)
+        
+        if(percentCodes.includes(prefix)){
+          switch(prefix){
+            case "%var":
+              let varName = expressions(removeQuotes(content));
+              str = str.replaceBetween(percentIndex, endIndex + 1, `" + DFUtilities.parseTxt(DFVar.getVar(new DFVar("${varName}", DFVar.getVarScope("${varName}", localVars)), localVars)) + "`)
+              break
+          }
+        }
+      }
+    }
+  }
+  
+  return str;
 }
 
 
@@ -285,16 +346,21 @@ function javafyParam(arg, slot, codeBlock) {
       return `new DFSound("${arg.data.sound}", ${arg.data.pitch}f, ${arg.data.vol}f)`
     case "loc":
       let loc = arg.data.loc
-      return `new Location(Bukkit.getServer().getWorlds().get(0), ${loc.x}, ${loc.y}, ${loc.z}, ${loc.yaw}, ${loc.pitch})`
+      newImport(["org.bukkit.Bukkit"])
+      return `new Location(Bukkit.getWorlds().get(0), ${loc.x}, ${loc.y}, ${loc.z}, ${loc.yaw}, ${loc.pitch})`
     case "item":
       return `DFUtilities.parseItemNBT("${removeQuotes(arg.data.item)}")`
     case "pot":
+      newImport(["org.bukkit.potion.PotionEffect", "org.bukkit.potion.PotionEffectType"])
       let potion = arg.data
-      return `new PotionEffect(PotionEffectType.${potionEffects()[potion.pot]}, ${potion.dur}, ${potion.amp}, ${slot})`
+      return `new PotionEffect(PotionEffectType.${potionEffects()[potion.pot]}, ${potion.dur}, ${potion.amp})`
     case "var":
       return `new DFVar("${textCodes(removeQuotes(arg.data.name))}", ${varScopes()[arg.data.scope]})`
     case "g_val":
       return gameValues(arg.data, codeBlock)
+    case "vec":
+      newImport(["org.bukkit.util.Vector"])
+      return `new Vector(${arg.data.x}, ${arg.data.y}, ${arg.data.z})`
   }
 }
 
@@ -349,7 +415,10 @@ function blockClasses() {
     "set_var": "SetVariable",
     "game_action": "GameAction",
     "if_player": "IfPlayer",
-    "if_var": "IfVariable"
+    "if_var": "IfVariable",
+    "if_game": "IfGame",
+    "repeat": "Repeat",
+    "control": "Control"
   }
 }
 
@@ -359,15 +428,47 @@ function blockParams(codeBlock) {
     "set_var": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", target, localVars`,
     "game_action": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", ${selectionSyntax(codeBlock.target)}[0]`,
     "if_player": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", (Player) target`,
-    "if_var": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", target, localVars`
+    "if_var": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", target, localVars`,
+    "if_game": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", ${selectionSyntax(codeBlock.target)}[0], specifics`,
+    "repeat": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", localVars, ${loopID}d + threadID`,
+    "control": ""
   }
 }
 
+function actionSpecifics(codeBlock){
+  console.log(threadCode)
+  console.log(root)
+  let dict = {
+    "Wait": `try {Thread.sleep(DFUtilities.getWait(${getCodeArgs(codeBlock)}));} catch (InterruptedException e) {e.printStackTrace();}`,
+    "Return": `return;`,
+    "Skip": `continue;`,
+    "StopRepeat": `break;`,
+    "End": root.block == "func" ? "return true;" : "return;",
+    "CancelEvent": ["event.setCancelled(true);", `specifics.put("cancelled", event.isCancelled());`],
+    "UncancelEvent": ["event.setCancelled(false);", `specifics.put("cancelled", event.isCancelled());`]
+  }
+  
+  switch(codeBlock.block){
+    case "call_func":
+      mainFunc.push(`if(${codeBlock.data}(threadID, localVars, targets, specifics)) ${root.block == "func" ? "return true" : "return"};`); return true
+  }
+
+  console.log(codeBlock.block)
+
+  if(Object.keys(dict).includes(codeBlock.action)){
+    if(Array.isArray(dict[codeBlock.action])){
+      for(let temp of dict[codeBlock.action])
+        mainFunc.push(temp)
+    }
+    else mainFunc.push(dict[codeBlock.action])
+  }
+  else return false
+  return true
+}
+
 function gameValues(gVal, codeBlock){
-  let selection = {
-    Default: "event.getPlayer()",
-    AllPlayers: "target"
-  }[gVal.target == null ? "default" : gVal.target]
+  let target = (gVal.target == null ? "default" : gVal.target).toLowerCase()
+  let selection = target == "allplayers" ? "target" : `targets.get("${target}")`
   
   if(selection == "target" && nonTargetDependants.includes(codeBlock.block)) 
     selection = `${selectionSyntax(codeBlock.target)}[0]`
@@ -395,21 +496,21 @@ function gameValues(gVal, codeBlock){
     "Ping": [`${selection}.getPing()`, "NUM"],
     "Item Usage Progress": [``, "NUM"], //TODO
     "Steer Sideways Movement": [``, "NUM"], //TODO: This might require ProtocolLib!
-    "Steer Forward Movement": [``, "NUM"] //TODO: This might require ProtocolLib!
+    "Steer Forward Movement": [``, "NUM"], //TODO: This might require ProtocolLib!
+    "Event Item": [`specifics.get("item")`, "ITEM"]
   }[gVal.type]
 }
 
 function selectionSyntax(target) {
-  let targetTypes = {
-    default: "new LivingEntity[]{event.getPlayer()}",
-    AllPlayers: "Bukkit.getOnlinePlayers().toArray(new LivingEntity[0])"
-  };
+  if(target == mainTarget && mainTarget != "none") return `new LivingEntity[]{target}`
+  if(target == "AllPlayers"){
+    newImport(["org.bukkit.Bukkit"])
+    return "Bukkit.getOnlinePlayers().toArray(new LivingEntity[0])"
+  }
 
-  if(target == mainTarget && mainTarget != null) return `new LivingEntity[]{target}`
-  
   return target == null ?
-    targetTypes["default"] :
-    targetTypes[target]
+    `new LivingEntity[]{targets.get("default")}` :
+    `new LivingEntity[]{targets.get("${target.toLowerCase()}")}`
 }
 
 function findParent(parentArray, arr){
@@ -425,3 +526,16 @@ function findParent(parentArray, arr){
 
   return null
 }
+
+function findMostNestedArr(array, result, nest){
+  for(let element of array)
+    if(Array.isArray(element))
+      result = findMostNestedArr(element, result, nest + 1)
+
+  if(result[1] < nest) result = [array, nest]
+  return result
+}
+
+String.prototype.replaceBetween = function(start, end, what) { //https://stackoverflow.com/questions/14880229/how-to-replace-a-substring-between-two-indices
+  return this.substring(0, start) + what + this.substring(end);
+};
