@@ -2532,5 +2532,49 @@
         "defaultValue": null
       }
     ]
+  ],
+  "GAMEACTION:SpawnArmorStand": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "customName",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "equipment",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": [null, null, null, null, null, null]
+      }
+    ]
+  ],
+  "GAMEACTION:SetBlock": [
+    [
+      {
+        "name": "block",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "locs",
+        "type": "LOC",
+        "repeating": true,
+        "defaultValue": null
+      },
+      {
+        "name": "tags",
+        "type": "TXT",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
   ]
 }
