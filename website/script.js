@@ -45,6 +45,7 @@ export function generate() {
     "me.wonk2.utilities.*",
     "me.wonk2.utilities.enums.*",
     "me.wonk2.utilities.values.*",
+    "net.md_5.bungee.api.ChatColor",
     "org.bukkit.boss.BossBar",
     "org.bukkit.command.CommandSender",
     "org.bukkit.command.Command",
@@ -274,7 +275,7 @@ function newImport(newLibraries) {
 }
 
 function textCodes(str) {
-  str = expressions(str)
+  str = expressions(str).replaceAll("Â§", "§")
   
   let targetCodes = {
     "%default": `targets.get("default").getName()`
@@ -285,8 +286,11 @@ function textCodes(str) {
     str = str.replaceAll(temp, `" + ${targetCodes[temp]} + "`)
   }
 
+  //Hex Codes
+  for(let match of str.match(/§x(§[a-fA-F0-9]){6}/g))
+    str = str.replace(match,`" + ChatColor.of("${match.toLowerCase().replace("x", "#").replaceAll("§", "")}") + "`)
 
-  return str.replaceAll(`"" + `, "").replaceAll(`+ ""`, "").replaceAll("Â§", "§")
+  return `"${str}"`.replaceAll(`"" + `, "").replaceAll(`+ ""`, "")
 }
 
 function expressions(str){
@@ -339,7 +343,7 @@ function removeQuotes(text) {
 function javafyParam(arg, slot, codeBlock) {
   switch (arg.id) {
     case "txt":
-      return `"${textCodes(removeQuotes(arg.data.name))}"`
+      return `${textCodes(removeQuotes(arg.data.name))}` // surrounding quotes are added by textCodes method before returning!
     case "num":
       return arg.data.name + "d"
     case "snd":
@@ -355,7 +359,7 @@ function javafyParam(arg, slot, codeBlock) {
       let potion = arg.data
       return `new PotionEffect(PotionEffectType.${potionEffects()[potion.pot]}, ${potion.dur}, ${potion.amp})`
     case "var":
-      return `new DFVar("${textCodes(removeQuotes(arg.data.name))}", ${varScopes()[arg.data.scope]})`
+      return `new DFVar(${textCodes(removeQuotes(arg.data.name))}, ${varScopes()[arg.data.scope]})`
     case "g_val":
       return gameValues(arg.data, codeBlock)
     case "vec":
@@ -440,7 +444,7 @@ function actionSpecifics(codeBlock){
   console.log(root)
   let dict = {
     "Wait": `try {Thread.sleep(DFUtilities.getWait(${getCodeArgs(codeBlock)}));} catch (InterruptedException e) {e.printStackTrace();}`,
-    "Return": `return;`,
+    "Return": `return false;`,
     "Skip": `continue;`,
     "StopRepeat": `break;`,
     "End": root.block == "func" ? "return true;" : "return;",
