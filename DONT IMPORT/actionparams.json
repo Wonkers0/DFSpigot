@@ -2576,5 +2576,33 @@
         "defaultValue": null
       }
     ]
+  ],
+  "GAMEACTION:SetRegion": [
+    [
+      {
+        "name": "block",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc1",
+        "type": "LOC",
+        "repeating": true,
+        "defaultValue": null
+      },
+      {
+        "name": "loc2",
+        "type": "LOC",
+        "repeating": true,
+        "defaultValue": null
+      },
+      {
+        "name": "tags",
+        "type": "TXT",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
   ]
 }
