@@ -2566,13 +2566,13 @@
       {
         "name": "locs",
         "type": "LOC",
-        "repeating": false,
+        "repeating": true,
         "defaultValue": null
       },
       {
         "name": "tags",
         "type": "TXT",
-        "repeating": false,
+        "repeating": true,
         "defaultValue": null
       }
     ]
@@ -2600,7 +2600,7 @@
       {
         "name": "tags",
         "type": "TXT",
-        "repeating": false,
+        "repeating": true,
         "defaultValue": null
       }
     ]
