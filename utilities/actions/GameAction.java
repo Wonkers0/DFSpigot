@@ -460,6 +460,34 @@ public class GameAction {
 						}
 					}
 				}
+					case "SetRegion": {
+					Location loc1 = (Location) args.get("loc1").getVal();
+					Material material = ((ItemStack) args.get("block").getVal()).getType();
+					BlockData finalData = material.createBlockData();
+					StringBuilder builder = new StringBuilder();
+					builder.append("[");
+					for (String dblockData : DFValue.castTxt((DFValue[]) args.get("tags").getVal()))
+						builder.append(dblockData).append(",");
+
+					builder.delete(builder.length() - 1, builder.length());
+					builder.append("]");
+					BlockData data = material.createBlockData(String.valueOf(builder));
+					finalData = data.merge(finalData);
+					Location loc2 = (Location) args.get("loc2").getVal();
+					World world = BukkitAdapter.adapt(loc1.getWorld());
+					CuboidRegion selection = new CuboidRegion(world, BlockVector3.at(loc1.getBlockX(), loc1.getBlockY(), loc1.getBlockZ()), BlockVector3.at(loc2.getBlockX(), loc2.getBlockY(), loc2.getBlockZ()));
+
+					try (EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(world, -1)) {
+						BlockState block = BukkitAdapter.adapt(finalData);
+
+						editSession.setBlocks(selection, block);
+					}
+
+
+					}
+
+					break;
+				}
 
 			}
 			return null;
