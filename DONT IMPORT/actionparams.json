@@ -2604,5 +2604,33 @@
         "defaultValue": null
       }
     ]
+  ],
+  "GAMEACTION:CloneRegion": [
+    [
+      {
+        "name": "loc1",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc2",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "copyLoc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "pasteLoc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
   ]
 }
