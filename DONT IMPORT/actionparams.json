@@ -2636,7 +2636,7 @@
   "PLAYERACTION:Particle": [
     [
       {
-        "name": "particle",
+        "name": "particles",
         "type": "PART",
         "repeating": true,
         "defaultValue": null
