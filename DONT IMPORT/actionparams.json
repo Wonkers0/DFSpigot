@@ -2632,5 +2632,21 @@
         "defaultValue": null
       }
     ]
+  ],
+  "PLAYERACTION:Particle": [
+    [
+      {
+        "name": "particle",
+        "type": "PART",
+        "repeating": true,
+        "defaultValue": null
+      },
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
   ]
 }
