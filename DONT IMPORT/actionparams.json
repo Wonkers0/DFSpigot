@@ -2955,7 +2955,7 @@
         "name": "spacing",
         "type": "NUM",
         "repeating": false,
-        "defaultVealue": 0.5
+        "defaultValue": 0.5
       }
     ]
   ],
