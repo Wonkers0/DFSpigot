@@ -2990,5 +2990,125 @@
         "defaultValue": 20
       }
     ]
+  ],
+  "PLAYERACTION:BreakBlock": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "PLAYERACTION:SetEventDamage": [
+    [
+      {
+        "name": "num",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 2
+      }
+    ]
+  ],
+  "PLAYERACTION:SetEventHeal": [
+    [
+      {
+        "name": "num",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 2
+      }
+    ]
+  ],
+  "PLAYERACTION:SetEventXP": [
+    [
+      {
+        "name": "num",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "PLAYERACTION:SetBlockData": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": true,
+        "defaultValue": null
+      },
+      {
+        "name": "txt",
+        "type": "TXT",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "PLAYERACTION:TickBlock": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": true,
+        "defaultValue": null
+      },
+      {
+        "name": "num",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 1
+      }
+    ]
+  ],
+  "PLAYERACTION:BoneMeal": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": true,
+        "defaultValue": null
+      },
+      {
+        "name": "num",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 1
+      }
+    ]
+  ],
+  "PLAYERACTION:SetBlockGrowth": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "num",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 1
+      }
+    ]
+  ],
+  "PLAYERACTION:FillContainer": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "item",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
   ]
 }
