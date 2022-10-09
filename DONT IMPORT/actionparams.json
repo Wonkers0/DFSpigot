@@ -2648,5 +2648,347 @@
         "defaultValue": null
       }
     ]
+  ],
+  "PLAYERACTION:ParticleLine": [
+    [
+      {
+        "name": "particle",
+        "type": "PART",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc1",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc2",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "spacing",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 0.5
+      }
+    ]
+  ],
+  "PLAYERACTION:ParticleLineA": [
+    [
+      {
+        "name": "particle",
+        "type": "PART",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc1",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc2",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "spacing",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 0.5
+      },
+      {
+        "name": "ticks",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 40
+      }
+    ]
+  ],
+  "PLAYERACTION:ParticleCircle": [
+    [
+      {
+        "name": "particle",
+        "type": "PART",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "diameter",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 2
+      }
+    ]
+  ],
+  "PLAYERACTION:ParticleCircleA": [
+    [
+      {
+        "name": "particle",
+        "type": "PART",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "diameter",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 2
+      },
+      {
+        "name": "ticks",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 40
+      }
+    ]
+  ],
+  "PLAYERACTION:ParticleCuboid": [
+    [
+      {
+        "name": "particle",
+        "type": "PART",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc1",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc2",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "spacing",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 0.5
+      }
+    ]
+  ],
+  "PLAYERACTION:ParticleCuboidA": [
+    [
+      {
+        "name": "particle",
+        "type": "PART",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc1",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc2",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "spacing",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 0.5
+      },
+      {
+        "name": "ticks",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 40
+      }
+    ]
+  ],
+  "PLAYERACTION:ParticleSpiral": [
+    [
+      {
+        "name": "particle",
+        "type": "PART",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "length",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 10
+      },
+      {
+        "name": "diameter",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 2
+      },
+      {
+        "name": "amount",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 50
+      },
+      {
+        "name": "rotations",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 4
+      }
+    ]
+  ],
+  "PLAYERACTION:ParticleSpiralA": [
+    [
+      {
+        "name": "particle",
+        "type": "PART",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "length",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 10
+      },
+      {
+        "name": "diameter",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue":2
+      },
+      {
+        "name": "amount",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 50
+      },
+      {
+        "name": "rotations",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 4
+      },
+      {
+        "name": "ticks",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 40
+      }
+    ]
+  ],
+  "PLAYERACTION:ParticleSphere": [
+    [
+      {
+        "name": "particle",
+        "type": "PART",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "diameter",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 2
+      }
+    ]
+  ],
+  "PLAYERACTION:ParticleRay": [
+    [
+      {
+        "name": "particle",
+        "type": "PART",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "vector",
+        "type": "VEC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "spacing",
+        "type": "NUM",
+        "repeating": false,
+        "defaultVealue": 0.5
+      }
+    ]
+  ],
+  "DisplayLightning": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "Vibration": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc2",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "ticks",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 20
+      }
+    ]
   ]
 }
