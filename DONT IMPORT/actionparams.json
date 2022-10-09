@@ -2991,7 +2991,7 @@
       }
     ]
   ],
-  "PLAYERACTION:BreakBlock": [
+  "GAMEACTION:BreakBlock": [
     [
       {
         "name": "loc",
@@ -3001,7 +3001,7 @@
       }
     ]
   ],
-  "PLAYERACTION:SetEventDamage": [
+  "GAMEACTION:SetEventDamage": [
     [
       {
         "name": "num",
@@ -3011,7 +3011,7 @@
       }
     ]
   ],
-  "PLAYERACTION:SetEventHeal": [
+  "GAMEACTION:SetEventHeal": [
     [
       {
         "name": "num",
@@ -3021,7 +3021,7 @@
       }
     ]
   ],
-  "PLAYERACTION:SetEventXP": [
+  "GAMEACTION:SetEventXP": [
     [
       {
         "name": "num",
@@ -3031,7 +3031,7 @@
       }
     ]
   ],
-  "PLAYERACTION:SetBlockData": [
+  "GAMEACTION:SetBlockData": [
     [
       {
         "name": "loc",
@@ -3047,7 +3047,7 @@
       }
     ]
   ],
-  "PLAYERACTION:TickBlock": [
+  "GAMEACTION:TickBlock": [
     [
       {
         "name": "loc",
@@ -3063,7 +3063,7 @@
       }
     ]
   ],
-  "PLAYERACTION:BoneMeal": [
+  "GAMEACTION:BoneMeal": [
     [
       {
         "name": "loc",
@@ -3079,7 +3079,7 @@
       }
     ]
   ],
-  "PLAYERACTION:SetBlockGrowth": [
+  "GAMEACTION:SetBlockGrowth": [
     [
       {
         "name": "loc",
@@ -3095,7 +3095,7 @@
       }
     ]
   ],
-  "PLAYERACTION:FillContainer": [
+  "GAMEACTION:FillContainer": [
     [
       {
         "name": "loc",
