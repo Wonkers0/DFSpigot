@@ -3110,5 +3110,607 @@
         "defaultValue": null
       }
     ]
+  ],
+  "ENTITYACTION:Damage": [
+    [
+      {
+        "name": "amount",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:Heal": [
+    [
+      {
+        "name": "amount",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:SetHealth": [
+    [
+      {
+        "name": "amount",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:SetMaxHealth": [
+    [
+      {
+        "name": "amount",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:SetAbsorption": [
+    [
+      {
+        "name": "amount",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:SetFireTicks": [
+    [
+      {
+        "name": "ticks",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:SetFreezeTicks": [
+    [
+      {
+        "name": "ticks",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:SetInvulTicks": [
+    [
+      {
+        "name": "ticks",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:GivePotion": [
+    [
+      {
+        "name": "effects",
+        "type": "POT",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:RemovePotion": [
+    [
+      {
+        "name": "effects",
+        "type": "POT",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:ClearPotions": [[]],
+  "ENTITYACTION:SetAge": [
+    [
+      {
+        "name": "age",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:SetFallDistance": [
+    [
+      {
+        "name": "distance",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:SetCreeperFuse": [
+    [
+      {
+        "name": "ticks",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:SetCreeperPower": [
+    [
+      
+    ]
+  ],
+  "ENTITYACTION:SetCloudRadius": [
+    [
+      {
+        "name": "radius",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "shrinkSpeed",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:SetVillagerExp": [
+    [
+      {
+        "name": "amount",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:SetWitherInvul": [
+    [
+      {
+        "name": "ticks",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:SetHorseJump": [
+    [
+      {
+        "name": "strength",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:SetPickupDelay": [
+    [
+      {
+        "name": "ticks",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:SetFishingTime": [
+    [
+      {
+        "name": "ticks",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:Teleport": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:LaunchUp": [
+    [
+      {
+        "name": "launch",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:LaunchFwd": [
+    [
+      {
+        "name": "launch",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:LaunchToward": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "launch",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:RideEntity": [
+    [
+      {
+        "name": "uuid",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:SetGliding": [[]],
+  "ENTITYACTION:SetGravity": [[]],
+  "ENTITYACTION:AttachLead": [
+    [
+      
+    ]
+  ],
+  "ENTITYACTION:SetRotation": [
+    [
+      {
+        "name": "pitch",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "yaw",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:SetVelocity": [
+    [
+      {
+        "name": "vector",
+        "type": "VEC",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:SetName": [
+    [
+      {
+        "name": "name",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:SetNameVisible": [[]],
+  "ENTITYACTION:SetNameColor": [
+    [
+      
+    ]
+  ],
+  "ENTITYACTION:SetAI": [[]],
+  "ENTITYACTION:SetSilenced": [[]],
+  "ENTITYACTION:SetDeathDrops": [[]],
+  "ENTITYACTION:SetCollidable": [[]],
+  "ENTITYACTION:SetInvulnerable": [[]],
+  "ENTITYACTION:SetSize": [
+    [
+      {
+        "name": "size",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:SetSheepSheared": [[]],
+  "ENTITYACTION:SetSaddle": [[]],
+  "ENTITYACTION:SetCarryingChest": [[]],
+  "ENTITYACTION:ArmorStandSlots": [
+    [
+      
+    ]
+  ],
+  "ENTITYACTION:SetMarker": [[]],
+  "ENTITYACTION:SetAngry": [[]],
+  "ENTITYACTION:SetRearing": [[]],
+  "ENTITYACTION:SetRiptiding": [[]],
+  "ENTITYACTION:CreeperCharged": [[]],
+  "ENTITYACTION:SetInvisible": [[]],
+  "ENTITYACTION:SetGoatScreaming": [[]],
+  "ENTITYACTION:Tame": [
+    [
+      {
+        "name": "owner",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:EndCrystalBeam": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:SetPandaGene": [[]],
+  "ENTITYACTION:SetProfession": [[]],
+  "ENTITYACTION:SetProjSource": [
+    [
+      {
+        "name": "shooter",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:SetPersistent": [[]],
+  "ENTITYACTION:SetGlowing": [[]],
+  "ENTITYACTION:SetDyeColor": [[]],
+  "ENTITYACTION:SetFishPattern": [[]],
+  "ENTITYACTION:SetRabbitType": [[]],
+  "ENTITYACTION:SetCatType": [[]],
+  "ENTITYACTION:MooshroomType": [[]],
+  "ENTITYACTION:SetFoxType": [[]],
+  "ENTITYACTION:SetParrotColor": [[]],
+  "ENTITYACTION:SetHorsePattern": [[]],
+  "ENTITYACTION:SetAxolotlColor": [[]],
+  "ENTITYACTION:SetLlamaColor": [[]],
+  "ENTITYACTION:SetVillagerBiome": [[]],
+  "ENTITYACTION:SnowmanPumpkin": [[]],
+  "ENTITYACTION:SetEndermanBlock": [
+    [
+      {
+        "name": "item",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:SetMinecartBlock": [
+    [
+      {
+        "name": "item",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "offset",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:ArmorStandParts": [[]],
+  "ENTITYACTION:SetBeeNectar": [[]],
+  "ENTITYACTION:ProjectileItem": [
+    [
+      
+    ]
+  ],
+  "ENTITYACTION:SetVisualFire": [[]],
+  "ENTITYACTION:SendAnimation": [
+    [
+      
+    ]
+  ],
+  "ENTITYACTION:AttackAnimation": [[]],
+  "ENTITYACTION:ArmorStandPose": [
+    [
+      {
+        "name": "vector",
+        "type": "VEC",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ],
+    [
+      {
+        "name": "x",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 0
+      },
+      {
+        "name": "y",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 0
+      },
+      {
+        "name": "z",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 0
+      }
+    ]
+  ],
+  "ENTITYACTION:SetPose": [[]],
+  "ENTITYACTION:SetFoxLeaping": [[]],
+  "ENTITYACTION:SetArmsRaised": [[]],
+  "ENTITYACTION:SetCatResting": [[]],
+  "ENTITYACTION:SetGlowSquidDark": [
+    [
+      {
+        "name": "ticks",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:SetCelebrating": [[]],
+  "ENTITYACTION:SetTarget": [
+    [
+      {
+        "name": "target",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:MoveToLoc": [
+    [
+      
+    ]
+  ],
+  "ENTITYACTION:Jump": [[]],
+  "ENTITYACTION:Ram": [
+    [
+      
+    ]
+  ],
+  "ENTITYACTION:SheepEat": [[]],
+  "ENTITYACTION:IgniteCreeper": [[]],
+  "ENTITYACTION:Explode": [[]],
+  "ENTITYACTION:FoxSleeping": [[]],
+  "ENTITYACTION:SetDragonPhase": [[]],
+  "ENTITYACTION:SetBulletTarget": [
+    [
+      {
+        "name": "target",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:UseItem": [
+    [
+      
+    ]
+  ],
+  "ENTITYACTION:Remove": [[]],
+  "ENTITYACTION:SetEquipment": [
+    [
+      {
+        "name": "item",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:SetArmor": [
+    [
+      {
+        "name": "armor",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": [null,null,null,null]
+      }
+    ]
+  ],
+  "ENTITYACTION:LaunchProj": [
+    [
+      
+    ]
+  ],
+  "ENTITYACTION:ShearSheep": [[]],
+  "ENTITYACTION:SetCustomTag": [
+    [
+      {
+        "name": "key",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "numVal",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ],
+    [
+      {
+        "name": "key",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "txtVal",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:GetCustomTag": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "name",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:RemoveCustomTag": [
+    [
+      {
+        "name": "name",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:SetItem": [
+    [
+      {
+        "name": "item",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
   ]
 }
