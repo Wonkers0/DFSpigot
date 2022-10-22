@@ -26,7 +26,7 @@ At first, IntelliJ might not recognize some of the dependencies in your project.
 
 To get started, download [BuildTools](https://www.spigotmc.org/wiki/buildtools/). This will let you download spigot later on. After you've downloaded it, it'll probably be lying somewhere in your *Downloads* folder.
 
-Open up the windows command prompt (or any equivalent on other operating systems), and type `cd <BuildTools Directory Path`. The directory path should be pointing to the folder that BuildTools.jar is in, not BuildTools itself. So for example: `C:\Users\Wonk\Downloads` instead of `C:\Users\Wonk\Downloads\BuildTools.jar`
+Open up the windows command prompt (or any equivalent on other operating systems), and type `cd <BuildTools Directory Path`. The directory path should be pointing to the folder that BuildTools.jar is in, not BuildTools itself. So for example: `C:\Users\Wonk\Downloads` instead of `C:\Users\Wonk\Downloads\BuildTools.jar`.
 
 If you don't know where your BuildTools ended up, you can view so from your browser's downloads tab. On most browsers, the shortcut CTRL + J will open it up.
 
@@ -69,4 +69,4 @@ TODO: Fill out this section once commands are supported.
 ## ⚠️ Please keep in mind that generating code from code lines containing unsupported actions will yield errors. You can view a list of all the supported actions [here](https://github.com/Wonkers0/DFSpigot/blob/main/supported_actions.md).
 <br><br>
 ### 📙 How to compile your plugin
-For compiling your plugin, visit [this](https://github.com/Wonkers0/DFSpigot/blob/main/compiling_tutorial.md)
+For compiling your plugin, visit [this](https://github.com/Wonkers0/DFSpigot/blob/main/compiling_tutorial.md).
