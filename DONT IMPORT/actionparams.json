@@ -2340,6 +2340,14 @@
   "REPEAT:Multiple": [
     [
       {
+        "name": "iterations",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ],
+    [
+      {
         "name": "var",
         "type": "VAR",
         "repeating": false,
