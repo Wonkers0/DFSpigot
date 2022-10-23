@@ -90,35 +90,26 @@ export default function threadCodes(root, rootEvent, specifics){
   "event": [
       "@EventHandler",
       [
-        `public void ${root.action} (${rootEvent} event)`,
+        `public void ${root.action} (${rootEvent} event){`,
         "double threadID = new Random().nextDouble();",
+        "int funcStatus;",
         "HashMap<String, DFValue> localVars = new HashMap<>();",
         `HashMap<String, LivingEntity> targets = new HashMap<>(){{${Object.keys(specifics["targets"]).map(key => `\n{indent}  put("${key}", ${specifics["targets"][key]});`).join('')}\n{indent}}};`,
+        "",
         `HashMap<String, Object> specifics = new HashMap<>(){{${Object.keys(specifics).filter(key => key != "targets").map(key => `\n{indent}  put("${key}", ${specifics[key]});`).join('')}\n{indent}}};`,
-        "AtomicBoolean thread = new AtomicBoolean(false);",
-        [
-          "new Thread(() ->",
-          "thread.set(true);"
-        ],
-        ").start();",
-        "while(!thread.get()) try{Thread.sleep(1);}catch(InterruptedException ignored){}"
-      ]
+        ""
+      ],
+      "}"
     ],
   "func": [
       [
-        `public boolean ${root.data} (double threadID, HashMap<String, DFValue> localVars, HashMap<String, LivingEntity> targets, HashMap<String, Object> specifics)`,
+        `public int ${root.data} (double threadID, HashMap<String, DFValue> localVars, HashMap<String, LivingEntity> targets, HashMap<String, Object> specifics){`,
+        "}"
       ]
     ],
   "process": [ // TODO: Add target hashmap for processes once they're implemented
       [
-        `public void ${root.data} ()`,
-        "double threadID = new Random().nextDouble();",
-        "HashMap<String, DFValue> localVars = new HashMap<>();",
-        [
-          "threads.put(new BukkitRunnable()",
-          ["@Override public void run()", "//Processes are not supported!", "", "", ""]
-        ],
-        ".runTaskAsynchronously(this).getTaskId(), new ThreadStorage());"
+        "//Processes are not supported!"
       ]
     ]
   }
