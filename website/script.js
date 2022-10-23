@@ -30,13 +30,13 @@ function decodeTemplate(data) { // Permanently borrowed from grog 😊
 var mainFunc, libraries, root, code, specifics, loopID, threadCode
 export var threads = [];
 
-export function getRoot(base64){
-  try { 
+export function getRoot(base64) {
+  try {
     return decodeTemplate(base64.match(/h4sI(A{5,20})[a-z0-9+_/=]+/i)[0]).blocks[0]
   }
-  catch(e){
+  catch (e) {
     console.log(e)
-    return null  
+    return null
   }
 }
 
@@ -45,13 +45,15 @@ export function generate() {
     "me.wonk2.utilities.*",
     "me.wonk2.utilities.enums.*",
     "me.wonk2.utilities.values.*",
+    "me.wonk2.utilities.actions.*",
+    "me.wonk2.utilities.actions.pointerclasses.brackets.*",
+    "me.wonk2.utilities.internals.CodeExecutor",
     "net.md_5.bungee.api.ChatColor",
     "org.bukkit.boss.BossBar",
     "org.bukkit.command.CommandSender",
     "org.bukkit.command.Command",
     "org.bukkit.command.CommandExecutor",
     "org.bukkit.entity.LivingEntity",
-    "org.bukkit.entity.Player", // IfPlayer.invokeAction takes in a Player, not a LivingEntity
     "org.bukkit.Location",
     "org.bukkit.Material", // Event Item, don't remove
     "org.bukkit.inventory.ItemStack", // Event Item, don't remove
@@ -59,60 +61,55 @@ export function generate() {
     "org.bukkit.event.EventHandler",
     "org.bukkit.event.block.Action",
     "org.bukkit.plugin.java.JavaPlugin",
-    "org.bukkit.scheduler.BukkitRunnable",
-    "java.util.*",
-    "java.util.concurrent.atomic.AtomicBoolean"
+    "java.util.*"
   ]
   code = [
-    "public class DFPlugin extends JavaPlugin implements Listener, CommandExecutor",
+    "public class DFPlugin extends JavaPlugin implements Listener, CommandExecutor{",
     "public static HashMap<String, TreeMap<Integer, BossBar>> bossbarHandler = new HashMap<>();",
     "public static Location origin = new Location(null, 0, 0, 0);",
     "public static JavaPlugin plugin;",
     ""
   ]
 
-  for(let threadData of threads){
+  for (let threadData of threads) {
     let decodedJson = decodeTemplate(threadData.match(/h4sI(A{5,20})[a-z0-9+_/=]+/i)[0])
     console.log(decodedJson)
 
     root = decodedJson.blocks[0];
-  
 
-    
+
+
     let isEvent = (root.block == "event" || root.block == "entity_event")
     let rootEvent = "null"
-    let specificsDefaults = 
+    let specificsDefaults =
     {
-      "targets":{
+      "targets": {
         "default": "event.getPlayer()"
       },
       "item": "new ItemStack(Material.AIR)",
       "cancelled": "event.isCancelled()"
     }
-    if(isEvent){
+    if (isEvent) {
       rootEvent = eventTypes[root.action]["name"].split(".")
       rootEvent = rootEvent[rootEvent.length - 1]
-      specifics = eventTypes[root.action]["specifics"]
-      
-      for(let key of Object.keys(specificsDefaults))
-        if(specifics[key] == null) specifics[key] = specificsDefaults[key]
+      specifics = setSpecificsDefaults(eventTypes[root.action]["specifics"], specificsDefaults)
     }
     else specifics = specificsDefaults
-    
+
     threadCode = threadCodes(root, rootEvent, specifics)[isEvent ? "event" : root.block]
-    switch(root.block){
+    switch (root.block) {
       case "event":
       case "entity_event":
-        mainFunc = threadCode[1][6]; break
+        mainFunc = threadCode[1]; break
       case "func":
         mainFunc = threadCode[0]; break
       case "process":
-        mainFunc = threadCode[0][3][1]; break
+        mainFunc = threadCode[0]; break
     }
     console.log(specifics["targets"])
-    
-    if(isEvent){
-      if(eventTypes[root.action]["check"] != null){
+
+    if (isEvent) {
+      if (eventTypes[root.action]["check"] != null) {
         let temp = [`if(${eventTypes[root.action]["check"]})`]
         mainFunc.push(temp)
         mainFunc = temp
@@ -120,100 +117,61 @@ export function generate() {
       libraries.push(`org.bukkit.event.${eventTypes[root.action]["name"]}`)
     }
 
-    spigotify(decodedJson.blocks)
-    if(root.block == "func") mainFunc.push("return false;")
+    mainFunc.push(spigotify(decodedJson.blocks))
+    mainFunc.push("});")
+
     code = code.concat(threadCode)
     code.push("")
   }
   code = code.concat(
     [
       "@Override",
-      [ 
-        "public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)",
+      [
+        "public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){",
         "return true;"
       ],
+      "}",
       "",
       "@Override",
       [
-        "public void onEnable()",
+        "public void onEnable(){",
         "plugin = this;",
         "",
         "DFUtilities.getManagers(this);",
         "getServer().getPluginManager().registerEvents(this, this);",
         "getServer().getPluginManager().registerEvents(new DFListeners(), this);",
         `this.getCommand("dfspigot").setExecutor(new DFListeners());`
-      ]
+      ],
+      "}"
     ]
   )
-  codeEditor.getDoc().setValue(`package me.wonk2;\n\n${libraries.map(lib => `import ${lib};`).join("\n")}\n\n${formatChildren(code[0], code, "  ")}`)
+  console.log(code)
+  codeEditor.getDoc().setValue(`package me.wonk2;\n\n${libraries.map(lib => `import ${lib};`).join("\n")}\n\n${formatChildren(code[0], code, "  ")}` + "\n}")
 }
 
 
-let mainTarget = "none"
-function spigotify(thread) {
+function spigotify(jsonThread) {
+  let thread = []
   let bannedBlocks = ["event", "process", "func", "entity_event"]
-  let ifStatements = ["if_player", "if_var", "if_game"]
-  var nonTargetDependant = ["game_action", "repeat", "control"]
-  for (let i = 1; i < thread.length; i++) {
-    let codeBlock = thread[i]
+  for (let i = 1; i < jsonThread.length; i++) {
+    let codeBlock = jsonThread[i]
     if (bannedBlocks.includes(codeBlock.block)) {
       console.error("INVALID INPUT: Found 1 or more root blocks inside this thread!")
       return
     }
 
-    if (codeBlock.id == "bracket") {
-      if (codeBlock.direct == "close"){
-        mainFunc = findParent(threadCode, findParent(threadCode, mainFunc)); // Statement is wrapped in a for loop
-        mainTarget = "none"
-      } 
-      continue
-    }
-
-    if(actionSpecifics(codeBlock) == false){
-      loopID = parseFloat((Math.random() * 99999999).toFixed(3));
-      let actionSyntax = `${blockClasses()[codeBlock.block]}.invokeAction(${blockParams(codeBlock)[codeBlock.block]})`
-      if (!ifStatements.includes(codeBlock.block) && codeBlock.block != "repeat"){
-        if(mainTarget == "none" && !nonTargetDependant.includes(codeBlock.block)){
-          let temp = [`for(LivingEntity target : ${selectionSyntax(codeBlock.target)})`]
-          mainFunc.push(temp)
-          mainFunc = temp
-          
-          mainTarget = codeBlock.target
-          mainFunc.push(`${actionSyntax};\n`)
-          mainFunc = findParent(threadCode, temp)
-          mainTarget = "none"
-        }
-        else mainFunc.push(`${actionSyntax};\n`)
-      }
-      else{
-        let temp = codeBlock.block == "repeat" ? [`while(${actionSyntax})`] : [`if(${actionSyntax})`]
-        
-        mainFunc.push(!nonTargetDependant.includes(codeBlock.block) ? 
-        [`for(LivingEntity target : ${selectionSyntax(codeBlock.target)})`, temp] : temp)
-        
-        temp.push("") // When formatting this will add a newline & make the if-statement more readable
-        if(codeBlock.block == "repeat"){
-          newImport(["me.wonk2.utilities.internals.LoopData"])
-          mainFunc.push(`LoopData.newData(${loopID}d + threadID);`)
-        }
-        mainFunc = temp
-  
-        mainTarget = nonTargetDependant.includes(codeBlock.block) ? "none" : codeBlock.target
-      }
-
-      newImport([`me.wonk2.utilities.actions.${blockClasses()[codeBlock.block]}`]) 
-    }
+    if(codeBlock.id == 'bracket' && codeBlock.direct == 'close') thread.push(codeBlock.type == 'norm' ? 'new ClosingBracket(),' : `new RepeatingBracket(),`)
+    else if(codeBlock.direct != 'open') thread = thread.concat([[`new ${blockClasses()[codeBlock.block]}(`, `${blockParams(codeBlock)}`], "),"])
   }
+
   let formattedLibraries = ""
-  for (let k = 0; k < libraries.length; k++) 
+  for (let k = 0; k < libraries.length; k++)
     formattedLibraries += `import ${libraries[k]};\n`
+
+  return [`CodeExecutor.executeThread(`, [`new Object[]{`].concat(thread)]
 }
 
 function formatChildren(element, children, indent) {
-  // Second check is for methods
-  if(children[0].split('(')[0] != 'for') element += "{" 
-  // Don't do brackets for if statements/for loops with only 1 element inside
-  
   for (let i = 1; i < children.length; i++) {
     if (Array.isArray(children[i])) {
       element +=
@@ -224,14 +182,12 @@ function formatChildren(element, children, indent) {
     }
   }
 
-  return children[0].split('(')[0] != 'for' ? 
-    element + "\n" + indent.replace("  ", "") + "}" :
-    element + indent.replace("  ", "")
+  return element
 }
 
 function getCodeArgs(codeBlock) {
-  if(codeBlock.action == null) return null;
-  
+  if (codeBlock.action == null) return null;
+
   let args = []
   let slots = []
   let tags = {}
@@ -240,11 +196,11 @@ function getCodeArgs(codeBlock) {
     let slot = codeBlock.args.items[i].slot
 
     if (arg.id != "bl_tag") {
-      if(arg.id != "g_val") args.push(`new DFValue(${javafyParam(arg, slot, codeBlock)}, ${slot}, DFType.${arg.id.toUpperCase()})`)
-      else{
+      if (arg.id != "g_val") args.push(`new DFValue(${javafyParam(arg, slot, codeBlock)}, ${slot}, DFType.${arg.id.toUpperCase()})`)
+      else {
         let paramInfo = javafyParam(arg, slot, codeBlock)
         args.push(`new DFValue(${paramInfo[0]}, DFType.${paramInfo[1]})`)
-      } 
+      }
       slots.push(slot)
     } else tags[arg.data.tag] = arg.data.option
   }
@@ -257,14 +213,15 @@ function getCodeArgs(codeBlock) {
   let tagValues = Object.values(tags)
 
   for (let i = 0; i < Math.max(slots.length, tagKeys.length); i++) {
-    if (i < slots.length) argMap += `\n{indent}  put(${slots[i]}, ${args[i]});`
-    if (i < tagKeys.length) tagMap += `\n{indent}  put("${removeQuotes(tagKeys[i])}", "${removeQuotes(tagValues[i])}");`
+    if (i < slots.length) argMap += `\n{indent}    put(${slots[i]}, ${args[i]});`
+    if (i < tagKeys.length) tagMap += `\n{indent}    put("${removeQuotes(tagKeys[i])}", "${removeQuotes(tagValues[i])}");`
   }
-  argMap = slots.length == 0 ? `new HashMap<>(){}` : `new HashMap<>(){{${argMap}\n{indent}}}`
-  tagMap = tagKeys.length == 0 ? `new HashMap<>(){}` : `new HashMap<>(){{${tagMap}\n{indent}}}`
+  
+  argMap = slots.length == 0 ? `new HashMap<>(){}` : `new HashMap<>(){{${argMap}\n{indent}  }}`
+  tagMap = tagKeys.length == 0 ? `new HashMap<>(){}` : `new HashMap<>(){{${tagMap}\n{indent}  }}`
   let actionName = `${codeBlock.block.replaceAll("_", "").toUpperCase()}:${codeBlock.action.replaceAll(/( $)|^ /gi, "")}`;
 
-  return `ParamManager.formatParameters(${argMap}, \n{indent}${tagMap}, "${actionName}", localVars)`
+  return `ParamManager.formatParameters(\n{indent}  ${argMap}, \n{indent}  ${tagMap}, "${actionName}", localVars)`
 }
 
 function newImport(newLibraries) {
@@ -276,7 +233,7 @@ function newImport(newLibraries) {
 
 function textCodes(str) {
   str = expressions(str).replaceAll("Â§", "§")
-  
+
   let targetCodes = {
     "%default": `targets.get("default").getName()`
   };
@@ -287,41 +244,43 @@ function textCodes(str) {
   }
 
   //Hex Codes
-  for(let match of str.match(/§x(§[a-fA-F0-9]){6}/g))
-    str = str.replace(match,`" + ChatColor.of("${match.toLowerCase().replace("x", "#").replaceAll("§", "")}") + "`)
+  let matches = str.match(/§x(§[a-fA-F0-9]){6}/g)
+  if (matches != null)
+    for (let match of matches)
+      str = str.replace(match, `" + ChatColor.of("${match.toLowerCase().replace("x", "#").replaceAll("§", "")}") + "`)
 
   return `"${str}"`.replaceAll(`"" + `, "").replaceAll(`+ ""`, "")
 }
 
-function expressions(str){
+function expressions(str) {
   let seenPercentage = false
   let countedBrackets = 0
-  
+
   let startIndex, endIndex, percentIndex
 
   let percentCodes = ["%var"]
-  for(let i = 0; i < str.length; i++){
+  for (let i = 0; i < str.length; i++) {
     let char = str[i]
-    
-    if(char == '%' && (startIndex == -1 || (!percentCodes.includes(str.substring(percentIndex, startIndex))))){
+
+    if (char == '%' && (startIndex == -1 || (!percentCodes.includes(str.substring(percentIndex, startIndex))))) {
       seenPercentage = true
       percentIndex = i
       startIndex = -1
       endIndex = -1
     }
 
-    if((char == '(' || char == ')') && seenPercentage){
+    if ((char == '(' || char == ')') && seenPercentage) {
       countedBrackets += (char == '(' ? 1 : -1)
-      if(countedBrackets == 1 && startIndex == -1){
+      if (countedBrackets == 1 && startIndex == -1) {
         startIndex = i
-      } 
-      else if(countedBrackets == 0){
+      }
+      else if (countedBrackets == 0) {
         endIndex = i
         let prefix = str.substring(percentIndex, startIndex)
         let content = str.substring(startIndex + 1, endIndex)
-        
-        if(percentCodes.includes(prefix)){
-          switch(prefix){
+
+        if (percentCodes.includes(prefix)) {
+          switch (prefix) {
             case "%var":
               let varName = expressions(removeQuotes(content));
               str = str.replaceBetween(percentIndex, endIndex + 1, `" + DFUtilities.parseTxt(DFVar.getVar(new DFVar("${varName}", DFVar.getVarScope("${varName}", localVars)), localVars)) + "`)
@@ -331,8 +290,17 @@ function expressions(str){
       }
     }
   }
-  
+
   return str;
+}
+
+function setSpecificsDefaults(specifics, specificsDefaults) {
+  for (let key of Object.keys(specificsDefaults)) {
+    if (specifics[key] == null) specifics[key] = specificsDefaults[key]
+    else if (specificsDefaults[key].constructor == Object)
+      specifics[key] = setSpecificsDefaults(specifics[key], specificsDefaults)
+  }
+  return specifics
 }
 
 
@@ -343,7 +311,7 @@ function removeQuotes(text) {
 function javafyParam(arg, slot, codeBlock) {
   switch (arg.id) {
     case "txt":
-      return `${textCodes(removeQuotes(arg.data.name))}` // surrounding quotes are added by textCodes method before returning!
+      return `${textCodes(removeQuotes(arg.data.name))}` // Surrounding quotes are added by textCodes method before returning!
     case "num":
       return arg.data.name + "d"
     case "snd":
@@ -351,7 +319,7 @@ function javafyParam(arg, slot, codeBlock) {
     case "loc":
       let loc = arg.data.loc
       newImport(["org.bukkit.Bukkit"])
-      return `new Location(Bukkit.getWorlds().get(0), ${loc.x}, ${loc.y}, ${loc.z}, ${loc.yaw}, ${loc.pitch})`
+      return `new Location(Bukkit.getWorlds().get(0), ${loc.x}d, ${loc.y}d, ${loc.z}d, ${loc.yaw}f, ${loc.pitch}f)`
     case "item":
       return `DFUtilities.parseItemNBT("${removeQuotes(arg.data.item)}")`
     case "pot":
@@ -365,8 +333,23 @@ function javafyParam(arg, slot, codeBlock) {
     case "vec":
       newImport(["org.bukkit.util.Vector"])
       return `new Vector(${arg.data.x}, ${arg.data.y}, ${arg.data.z})`
+    case "part":
+      newImport(["me.wonk2.utilities.values.DFParticle", "org.bukkit.Color"])
+      let p = arg.data;
+      let pd = p.data == null ? {} : p.data;
+
+
+      let fields = ["size", "sizeVariation", "motionVariation", "colorVariation", "x", "y", "z"]
+
+      return `new DFParticle("${p.particle}", ${p.cluster.amount}, ${p.cluster.horizontal}, ${p.cluster.vertical}, ${doublify(pd.size)}, ${doublify(pd.sizeVariation)}, ${pd.x != null ? `new Vector(${pd.x}, ${pd.y}, ${pd.z})` : "null"}, ${doublify(pd.motionVariation)}, ${pd.rgb == null ? "null" : `Color.fromRGB(${pd.rgb})`}, ${doublify(pd.colorVariation)}, ${pd.material != null ? `Material.valueOf(${pd.material})` : "null"})`
+
   }
 }
+
+function doublify(val) {
+  return val == null ? "null" : val + "d"
+}
+
 
 function potionEffects() {
   return {
@@ -422,63 +405,49 @@ function blockClasses() {
     "if_var": "IfVariable",
     "if_game": "IfGame",
     "repeat": "Repeat",
-    "control": "Control"
+    "control": "Control",
+    "entity_action": "EntityAction"
   }
 }
 
 function blockParams(codeBlock) {
+  let target = codeBlock.target == null ? `"default"` : `"codeBlock.target"` // TODO: Change "default" to selection once that is implemented
+  let args = getCodeArgs(codeBlock)
+  let action = codeBlock.action.replaceAll(/( $)|^ /gi, "")
+
   return {
-    "player_action": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", target`,
-    "set_var": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", target, localVars`,
-    "game_action": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", ${selectionSyntax(codeBlock.target)}[0]`,
-    "if_player": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", (Player) target`,
-    "if_var": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", target, localVars`,
-    "if_game": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", ${selectionSyntax(codeBlock.target)}[0], specifics`,
-    "repeat": `${getCodeArgs(codeBlock)}, "${codeBlock.action.replaceAll(/( $)|^ /gi, "")}", localVars, ${loopID}d + threadID`,
-    "control": ""
-  }
+    "player_action": `${target}, targets, ${args}, "${action}"`,
+    "set_var": `${target}, targets, ${args}, "${action}", localVars`,
+    "game_action": `${target}, targets, ${args}, "${action}"`,
+    "if_player": `${target}, targets, ${args}, "${action}"`,
+    "if_var": `${target}, targets, ${args}, "${action}"`,
+    "if_game": `${target}, targets, ${args}, "${action}", specifics`,
+    "repeat": `null, null, ${args}, "${action}", localVars, ${loopID}d, threadID`,
+    "control": `${target}, targets, ${args}, "${action}"`,
+    "entity_action": `${target}, targets, ${args}, "${action}", localVars`
+  }[codeBlock.block]
 }
 
-function actionSpecifics(codeBlock){
-  console.log(threadCode)
-  console.log(root)
-  let dict = {
-    "Wait": `try {Thread.sleep(DFUtilities.getWait(${getCodeArgs(codeBlock)}));} catch (InterruptedException e) {e.printStackTrace();}`,
-    "Return": `return false;`,
-    "Skip": `continue;`,
-    "StopRepeat": `break;`,
-    "End": root.block == "func" ? "return true;" : "return;",
-    "CancelEvent": ["event.setCancelled(true);", `specifics.put("cancelled", event.isCancelled());`],
-    "UncancelEvent": ["event.setCancelled(false);", `specifics.put("cancelled", event.isCancelled());`]
-  }
-  
-  switch(codeBlock.block){
-    case "call_func":
-      mainFunc.push(`if(${codeBlock.data}(threadID, localVars, targets, specifics)) ${root.block == "func" ? "return true" : "return"};`); return true
-  }
-
-  console.log(codeBlock.block)
-
-  if(Object.keys(dict).includes(codeBlock.action)){
-    if(Array.isArray(dict[codeBlock.action])){
-      for(let temp of dict[codeBlock.action])
-        mainFunc.push(temp)
-    }
-    else mainFunc.push(dict[codeBlock.action])
-  }
-  else return false
-  return true
-}
-
-function gameValues(gVal, codeBlock){
+function gameValues(gVal, codeBlock) {
   let target = (gVal.target == null ? "default" : gVal.target).toLowerCase()
   let selection = target == "allplayers" ? "target" : `targets.get("${target}")`
-  
-  if(selection == "target" && nonTargetDependants.includes(codeBlock.block)) 
-    selection = `${selectionSyntax(codeBlock.target)}[0]`
+
+  if (selection == "target" && nonTargetDependants.includes(codeBlock.block))
+    selection = `${selectionSyntax(codeBlock)}[0]`
 
   return {
-    "Location": [`${selection}.getLocation()`, "LOC"],
+    "Location": [`DFUtilities.getRelativeLoc(${selection}.getLocation())`, "LOC"],
+    "Target Block Location": [`DFUtilities.getTargetBlock(${selection}}})`, "LOC"],
+    "Target Block Side": [`${selection}.getFacing().getDirection()`, "VEC"],
+    "Eye Location": [`DFUtilities.getRelativeLoc(${selection}.getEyeLocation())`, "LOC"],
+    "X-Coordinate": [`DFUtilities.getRelativeLoc(${selection}.getLocation()).getX()`, "NUM"],
+    "Y-Coordinate": [`DFUtilities.getRelativeLoc(${selection}.getLocation()).getY()`, "NUM"],
+    "Z-Coordinate": [`DFUtilities.getRelativeLoc(${selection}.getLocation()).getZ()`, "NUM"],
+    "Pitch": [`${selection}.getLocation().getPitch()`, "NUM"],
+    "Yaw": [`${selection}.getLocation().getYaw()`, "NUM"],
+    "Spawn Location": [`${selection}.getBedSpawnLocation()`, "LOC"],
+    "Velocity": [`${selection}.getVelocity()`, "VEC"],
+    "Direction": [`${selection}.getLocation().getDirection().normalize()`, "VEC"],
     "Current Health": [`${selection}.getHealth()`, "NUM"],
     "Maximum Health": [`${selection}.getAttribute(Attribute.GENERIC_MAX_HEALTH)`, "NUM"],
     "Absorption Health": [`${selection}.getAbsorptionAmount()`, "NUM"],
@@ -499,45 +468,22 @@ function gameValues(gVal, codeBlock){
     "Held Slot": [`${selection}.getInventory().getHeldItemSlot()`, "NUM"],
     "Ping": [`${selection}.getPing()`, "NUM"],
     "Item Usage Progress": [``, "NUM"], //TODO
-    "Steer Sideways Movement": [``, "NUM"], //TODO: This might require ProtocolLib!
+    "Steer Sideways Movement": [``, "NUM"], //TODO: This might require ProtocolLib!d
     "Steer Forward Movement": [``, "NUM"], //TODO: This might require ProtocolLib!
     "Event Item": [`specifics.get("item")`, "ITEM"]
   }[gVal.type]
 }
 
-function selectionSyntax(target) {
-  if(target == mainTarget && mainTarget != "none") return `new LivingEntity[]{target}`
-  if(target == "AllPlayers"){
+function selectionSyntax(codeBlock) {
+  let target = codeBlock.target
+  if (target == "AllPlayers") {
     newImport(["org.bukkit.Bukkit"])
     return "Bukkit.getOnlinePlayers().toArray(new LivingEntity[0])"
   }
 
   return target == null ?
-    `new LivingEntity[]{targets.get("default")}` :
-    `new LivingEntity[]{targets.get("${target.toLowerCase()}")}`
-}
-
-function findParent(parentArray, arr){
-  for(let i = 0; i < parentArray.length; i++){
-    if(!Array.isArray(parentArray[i])) continue
-    
-    if(JSON.stringify(parentArray[i]) == JSON.stringify(arr)) return parentArray
-    else if (Array.isArray(parentArray[i])){
-      let potentialReturn = findParent(parentArray[i], arr)
-      if(potentialReturn != null) return potentialReturn
-    }
-  }
-
-  return null
-}
-
-function findMostNestedArr(array, result, nest){
-  for(let element of array)
-    if(Array.isArray(element))
-      result = findMostNestedArr(element, result, nest + 1)
-
-  if(result[1] < nest) result = [array, nest]
-  return result
+    `new LivingEntity[]{${codeBlock.block == "entity_action" ? "DFUtilities.lastEntity" : `targets.get("default")`}}` :
+    `new LivingEntity[]{targets.get("${codeBlock.block == "entity_action" ? `${target.toLowerCase()}_entity` : target.toLowerCase()}")}`
 }
 
 String.prototype.replaceBetween = function(start, end, what) { //https://stackoverflow.com/questions/14880229/how-to-replace-a-substring-between-two-indices
