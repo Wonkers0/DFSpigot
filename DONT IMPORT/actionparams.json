@@ -19,6 +19,9 @@
       }
     ]
   ],
+  "PLAYERACTION:SurvivalMode": [[]],
+  "PLAYERACTION:AdventureMode": [[]],
+  "PLAYERACTION:CreativeMode": [[]],
   "PLAYERACTION:CloseInv": [[]],
   "PLAYERACTION:GiveItems": [
     [
