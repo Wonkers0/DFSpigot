@@ -2644,6 +2644,8 @@
       }
     ]
   ],
+  "GAMEACTION:CancelEvent": [[]],
+  "GAMEACTION:UncancelEvent": [[]],
   "PLAYERACTION:Particle": [
     [
       {
