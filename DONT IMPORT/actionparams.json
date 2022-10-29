@@ -1836,6 +1836,22 @@
       }
     ]
   ],
+  "IFVAR:TextMatches": [
+    [
+      {
+        "name": "match",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "checks",
+        "type": "TXT",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
   "IFVAR:=": [
     [
       {
