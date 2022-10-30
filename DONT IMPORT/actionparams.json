@@ -1852,6 +1852,28 @@
       }
     ]
   ],
+  "IFVAR:ItemHasTag": [
+    [
+      {
+        "name": "item",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "tag",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "check",
+        "type": "ANY",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
   "IFVAR:=": [
     [
       {
