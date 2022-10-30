@@ -16,20 +16,20 @@ export default {
   RightClick: 
   {
     "name": "player.PlayerInteractEvent",
-    "check": "event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR",
+    "check": "(event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) && event.getHand() == EquipmentSlot.HAND",
     "specifics": 
     {
-      "block":"event.getClickedBlock()",
+      "block":"DFUtilities.getEventLoc(event.getPlayer(), event.getClickedBlock())",
       "item":"event.getItem()"
     }
   },
   LeftClick:     
   {
     "name": "player.PlayerInteractEvent",
-    "check": "event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR",
+    "check": "(event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR) && event.getHand() == EquipmentSlot.HAND",
     "specifics": 
     {
-      "block":"event.getClickedBlock()",
+      "block":"DFUtilities.getEventLoc(event.getPlayer(), event.getClickedBlock())",
       "item":"event.getItem()"
     }
   },
@@ -116,7 +116,7 @@ export default {
     "check": "event.getEntity().isDead() && event.getEntity().getKiller() != null",
     "specifics": 
     {
-      "targets":{
+      "targets": {
         "default": "event.getEntity().getKiller()",
         "killer": "event.getEntity().getKiller()"
       }
