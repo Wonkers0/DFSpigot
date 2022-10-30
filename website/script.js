@@ -27,8 +27,9 @@ function decodeTemplate(data) { // Permanently borrowed from grog 😊
   return JSON.parse(string)
 }
 
-var mainFunc, libraries, root, code, specifics, loopID, threadCode
-export var threads = [];
+var mainFunc, libraries, root, code, specifics, threadCode
+var functions = []
+export var threads = []
 
 export function getRoot(base64) {
   try {
@@ -66,6 +67,7 @@ export function generate() {
   code = [
     "public class DFPlugin extends JavaPlugin implements Listener, CommandExecutor{",
     "public static HashMap<String, TreeMap<Integer, BossBar>> bossbarHandler = new HashMap<>();",
+    "funcs here (if you see this something went wrong)",
     "public static Location origin = new Location(null, 0, 0, 0);",
     "public static JavaPlugin plugin;",
     ""
@@ -95,6 +97,7 @@ export function generate() {
       specifics = setSpecificsDefaults(eventTypes[root.action]["specifics"], specificsDefaults)
     }
     else specifics = specificsDefaults
+    console.log(specifics)
 
     threadCode = threadCodes(root, rootEvent, specifics)[isEvent ? "event" : root.block]
     switch (root.block) {
@@ -102,7 +105,8 @@ export function generate() {
       case "entity_event":
         mainFunc = threadCode[1]; break
       case "func":
-        mainFunc = threadCode[0]; break
+        functions.push(spigotify(decodedJson.blocks, root)[1].concat(["});"]))
+        continue
       case "process":
         mainFunc = threadCode[0]; break
     }
@@ -115,14 +119,21 @@ export function generate() {
         mainFunc = temp
       }
       libraries.push(`org.bukkit.event.${eventTypes[root.action]["name"]}`)
+      mainFunc.push(spigotify(decodedJson.blocks, root))
+      let temp = specifics["cancelled"] == "false" ? "null" : "(Cancellable) event"
+      mainFunc.push(`}, targets, localVars, ${temp});`)
     }
 
-    mainFunc.push(spigotify(decodedJson.blocks))
-    mainFunc.push("});")
 
     code = code.concat(threadCode)
     code.push("")
   }
+  
+  code[2] = functions.length == 0 ? 
+    "public static HashMap<String, Object[]> functions = new HashMap<>();" :
+    ["public static HashMap<String, Object[]> functions = new HashMap<>(){{"].concat(functions)
+  code.splice(3, 0, "}};");
+  
   code = code.concat(
     [
       "@Override",
@@ -137,6 +148,7 @@ export function generate() {
         "public void onEnable(){",
         "plugin = this;",
         "",
+        "DFListeners.updateArgInfo()",
         "DFUtilities.getManagers(this);",
         "getServer().getPluginManager().registerEvents(this, this);",
         "getServer().getPluginManager().registerEvents(new DFListeners(), this);",
@@ -150,7 +162,7 @@ export function generate() {
 }
 
 
-function spigotify(jsonThread) {
+function spigotify(jsonThread, root) {
   let thread = []
   let bannedBlocks = ["event", "process", "func", "entity_event"]
   for (let i = 1; i < jsonThread.length; i++) {
@@ -161,14 +173,16 @@ function spigotify(jsonThread) {
     }
 
     if(codeBlock.id == 'bracket' && codeBlock.direct == 'close') thread.push(codeBlock.type == 'norm' ? 'new ClosingBracket(),' : `new RepeatingBracket(),`)
-    else if(codeBlock.direct != 'open') thread = thread.concat([[`new ${blockClasses()[codeBlock.block]}(`, `${blockParams(codeBlock)}`], "),"])
+    else if(codeBlock.direct != 'open') thread = thread.concat([[`new ${blockClasses()[codeBlock.block]}(`, `${blockParams(codeBlock, root.block == "func")}`], "),"])
   }
 
   let formattedLibraries = ""
   for (let k = 0; k < libraries.length; k++)
     formattedLibraries += `import ${libraries[k]};\n`
 
-  return [`CodeExecutor.executeThread(`, [`new Object[]{`].concat(thread)]
+  let prefix = root.block == "func" ? [`put("${root.data}", new Object[]{`] : [`new Object[]{`]
+  console.log(prefix.concat(thread))
+  return [`CodeExecutor.executeThread(`, prefix.concat(thread)]
 }
 
 function formatChildren(element, children, indent) {
@@ -185,7 +199,7 @@ function formatChildren(element, children, indent) {
   return element
 }
 
-function getCodeArgs(codeBlock) {
+function getCodeArgs(codeBlock, isFunc) {
   if (codeBlock.action == null) return null;
 
   let args = []
@@ -199,7 +213,7 @@ function getCodeArgs(codeBlock) {
       if (arg.id != "g_val") args.push(`new DFValue(${javafyParam(arg, slot, codeBlock)}, ${slot}, DFType.${arg.id.toUpperCase()})`)
       else {
         let paramInfo = javafyParam(arg, slot, codeBlock)
-        args.push(`new DFValue(${paramInfo[0]}, DFType.${paramInfo[1]})`)
+        args.push(`new DFValue(${paramInfo[0]}, ${slot}, DFType.${paramInfo[1]})`)
       }
       slots.push(slot)
     } else tags[arg.data.tag] = arg.data.option
@@ -221,7 +235,7 @@ function getCodeArgs(codeBlock) {
   tagMap = tagKeys.length == 0 ? `new HashMap<>(){}` : `new HashMap<>(){{${tagMap}\n{indent}  }}`
   let actionName = `${codeBlock.block.replaceAll("_", "").toUpperCase()}:${codeBlock.action.replaceAll(/( $)|^ /gi, "")}`;
 
-  return `ParamManager.formatParameters(\n{indent}  ${argMap}, \n{indent}  ${tagMap}, "${actionName}", localVars)`
+  return `new ParamManager(\n{indent}  ${argMap}, \n{indent}  ${tagMap}, "${actionName}", ${isFunc ? "null" : "localVars"})`
 }
 
 function newImport(newLibraries) {
@@ -298,14 +312,14 @@ function setSpecificsDefaults(specifics, specificsDefaults) {
   for (let key of Object.keys(specificsDefaults)) {
     if (specifics[key] == null) specifics[key] = specificsDefaults[key]
     else if (specificsDefaults[key].constructor == Object)
-      specifics[key] = setSpecificsDefaults(specifics[key], specificsDefaults)
+      specifics[key] = setSpecificsDefaults(specifics[key], specificsDefaults[key])
   }
   return specifics
 }
 
 
 function removeQuotes(text) {
-  return text.replaceAll(`"`, `\\"`)
+  return text.replaceAll(`"`, `\\"`).replaceAll(`\\'`, `\\\\'`)
 }
 
 function javafyParam(arg, slot, codeBlock) {
@@ -329,7 +343,7 @@ function javafyParam(arg, slot, codeBlock) {
     case "var":
       return `new DFVar(${textCodes(removeQuotes(arg.data.name))}, ${varScopes()[arg.data.scope]})`
     case "g_val":
-      return gameValues(arg.data, codeBlock)
+      return gameValues(arg.data)
     case "vec":
       newImport(["org.bukkit.util.Vector"])
       return `new Vector(${arg.data.x}, ${arg.data.y}, ${arg.data.z})`
@@ -406,40 +420,44 @@ function blockClasses() {
     "if_game": "IfGame",
     "repeat": "Repeat",
     "control": "Control",
-    "entity_action": "EntityAction"
+    "entity_action": "EntityAction",
+    "call_func": "CallFunction"
   }
 }
 
-function blockParams(codeBlock) {
-  let target = codeBlock.target == null ? `"default"` : `"codeBlock.target"` // TODO: Change "default" to selection once that is implemented
-  let args = getCodeArgs(codeBlock)
-  let action = codeBlock.action.replaceAll(/( $)|^ /gi, "")
+function blockParams(codeBlock, isFunc) {
+  let target, action
+  if(codeBlock.block == "entity_action" && codeBlock.target == null) target = `"LastEntity"` // TODO: Change "LastEntity" to selection once that is implemented
+  else target = codeBlock.target == null ? `"default"` : `"${codeBlock.target.toLowerCase()}"` // TODO: Change "default" to selection once that is implemented
+
+  let targets = isFunc ? "null" : "targets"
+  let localVars = isFunc ? "null" : "localVars"
+  let args = getCodeArgs(codeBlock, isFunc)
+  let inverted = codeBlock["inverted"] == "NOT"
+  if(codeBlock.action != null) action = codeBlock.action.replaceAll(/( $)|^ /gi, "")
 
   return {
-    "player_action": `${target}, targets, ${args}, "${action}"`,
-    "set_var": `${target}, targets, ${args}, "${action}", localVars`,
-    "game_action": `${target}, targets, ${args}, "${action}"`,
-    "if_player": `${target}, targets, ${args}, "${action}"`,
-    "if_var": `${target}, targets, ${args}, "${action}"`,
-    "if_game": `${target}, targets, ${args}, "${action}", specifics`,
-    "repeat": `null, null, ${args}, "${action}", localVars, ${loopID}d, threadID`,
-    "control": `${target}, targets, ${args}, "${action}"`,
-    "entity_action": `${target}, targets, ${args}, "${action}", localVars`
+    "player_action": `${target}, ${targets}, ${args}, "${action}"`,
+    "set_var": `${target}, ${targets}, ${args}, "${action}", ${localVars}`,
+    "game_action": `${target}, ${targets}, ${args}, "${action}"`,
+    "if_player": `${target}, ${targets}, ${args}, "${action}", ${inverted}`,
+    "if_var": `${target}, ${targets}, ${args}, "${action}", ${inverted}, ${localVars}`,
+    "if_game": `${target}, ${targets}, ${args}, "${action}", ${inverted}, specifics`,
+    "repeat": `null, null, ${args}, "${action}", ${inverted}, ${localVars}, ${Math.random() * Number.MAX_SAFE_INTEGER}d, threadID`,
+    "control": `${target}, ${targets}, ${args}, "${action}"`,
+    "entity_action": `${target}, ${targets}, ${args}, "${action}", ${localVars}`,
+    "call_func": `functions.get("${codeBlock.data}")`
   }[codeBlock.block]
 }
 
-function gameValues(gVal, codeBlock) {
-  let target = (gVal.target == null ? "default" : gVal.target).toLowerCase()
-  let selection = target == "allplayers" ? "target" : `targets.get("${target}")`
+function gameValues(gVal) {
+  let target = gVal.target == null ? `"default"` : `"${gVal.target.toLowerCase()}"`
+  let selection = `DFUtilities.getTargets(${target})[0]`
 
-  if (selection == "target" && nonTargetDependants.includes(codeBlock.block))
-    selection = `${selectionSyntax(codeBlock)}[0]`
-
-  return {
-    "Location": [`DFUtilities.getRelativeLoc(${selection}.getLocation())`, "LOC"],
+  let gVals = {
+    "Event Block Location": [`DFUtilities.getRelativeLoc(((Block) specifics.get("block")).getLocation())`, "LOC"],
     "Target Block Location": [`DFUtilities.getTargetBlock(${selection}}})`, "LOC"],
     "Target Block Side": [`${selection}.getFacing().getDirection()`, "VEC"],
-    "Eye Location": [`DFUtilities.getRelativeLoc(${selection}.getEyeLocation())`, "LOC"],
     "X-Coordinate": [`DFUtilities.getRelativeLoc(${selection}.getLocation()).getX()`, "NUM"],
     "Y-Coordinate": [`DFUtilities.getRelativeLoc(${selection}.getLocation()).getY()`, "NUM"],
     "Z-Coordinate": [`DFUtilities.getRelativeLoc(${selection}.getLocation()).getZ()`, "NUM"],
@@ -471,19 +489,11 @@ function gameValues(gVal, codeBlock) {
     "Steer Sideways Movement": [``, "NUM"], //TODO: This might require ProtocolLib!d
     "Steer Forward Movement": [``, "NUM"], //TODO: This might require ProtocolLib!
     "Event Item": [`specifics.get("item")`, "ITEM"]
-  }[gVal.type]
-}
-
-function selectionSyntax(codeBlock) {
-  let target = codeBlock.target
-  if (target == "AllPlayers") {
-    newImport(["org.bukkit.Bukkit"])
-    return "Bukkit.getOnlinePlayers().toArray(new LivingEntity[0])"
   }
 
-  return target == null ?
-    `new LivingEntity[]{${codeBlock.block == "entity_action" ? "DFUtilities.lastEntity" : `targets.get("default")`}}` :
-    `new LivingEntity[]{targets.get("${codeBlock.block == "entity_action" ? `${target.toLowerCase()}_entity` : target.toLowerCase()}")}`
+  if(!Object.keys(gVals).includes(gVal.type))
+    return [`new GameValue(Value.${gVal.type.replaceAll(" ", "")}, ${target})`, "GAMEVAL"]
+  else return gVals[gVal.type]
 }
 
 String.prototype.replaceBetween = function(start, end, what) { //https://stackoverflow.com/questions/14880229/how-to-replace-a-substring-between-two-indices
