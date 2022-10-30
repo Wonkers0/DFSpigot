@@ -101,12 +101,6 @@ export default function threadCodes(root, rootEvent, specifics){
       ],
       "}"
     ],
-  "func": [
-      [
-        `public int ${root.data} (double threadID, HashMap<String, DFValue> localVars, HashMap<String, LivingEntity> targets, HashMap<String, Object> specifics){`,
-        "}"
-      ]
-    ],
   "process": [ // TODO: Add target hashmap for processes once they're implemented
       [
         "//Processes are not supported!"
