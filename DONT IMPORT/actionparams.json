@@ -99,17 +99,7 @@
         "name": "items",
         "type": "ITEM",
         "repeating": true,
-        "defaultValue": [
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null
-        ]
+        "defaultValue": []
       }
     ]
   ],
