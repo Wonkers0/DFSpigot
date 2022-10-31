@@ -9,6 +9,9 @@ If you wish to contribute, go ahead, but please follow the code standards laid o
 The **java classes** found in this repository need to be imported to provide the methods that your plugin needs to run. But first, read the sections below to learn how to generate your DFPlugin.java class. This class will communicate with the other classes found in this repo to move your games from DiamondFire to a *server of your own*. 👍
 
 ### 💾 Setting up your project
+
+#### ⚠️ ⚠️ ⚠️ **WARNING: This tutorial is** ***months*** **out of date! I will publish another one, please be patient.**
+
 Before you can compile the code, you need to first set up your project in a standard IDE. This tutorial covers [the IntelliJ IDE](https://www.jetbrains.com/idea/download/download-thanks.html?platform=windows&code=IIC), so install this first.
 
 Once installed, you should see this welcome screen when opening the IDE for the first time:
