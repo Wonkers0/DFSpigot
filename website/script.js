@@ -150,10 +150,17 @@ export function generate() {
         "plugin = this;",
         "",
         "DFListeners.updateArgInfo();",
-        "DFUtilities.getManagers(this);",
+        "DFVar.deserializeSavedVars();",
+        "DFUtilities.playerConfig = new FileManager(plugin, \"playerData.yml\");",
         "getServer().getPluginManager().registerEvents(this, this);",
         "getServer().getPluginManager().registerEvents(new DFListeners(), this);",
         `this.getCommand("dfspigot").setExecutor(new DFListeners());`
+      ],
+      "}",
+      "@Override",
+      [
+        "public void onDisable(){",
+        "DFVar.serializeSavedVars();"
       ],
       "}"
     ]
