@@ -102,7 +102,11 @@ export default {
   {
     "name": "entity.EntityDamageEvent",
     "check": "event.getEntity() instanceof Player",
-    "specifics": {}
+    "specifics": {
+      "targets": {
+        "default": "(Player) event.getEntity()"
+      }
+    }
   },
   ProjHit:
   {
@@ -218,7 +222,11 @@ export default {
   {
     "name": "player.PlayerInteractEntityEvent",
     "check": "!(event.getRightClicked() instanceof Player)",
-    "specifics": {}
+    "specifics": {
+      "targets": {
+        "victim": "(LivingEntity) event.getRightClicked()"
+      }
+    }
   },
   HorseJump:
   {
