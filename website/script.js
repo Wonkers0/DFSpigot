@@ -27,8 +27,7 @@ function decodeTemplate(data) { // Permanently borrowed from grog 😊
   return JSON.parse(string)
 }
 
-var mainFunc, libraries, root, code, specifics, threadCode
-var functions = []
+var mainFunc, libraries, root, code, specifics, threadCode, functions
 export var threads = []
 
 export function getRoot(base64) {
@@ -72,6 +71,8 @@ export function generate() {
     "public static JavaPlugin plugin;",
     ""
   ]
+
+  functions = []
 
   for (let threadData of threads) {
     let decodedJson = decodeTemplate(threadData.match(/h4sI(A{5,20})[a-z0-9+_/=]+/i)[0])
@@ -120,7 +121,7 @@ export function generate() {
       }
       libraries.push(`org.bukkit.event.${eventTypes[root.action]["name"]}`)
       mainFunc.push(spigotify(decodedJson.blocks, root))
-      let temp = specifics["cancelled"] == "false" ? "null" : "(Cancellable) event"
+      let temp = specifics["cancelled"] == "false" ? "null" : "event"
       mainFunc.push(`}, targets, localVars, ${temp});`)
     }
 
@@ -132,7 +133,7 @@ export function generate() {
   code[2] = functions.length == 0 ? 
     "public static HashMap<String, Object[]> functions = new HashMap<>();" :
     ["public static HashMap<String, Object[]> functions = new HashMap<>(){{"].concat(functions)
-  code.splice(3, 0, "}};");
+  if(functions.length != 0) code.splice(3, 0, "}};");
   
   code = code.concat(
     [
@@ -148,7 +149,7 @@ export function generate() {
         "public void onEnable(){",
         "plugin = this;",
         "",
-        "DFListeners.updateArgInfo()",
+        "DFListeners.updateArgInfo();",
         "DFUtilities.getManagers(this);",
         "getServer().getPluginManager().registerEvents(this, this);",
         "getServer().getPluginManager().registerEvents(new DFListeners(), this);",
@@ -245,17 +246,8 @@ function newImport(newLibraries) {
   }
 }
 
-function textCodes(str) {
-  str = expressions(str).replaceAll("Â§", "§")
-
-  let targetCodes = {
-    "%default": `targets.get("default").getName()`
-  };
-
-  for (let i = 0; i < Object.keys(targetCodes).length; i++) {
-    let temp = Object.keys(targetCodes)[i]
-    str = str.replaceAll(temp, `" + ${targetCodes[temp]} + "`)
-  }
+function hexCodes(str) {
+  str = str.replaceAll("Â§", "§")
 
   //Hex Codes
   let matches = str.match(/§x(§[a-fA-F0-9]){6}/g)
@@ -264,48 +256,6 @@ function textCodes(str) {
       str = str.replace(match, `" + ChatColor.of("${match.toLowerCase().replace("x", "#").replaceAll("§", "")}") + "`)
 
   return `"${str}"`.replaceAll(`"" + `, "").replaceAll(`+ ""`, "")
-}
-
-function expressions(str) {
-  let seenPercentage = false
-  let countedBrackets = 0
-
-  let startIndex, endIndex, percentIndex
-
-  let percentCodes = ["%var"]
-  for (let i = 0; i < str.length; i++) {
-    let char = str[i]
-
-    if (char == '%' && (startIndex == -1 || (!percentCodes.includes(str.substring(percentIndex, startIndex))))) {
-      seenPercentage = true
-      percentIndex = i
-      startIndex = -1
-      endIndex = -1
-    }
-
-    if ((char == '(' || char == ')') && seenPercentage) {
-      countedBrackets += (char == '(' ? 1 : -1)
-      if (countedBrackets == 1 && startIndex == -1) {
-        startIndex = i
-      }
-      else if (countedBrackets == 0) {
-        endIndex = i
-        let prefix = str.substring(percentIndex, startIndex)
-        let content = str.substring(startIndex + 1, endIndex)
-
-        if (percentCodes.includes(prefix)) {
-          switch (prefix) {
-            case "%var":
-              let varName = expressions(removeQuotes(content));
-              str = str.replaceBetween(percentIndex, endIndex + 1, `" + DFUtilities.parseTxt(DFVar.getVar(new DFVar("${varName}", DFVar.getVarScope("${varName}", localVars)), localVars)) + "`)
-              break
-          }
-        }
-      }
-    }
-  }
-
-  return str;
 }
 
 function setSpecificsDefaults(specifics, specificsDefaults) {
@@ -325,9 +275,9 @@ function removeQuotes(text) {
 function javafyParam(arg, slot, codeBlock) {
   switch (arg.id) {
     case "txt":
-      return `${textCodes(removeQuotes(arg.data.name))}` // Surrounding quotes are added by textCodes method before returning!
+      return hexCodes(removeQuotes(arg.data.name)) // Surrounding quotes are added by hexCodes method before returning
     case "num":
-      return arg.data.name + "d"
+      return `"${arg.data.name}"` // Needs to be a string to be processed for text codes during runtime
     case "snd":
       return `new DFSound("${arg.data.sound}", ${arg.data.pitch}f, ${arg.data.vol}f)`
     case "loc":
@@ -341,7 +291,7 @@ function javafyParam(arg, slot, codeBlock) {
       let potion = arg.data
       return `new PotionEffect(PotionEffectType.${potionEffects()[potion.pot]}, ${potion.dur}, ${potion.amp})`
     case "var":
-      return `new DFVar(${textCodes(removeQuotes(arg.data.name))}, ${varScopes()[arg.data.scope]})`
+      return `new DFVar("${removeQuotes(arg.data.name)}", ${varScopes()[arg.data.scope]})`
     case "g_val":
       return gameValues(arg.data)
     case "vec":
@@ -406,7 +356,7 @@ function varScopes() {
   return {
     "unsaved": "Scope.GLOBAL",
     "local": "Scope.LOCAL",
-    "save": "Scope.SAVE"
+    "saved": "Scope.SAVE"
   };
 }
 
