@@ -28,6 +28,9 @@ import me.wonk2.utilities.values.DFValue;
 import me.wonk2.utilities.values.TextCode;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextColor;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
@@ -390,5 +393,47 @@ public abstract class DFUtilities {
 			editSession.flushSession();
 		} catch (IOException | WorldEditException e) { e.printStackTrace(); }
 	}
+
+	/**
+     * converts any string to a nms net.minecraft.network.chat.Component
+     * @param str a DiamondFire text string with §
+     * @return a nms component
+     * @author CheaterTim
+     */
+    public static MutableComponent componentFromString(String str) {
+        String[] parts = str.replaceAll("§x(§[a-fA-F0-9]){6}(?=§x(§[a-fA-F0-9]){6})", "") // §x§5§2§f§f&§&1§x§c§c§2§7§2§7 -> §x§c§c§2§7§2§7 (to fix an edge case where it uses the second color as the text content)
+                .replaceAll("§x(§[a-fA-F0-9]){6}", "\uE000$0\uE000") // hell&x&c&c&2&7&2&7world -> hell(U+E000)&x&c&c&2&7&2&7(U+E000)world
+                .split("\uE000"); // hell(U+E000)&x&c&c&2&7&2&7(U+E000)world -> [hell, &x&c&c&2&7&2&7, world]
+
+        MutableComponent comp = Component.empty();
+
+
+        int i = -1;
+        boolean didHexCod = false;
+        for(String part : parts) {
+            i++;
+            boolean end = i == parts.length - 1;
+            String next = end ? null : parts[i + 1];
+
+            if(part.length() == 0) continue;
+
+            if(didHexCod) {
+                didHexCod = false;
+                continue;
+            }
+
+            if(part.matches("§x(§[a-fA-F0-9]){6}") && !end) { // if the part is a hex code, and we're not at the last part
+                String hex = part.replace("§", "").replace("x", "#"); // convert it to a normal hex code
+            comp.append(Component.literal(next).withStyle(style -> { // add the next part
+                return style.withColor(TextColor.parseColor(hex)); // with our hex color
+            }));
+            didHexCod = true; // make sure the next part is ignored, because we already appended that
+            } else {
+                comp.append(part);
+            }
+        }
+
+        return comp;
+    }
 	
 }

@@ -1,13 +1,12 @@
 package me.wonk2.utilities.actions;
 
-import com.gmail.filoghost.holographicdisplays.api.Hologram;
-import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import me.wonk2.DFPlugin;
 import me.wonk2.utilities.DFUtilities;
 import me.wonk2.utilities.ParamManager;
 import me.wonk2.utilities.actions.pointerclasses.Action;
 import me.wonk2.utilities.internals.PlayerData;
 import me.wonk2.utilities.internals.TextAligning;
+import me.wonk2.utilities.internals.Hologram;
 import me.wonk2.utilities.values.DFParticle;
 import me.wonk2.utilities.values.DFSound;
 import me.wonk2.utilities.values.DFValue;
@@ -509,22 +508,11 @@ public class PlayerAction extends Action {
 			
 			case "DisplayHologram": { //TODO
 				if(!(target instanceof Player)) break;
-				
-				PlayerData playerData = PlayerData.getPlayerData(target.getUniqueId());
 				Location loc = (Location) args.get("location").getVal();
 				String text = (String) args.get("text").getVal();
 				
-				for (Hologram hologram : playerData.holograms.stream().filter(hologram -> DFUtilities.locationEquals(hologram.getLocation(), loc, true)).toArray(Hologram[]::new))
-					hologram.delete();
-				
-				playerData.holograms.removeIf(Hologram::isDeleted);
-				
-				Hologram hologram = HologramsAPI.createHologram(DFPlugin.plugin, loc);
-				hologram.getVisibilityManager().setVisibleByDefault(false);
-				hologram.appendTextLine(text);
-				
-				hologram.getVisibilityManager().showTo((Player) target);
-				playerData.holograms.add(hologram);
+				Hologram.showHologram(loc, text, target);
+			
 				break;
 			}
 			
