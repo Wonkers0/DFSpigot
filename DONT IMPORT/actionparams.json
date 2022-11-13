@@ -3773,5 +3773,38 @@
       }
     ]
   ],
-  "SELECTOBJ:AllEntities": [[]]
+  "SELECTOBJ:AllEntities": [[]],
+  "SELECTOBJ:AllPlayers": [[]],
+  "SELECTOBJ:RandomPlayer": [
+    [
+      {
+        "name": "size",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 1
+      }
+    ]
+  ],
+  "SELECTOBJ:LastEntity": [[]],
+  "SELECTOBJ:PlayerName": [
+    [
+      {
+        "name": "names",
+        "type": "TXT",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SELECTOBJ:EntityName": [
+    [
+      {
+        "name": "names",
+        "type": "TXT",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SELECTOBJ:Invert": [[]]
 }
