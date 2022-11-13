@@ -24,6 +24,7 @@ import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
@@ -32,6 +33,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.network.protocol.game.ClientboundEntityEventPacket;
+import net.minecraft.server.level.ServerPlayer;
 
 import java.util.*;
 
@@ -486,6 +490,15 @@ public class PlayerAction extends Action {
 			
 			case "InstantRespawn": {
 				PlayerData.getPlayerData(target.getUniqueId()).instantRespawn = tags.get("Instant Respawn") == "Enable";
+				break;
+			}
+
+			case "SetReducedDebug": {
+				ServerPlayer nmsPlayer = ((CraftPlayer) target).getHandle();
+				ServerGamePacketListenerImpl connection = nmsPlayer.connection;
+
+				connection.send(new ClientboundEntityEventPacket(nmsPlayer, (byte)(tags.get("Reduced Debug Info Enabled") == "True" ? 22 : 23)));
+
 				break;
 			}
 			

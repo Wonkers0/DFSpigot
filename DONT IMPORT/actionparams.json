@@ -990,6 +990,9 @@
   "PLAYERACTION:InstantRespawn": [
     []
   ],
+  "PLAYERACTION:SetReducedDebug": [
+    []
+  ],
   "PLAYERACTION:StopSound": [
     [
       {
