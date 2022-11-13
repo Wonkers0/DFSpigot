@@ -3035,6 +3035,22 @@
       }
     ]
   ],
+  "PLAYERACTION:SetChatTag": [
+    {
+      "name": "tag",
+      "type": "TXT",
+      "repeating": true,
+      "defaultValue": [""]
+    }
+  ],
+  "PLAYERACTION:ChatColor": [
+    {
+      "name": "tag",
+      "type": "TXT",
+      "repeating": false,
+      "defaultValue": ""
+    }
+  ],
   "GAMEACTION:BreakBlock": [
     [
       {

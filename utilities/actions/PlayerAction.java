@@ -738,6 +738,19 @@ public class PlayerAction extends Action {
 				drawParticleCircle((Player) target, particle, loc, diameter, ticks);
 				break;
 			}
+
+
+			// Appearance
+			case "SetChatTag": {
+				PlayerData playerData = PlayerData.getPlayerData(target.getUniqueId());
+				playerData.chatTag = DFValue.castTxt((DFValue[]) args.get("tag").getVal()).join("");
+				break;
+			}
+
+			case "ChatColor": {
+				PlayerData playerData = PlayerData.getPlayerData(target.getUniqueId());
+				playerData.chatColor = DFUtilities.regex("§[xXa-fA-Fk-oK-O0-9]", (String)args.get("tag").getVal()).join("");
+			}
 		}
 	}
 	

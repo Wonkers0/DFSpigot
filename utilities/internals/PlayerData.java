@@ -13,7 +13,9 @@ public final class PlayerData { // Permanently borrowed PlayerData class from Ch
 	public boolean wasGrounded = true;
 	public Location respawnLoc;
 	public ArrayList<Material> allowedBlocks = new ArrayList<>();
-	
+	public String chatTag = "";
+	public String chatColor = "";
+
 	private static final HashMap<UUID, PlayerData> data = new HashMap<>();
 	
 	public static PlayerData getPlayerData(UUID uuid) {
