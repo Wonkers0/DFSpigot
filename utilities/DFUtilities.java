@@ -53,6 +53,8 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 // Class to store general-use methods and implement event handlers to assist other action implementations
 public abstract class DFUtilities {
@@ -434,6 +436,22 @@ public abstract class DFUtilities {
         }
 
         return comp;
+    }
+
+    public String[] regex(String pattern, String str) {
+        ArrayList<String> result = new ArrayList<>();
+
+        Pattern p = Pattern.compile(pattern);
+
+        Matcher m = p.matcher(str);
+        while(m.find()) {
+            result.add(m.group());
+        }
+
+        String[] r = new String[result.size()];
+        r = result.toArray(r);
+
+        return r;
     }
 	
 }

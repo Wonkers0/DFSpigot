@@ -24,6 +24,7 @@ import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
@@ -32,6 +33,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.network.protocol.game.ClientboundEntityEventPacket;
+import net.minecraft.server.level.ServerPlayer;
 
 import java.util.*;
 
@@ -488,6 +492,15 @@ public class PlayerAction extends Action {
 				PlayerData.getPlayerData(target.getUniqueId()).instantRespawn = tags.get("Instant Respawn") == "Enable";
 				break;
 			}
+
+			case "SetReducedDebug": {
+				ServerPlayer nmsPlayer = ((CraftPlayer) target).getHandle();
+				ServerGamePacketListenerImpl connection = nmsPlayer.connection;
+
+				connection.send(new ClientboundEntityEventPacket(nmsPlayer, (byte)(tags.get("Reduced Debug Info Enabled") == "True" ? 22 : 23)));
+
+				break;
+			}
 			
 			case "EnableBlocks": {
 				PlayerData playerData = PlayerData.getPlayerData(target.getUniqueId());
@@ -724,6 +737,19 @@ public class PlayerAction extends Action {
 				long ticks = (long) (double) args.get("ticks").getVal();
 				drawParticleCircle((Player) target, particle, loc, diameter, ticks);
 				break;
+			}
+
+
+			// Appearance
+			case "SetChatTag": {
+				PlayerData playerData = PlayerData.getPlayerData(target.getUniqueId());
+				playerData.chatTag = DFValue.castTxt((DFValue[]) args.get("tag").getVal()).join("");
+				break;
+			}
+
+			case "ChatColor": {
+				PlayerData playerData = PlayerData.getPlayerData(target.getUniqueId());
+				playerData.chatColor = DFUtilities.regex("§[xXa-fA-Fk-oK-O0-9]", (String)args.get("tag").getVal()).join("");
 			}
 		}
 	}

@@ -23,6 +23,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.io.File;
 import java.io.IOException;
@@ -144,6 +145,12 @@ public class DFListeners implements Listener, CommandExecutor {
 		return true;
 	}
 	
+	@EventHandler
+    public void onChat(AsyncPlayerChatEvent e) {
+        PlayerData data = PlayerData.getPlayerData(e.getPlayer().getUniqueId());
+        e.setFormat(data.chatTag + "§r%s:" + data.chatColor + " %s");
+    }
+
 	private void setOrigin(Player player, Location origin){
 		DFPlugin.origin = origin;
 		player.sendMessage("§2ℹ §aAll location values will now be relative to " + DFUtilities.locToString(DFPlugin.origin));
