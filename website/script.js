@@ -61,6 +61,7 @@ export function generate() {
     "org.bukkit.event.EventHandler",
     "org.bukkit.event.block.Action",
     "org.bukkit.plugin.java.JavaPlugin",
+    "me.wonk2.utilities.internals.FileManager",
     "java.util.*"
   ]
   code = [
@@ -378,7 +379,8 @@ function blockClasses() {
     "repeat": "Repeat",
     "control": "Control",
     "entity_action": "EntityAction",
-    "call_func": "CallFunction"
+    "call_func": "CallFunction",
+    "select_obj": "SelectObject"
   }
 }
 
@@ -391,6 +393,7 @@ function blockParams(codeBlock, isFunc) {
   let localVars = isFunc ? "null" : "localVars"
   let args = getCodeArgs(codeBlock, isFunc)
   let inverted = codeBlock["inverted"] == "NOT"
+  let subAction = codeBlock["subAction"] == null ? "null" : codeBlock["subAction"]
   if(codeBlock.action != null) action = codeBlock.action.replaceAll(/( $)|^ /gi, "")
 
   return {
@@ -403,7 +406,8 @@ function blockParams(codeBlock, isFunc) {
     "repeat": `null, null, ${args}, "${action}", ${inverted}, ${localVars}, ${Math.random() * Number.MAX_SAFE_INTEGER}d, threadID`,
     "control": `${target}, ${targets}, ${args}, "${action}"`,
     "entity_action": `${target}, ${targets}, ${args}, "${action}", ${localVars}`,
-    "call_func": `functions.get("${codeBlock.data}")`
+    "call_func": `functions.get("${codeBlock.data}")`,
+    "select_obj": `${targets}, ${args}, "${action}", "${subAction}", ${inverted}, ${localVars}, specifics`
   }[codeBlock.block]
 }
 
