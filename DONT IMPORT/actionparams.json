@@ -3806,5 +3806,6 @@
       }
     ]
   ],
-  "SELECTOBJ:Invert": [[]]
+  "SELECTOBJ:Invert": [[]],
+  "SELECTOBJ:PlayerCond": [[]]
 }
