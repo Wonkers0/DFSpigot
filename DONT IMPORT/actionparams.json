@@ -3807,5 +3807,6 @@
     ]
   ],
   "SELECTOBJ:Invert": [[]],
-  "SELECTOBJ:PlayersCond": [[]]
+  "SELECTOBJ:PlayersCond": [[]],
+  "SELECTOBJ:FilterCondition": [[]]
 }
