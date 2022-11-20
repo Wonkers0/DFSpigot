@@ -3808,5 +3808,157 @@
   ],
   "SELECTOBJ:Invert": [[]],
   "SELECTOBJ:PlayersCond": [[]],
-  "SELECTOBJ:FilterCondition": [[]]
+  "SELECTOBJ:FilterCondition": [[]],
+  "SETVAR:GetCoord": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:SetCoord": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "coord",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:SetAllCoords": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "x",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "y",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "z",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "yaw",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "pitch",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:ShiftOnAxis": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "shift",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:PerlinNoise": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "frequency",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 1
+      },
+      {
+        "name": "octaves",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 1
+      },
+      {
+        "name": "octaveFrequency",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 1.5
+      },
+      {
+        "name": "octaveAmplitude",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 0.75
+      },
+      {
+        "name": "seed",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ]
 }
