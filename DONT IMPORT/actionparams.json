@@ -3957,7 +3957,7 @@
         "name": "seed",
         "type": "NUM",
         "repeating": false,
-        "defaultValue": null
+        "defaultValue": 0
       }
     ]
   ]
