@@ -3960,5 +3960,39 @@
         "defaultValue": 0
       }
     ]
+  ],
+  "SETVAR:ShiftAllAxes": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "shiftX",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 0
+      },
+      {
+        "name": "shiftY",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 0
+      },
+      {
+        "name": "shiftZ",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 0
+      }
+    ]
   ]
 }
