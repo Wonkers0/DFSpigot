@@ -22,6 +22,7 @@
   "PLAYERACTION:SurvivalMode": [[]],
   "PLAYERACTION:AdventureMode": [[]],
   "PLAYERACTION:CreativeMode": [[]],
+  "PLAYERACTION:SpectatorMode": [[]],
   "PLAYERACTION:CloseInv": [[]],
   "PLAYERACTION:GiveItems": [
     [
