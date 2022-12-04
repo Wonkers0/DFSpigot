@@ -23,7 +23,6 @@ public class IfPlayer extends Conditional {
 		super(targetName, targetMap, paramManager, action, inverted);
 	}
 	
-	@Override
 	public boolean evaluateCondition(){
 		Object[] inputArray = paramManager.formatParameters(targetMap);
 		HashMap<String, DFValue> args = DFUtilities.getArgs(inputArray);

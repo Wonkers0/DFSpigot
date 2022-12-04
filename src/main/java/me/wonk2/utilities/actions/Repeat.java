@@ -22,6 +22,7 @@ public class Repeat extends Conditional {
 	
 	@Override
 	public boolean evaluateCondition(){
+		
 		Object[] inputArray = paramManager.formatParameters(targetMap);
 		HashMap<String, DFValue> args = DFUtilities.getArgs(inputArray);
 		HashMap<String, String> tags = DFUtilities.getTags(inputArray);

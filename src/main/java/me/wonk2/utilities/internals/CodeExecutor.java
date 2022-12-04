@@ -21,23 +21,44 @@ import java.util.HashMap;
 
 public abstract class CodeExecutor {
 	private static void runCodeBlock(Object codeBlock, HashMap<String, LivingEntity[]> targetMap, HashMap<String, DFValue> localVars, @Nullable Cancellable event, SelectionType eventType){
+		boolean stoppedLoop = false, skippedIteration = false;
+		ArrayList<Repeat> encounteredLoops = new ArrayList<>();
+		
 		while(Bukkit.getOnlinePlayers().size() != 0) {
 			while (isConditional(codeBlock)) {
-				boolean condition = ((Conditional) codeBlock).evaluateCondition();
-				if (((Conditional) codeBlock).inverted) condition = !condition;
+				Conditional cond = (Conditional) codeBlock;
+				
+				boolean condition = cond.evaluateCondition();
+				if (cond.inverted) condition = !condition;
+				
+				if(codeBlock instanceof Repeat x){
+					if(encounteredLoops.contains(x)){
+						stoppedLoop = false;
+						skippedIteration = false;
+					}
+					else if(stoppedLoop || skippedIteration) condition = false;
+					
+					encounteredLoops.add(x);
+				}
 				
 				if (condition) codeBlock = getPointer(codeBlock);
 				else{
-					if(codeBlock instanceof Repeat) LoopData.loopVars.remove(((Repeat) codeBlock).id); // Clear loop data once it's done
+					if(codeBlock instanceof Repeat x){
+						LoopData.loopVars.remove(x.id); // Clear loop data once it's done
+						encounteredLoops.remove(x);
+					}
 					
-					codeBlock = ((Conditional) codeBlock).bracketPointer;
-					if(codeBlock instanceof RepeatingBracket) codeBlock = ((RepeatingBracket) codeBlock).pointer;
+					codeBlock = cond.bracketPointer;
+					if(codeBlock instanceof RepeatingBracket x) codeBlock = x.pointer;
 				}
 			}
 			if (codeBlock == null) return;
 			
 			Object codeBlockPointer = getPointer(codeBlock);
-			
+			if(stoppedLoop || skippedIteration){
+				codeBlock = codeBlockPointer; // We still need to advance to the next codeblock, otherwise we'd cause an infinite loop.
+				continue; // Don't run code blocks after a StopRepeat or Skip block
+			}
 			
 			if (codeBlock instanceof CallFunction) {
 				runCodeBlock(((CallFunction) codeBlock).getFunc(targetMap, localVars).get(0), targetMap, localVars, event, eventType);
@@ -73,10 +94,13 @@ public abstract class CodeExecutor {
 					return;
 				
 				case "Skip":
+					skippedIteration = true;
+					Bukkit.broadcastMessage("Skipped iteration");
 					break;
 				
 				case "StopRepeat":
-					break; //TODO
+					stoppedLoop = true;
+					break;
 				
 				case "UncancelEvent":
 				case "CancelEvent":

@@ -4,6 +4,7 @@
 *.iml
 *.ipr
 *.iws
+DFPlugin.java
 
 # IntelliJ
 out/

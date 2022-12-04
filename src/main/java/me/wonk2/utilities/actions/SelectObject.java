@@ -140,16 +140,13 @@ public class SelectObject extends Action {
 		String condClass = condInfo.get(subAction);
 		targetMap.put("selection", new LivingEntity[]{p});
 		
-		switch(condClass){
-			case "IFPLAYER":
-				return new IfPlayer("selection", targetMap, paramManager, subAction, inverted);
-			case "IFVAR":
-				return new IfVariable("selection", targetMap, paramManager, subAction, inverted, localStorage);
-			case "IFGAME":
-				return new IfGame("selection", targetMap, paramManager, subAction, inverted, specifics);
-			default:
+		return switch (condClass) {
+			case "IFPLAYER" -> new IfPlayer("selection", targetMap, paramManager, subAction, inverted);
+			case "IFVAR" -> new IfVariable("selection", targetMap, paramManager, subAction, inverted, localStorage);
+			case "IFGAME" -> new IfGame("selection", targetMap, paramManager, subAction, inverted, specifics);
+			default ->
 				throw new IllegalStateException("Error whilst trying to select objects: This type of conditional is not supported yet: " + condClass);
-		}
+		};
 	}
 	
 	public LivingEntity[] filterSelection(@NotNull LivingEntity[] selection){
