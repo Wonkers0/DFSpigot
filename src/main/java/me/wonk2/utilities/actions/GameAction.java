@@ -571,7 +571,7 @@ public class GameAction extends Action {
 				
 				loc.getBlock().setType(Material.AIR);
 				break;
-			} // goofy test 3
+			}
 		}
 	}
 }
