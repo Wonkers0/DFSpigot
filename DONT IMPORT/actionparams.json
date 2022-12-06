@@ -3121,7 +3121,7 @@
         "defaultValue": null
       },
       {
-        "name": "txt",
+        "name": "tags",
         "type": "TXT",
         "repeating": true,
         "defaultValue": null
