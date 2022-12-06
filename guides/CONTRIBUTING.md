@@ -17,7 +17,7 @@ selection `Minecraft` when making a new project, like so:
 
 *Choose "Spigot Plugin" and use JDK 17*
 ### (You will also need to change your language level to 16)
-
+<br><br>
 
 Once you've created the project, it should look like this:
 ![image](https://user-images.githubusercontent.com/106038003/205465192-28178b69-8cfb-4cc0-885d-f4d9e078e000.png)
