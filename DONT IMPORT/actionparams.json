@@ -4015,5 +4015,13 @@
         "defaultValue": 0
       }
     ]
+  ],
+  "PLAYERACTION:SetNameColor": [
+    {
+      "name": "color",
+      "type": "TXT",
+      "repeating": false,
+      "defaultValue": ""
+    }
   ]
 }
