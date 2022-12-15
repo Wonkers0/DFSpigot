@@ -4025,5 +4025,27 @@
         "defaultValue": ""
       }
     ]
+  ],
+  "PLAYERACTION:SetWorldBorder": [
+    [
+      {
+        "name": "center",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "radius",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "warnDistance",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 0
+      }
+    ]
   ]
 }
