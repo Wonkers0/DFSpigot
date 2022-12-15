@@ -4047,5 +4047,33 @@
         "defaultValue": 0
       }
     ]
+  ],
+  "SETVAR:Vector": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "x",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "y",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "z",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
   ]
 }
