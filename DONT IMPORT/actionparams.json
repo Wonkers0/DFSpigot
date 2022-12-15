@@ -4017,11 +4017,13 @@
     ]
   ],
   "PLAYERACTION:SetNameColor": [
-    {
-      "name": "color",
-      "type": "TXT",
-      "repeating": false,
-      "defaultValue": ""
-    }
+    [
+      {
+        "name": "color",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": ""
+      }
+    ]
   ]
 }
