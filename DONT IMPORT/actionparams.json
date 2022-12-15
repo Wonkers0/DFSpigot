@@ -4075,5 +4075,27 @@
         "defaultValue": null
       }
     ]
+  ],
+  "SETVAR:Distance": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc1",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc2",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
   ]
 }
