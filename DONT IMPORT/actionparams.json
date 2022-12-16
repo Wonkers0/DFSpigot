@@ -918,13 +918,7 @@
         "name": "nums",
         "type": "NUM",
         "repeating": true,
-        "defaultValue":
-        [
-          {
-            "val": 1,
-            "type": "NUM"
-          }
-        ]
+        "defaultValue": 1
       }
     ]
   ],
