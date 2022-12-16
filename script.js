@@ -427,7 +427,7 @@ function blockParams(codeBlock, isFunc) {
     "control": `${target}, ${targets}, ${args}, "${action}"`,
     "entity_action": `${target}, ${targets}, ${args}, "${action}", ${localVars}`,
     "call_func": `"${codeBlock.data}"`,
-    "start_process": `functions.get("${codeBlock.data}"), StartProcess.TargetMode.${TargetModes[tags["Target Mode"]]}, StartProcess.VarStorage.${VarStorage[tags["Local Variables"]]}`,
+    "start_process": `"${codeBlock.data}", StartProcess.TargetMode.${TargetModes[tags["Target Mode"]]}, StartProcess.VarStorage.${VarStorage[tags["Local Variables"]]}`,
     "select_obj": `${args}, "${action}", "${subAction}", ${inverted}, ${localVars}, ${isFunc ? "null" : "specifics"}`
   }[codeBlock.block]
 }
