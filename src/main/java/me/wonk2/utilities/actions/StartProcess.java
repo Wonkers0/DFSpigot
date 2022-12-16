@@ -41,12 +41,7 @@ public class StartProcess extends Action {
 			}
 		
 		
-		ObjectArrWrapper func = CodeExecutor.assignPointers(new ObjectArrWrapper(process));
-		for(int i = 0; i < func.length; i++)
-			if(func.get(i) instanceof Action && ((Action) func.get(i)).pointer == null)
-				((Action) func.get(i)).pointer = pointer;
-		
-		return func;
+		return CodeExecutor.assignPointers(new ObjectArrWrapper(process));
 	}
 	
 	@SuppressWarnings("unchecked")

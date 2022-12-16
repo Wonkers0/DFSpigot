@@ -26,6 +26,7 @@ import me.wonk2.utilities.internals.FileManager;
 import me.wonk2.utilities.internals.PlayerData;
 import me.wonk2.utilities.values.DFSound;
 import me.wonk2.utilities.values.DFValue;
+import me.wonk2.utilities.values.DFVar;
 import me.wonk2.utilities.values.TextCode;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
@@ -61,6 +62,12 @@ import java.util.regex.Pattern;
 public abstract class DFUtilities {
 	public static FileManager playerConfig;
 	public static LivingEntity lastEntity = null;
+	
+	public static void init(){
+		playerConfig = new FileManager(DFPlugin.plugin, "playerData.yml");
+		DFListeners.updateArgInfo();
+		DFVar.deserializeSavedVars();
+	}
 	
 	public static Vector getTangent(Vector normal){
 		normal = normal.clone();

@@ -743,7 +743,41 @@ public class PlayerAction extends Action {
 				
 				case "ChatColor": {
 					PlayerData playerData = PlayerData.getPlayerData(target.getUniqueId());
-					playerData.chatColor = String.join("", DFUtilities.regex("§[xXa-fA-Fk-oK-O0-9]", (String)args.get("tag").getVal()));
+					playerData.chatColor = String.join("", DFUtilities.regex("§[xXa-fA-Fk-oK-O0-9]", (String) args.get("tag").getVal()));
+					break;
+				}
+				
+				case "SetNameColor": {
+					((Player) target).setPlayerListName(String.join("", DFUtilities.regex("§[xXa-fA-Fk-oK-O0-9]", (String) args.get("color").getVal())) + target.getName());
+					break;
+				}
+				
+				case "SetWorldBorder": {
+					Location centerLoc = (Location) args.get("center").getVal();
+					double radius = (double) args.get("radius").getVal();
+					int warningDistance = args.get("warnDistance").getInt();
+					Player player = (Player) target;
+					
+					WorldBorder border = Bukkit.getServer().createWorldBorder();
+					border.setCenter(centerLoc);
+					border.setSize(radius);
+					border.setWarningDistance(warningDistance);
+					
+					Bukkit.getScheduler().runTaskLater(DFPlugin.plugin, () -> player.setWorldBorder(border), 1L);
+					// Delay by 1 tick, otherwise border won't be added when executed inside join event
+					// TODO: This kind of behavior is only wanted for the join event, figure out a more elegant implementation where
+					// TODO: it won't wait 1 tick for all events.
+					
+					/*
+						NOTE:
+						It'd be pretty annoying to make it only delay for join events since I would have to basically pass the event to the executioner
+						which I don't do already and adding that would mean adding it for all blocks not just PlayerAction and that'd be like super redundant
+						for such a niche thing
+						
+						I mean if this kind of behavior was required for multiple blocks / actions I'd be willing to do it ut rn this is the only time I've seen it
+						👆 So maybe wait a bit and see if we need it for other actions, or if waiting 1 tick is even that big of a deal?
+					 */
+					break;
 				}
 			}
 	}

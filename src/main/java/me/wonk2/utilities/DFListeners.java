@@ -7,10 +7,7 @@ import me.wonk2.utilities.actions.SelectObject;
 import me.wonk2.utilities.internals.EntityData;
 import me.wonk2.utilities.internals.PlayerData;
 import me.wonk2.utilities.values.DFVar;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -25,6 +22,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
@@ -95,6 +93,19 @@ public class DFListeners implements Listener, CommandExecutor {
 	public static void Respawn(PlayerRespawnEvent event){
 		PlayerData playerData = PlayerData.getPlayerData(event.getPlayer().getUniqueId());
 		if(playerData.respawnLoc != null) event.setRespawnLocation(playerData.respawnLoc);
+	}
+	
+	@EventHandler
+	public static void PlayerChatEvent(AsyncPlayerChatEvent event){
+		Player player = event.getPlayer();
+		PlayerData playerData = PlayerData.getPlayerData(player.getUniqueId());
+		
+		
+		String format = "<chat-tag><player>: <message>";
+		format = format.replace("<chat-tag>", playerData.chatTag);
+		format = format.replace("<player>", ChatColor.RESET + player.getDisplayName());
+		format = format.replace("<message>", playerData.chatColor + event.getMessage());
+		event.setFormat(format);
 	}
 	
 	@Override

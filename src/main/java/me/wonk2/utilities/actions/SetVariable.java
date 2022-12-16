@@ -19,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -523,6 +524,38 @@ public class SetVariable extends Action {
 					
 					double noiseValue = Noise.getPerlinFractal(loc, frequency, octaves, octaveFreq, octaveAmp, seed, fractalTypeHashMap.get(tags.get("Fractal Type")));
 					DFVar.setVar(var, new DFValue(noiseValue, DFType.NUM), localStorage);
+				}
+				
+				case "Vector" -> {
+					DFVar var = (DFVar) args.get("var").getVal();
+					double x = (double) args.get("x").getVal();
+					double y = (double) args.get("y").getVal();
+					double z = (double) args.get("z").getVal();
+					
+					DFVar.setVar(var, new DFValue(new Vector(x, y, z), DFType.VEC), localStorage);
+				}
+				
+				case "Distance" -> {
+					DFVar var = (DFVar) args.get("var").getVal();
+					Location loc1 = (Location) args.get("loc1").getVal();
+					Location loc2 = (Location) args.get("loc2").getVal();
+					double dist = 0;
+					
+					switch(tags.get("Distance Type")){
+						case "Distance 2D (X/Z)" -> {
+							loc2.setY(loc1.getY());
+							dist = loc1.distance(loc2);
+						}
+						case "Distance 3D (X/Y/Z)" -> dist = loc1.distance(loc2);
+						
+						case "Altitude (Y)" -> {
+							loc2.setX(loc1.getX());
+							loc2.setZ(loc1.getZ());
+							dist = loc1.distance(loc2);
+						}
+					}
+					
+					DFVar.setVar(var, new DFValue(dist, DFType.NUM), localStorage);
 				}
 			}
 	}

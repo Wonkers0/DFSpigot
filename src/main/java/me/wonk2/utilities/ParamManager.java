@@ -95,7 +95,9 @@ public class ParamManager {
 			
 			case NUM -> currentArg.setVal(Double.valueOf(DFUtilities.textCodes(String.valueOf(currentArg.getRawVal()), targetMap, localStorage)));
 			
-			case TXT -> currentArg.setVal(DFUtilities.textCodes((String) currentArg.getRawVal(), targetMap, localStorage));
+			case TXT -> currentArg.setVal(DFUtilities.textCodes(currentArg.getRawVal().toString(), targetMap, localStorage));
+			// Note the usage of ".toString()" instead of normal casting on the line above 👆
+			// This is because if you have hex colors in your txt values, they will be an instance of the "ChatColor" class upon spigotification. 🤔
 			
 			case VAR -> {
 				DFVar var = (DFVar) currentArg.getVal();

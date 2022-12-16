@@ -64,22 +64,27 @@ public abstract class CodeExecutor {
 				runCodeBlock(((CallFunction) codeBlock).getFunc(targetMap, localVars).get(0), targetMap, localVars, event, eventType);
 				return;
 			} else if (codeBlock instanceof StartProcess) {
+				
 				StartProcess p = (StartProcess) codeBlock;
 				
-				HashMap<String, LivingEntity[]> targets = p.getTargets(targetMap);
-				HashMap<String, DFValue> vars = p.getVars(localVars);
+				Bukkit.getScheduler().runTask(DFPlugin.plugin, () -> {
+					HashMap<String, DFValue> vars = p.getVars(localVars);
+					HashMap<String, LivingEntity[]> targets = p.getTargets(targetMap);
+					
+					if (p.targetMode == StartProcess.TargetMode.FOR_EACH) {
+						for (LivingEntity e : targetMap.get("selection")) {
+							targets = new HashMap<>() {{
+								put("selection", new LivingEntity[]{e});
+							}};
+							
+							SelectionType processType = targets.get("selection")[0] instanceof Player ? SelectionType.PLAYER : SelectionType.ENTITY;
+							runCodeBlock(p.getProcess(targets, vars).get(0), targets, vars, null, processType);
+						}
+					} else runCodeBlock(p.getProcess(targets, vars).get(0), targets, vars, null, p.targetMode == StartProcess.TargetMode.COPY_ALL ? eventType : SelectionType.EITHER);
+				});
+				codeBlock = codeBlockPointer;
+				continue;
 				
-				if (p.targetMode == StartProcess.TargetMode.FOR_EACH) {
-					for (LivingEntity e : targetMap.get("selection")) {
-						targets = new HashMap<>() {{
-							put("selection", new LivingEntity[]{e});
-						}};
-						
-						SelectionType processType = targets.get("selection")[0] instanceof Player ? SelectionType.PLAYER : SelectionType.ENTITY;
-						runCodeBlock(p.getProcess(targets, vars).get(0), targets, vars, null, processType);
-					}
-				} else runCodeBlock(p.getProcess(targets, vars).get(0), targets, vars, null, p.targetMode == StartProcess.TargetMode.COPY_ALL ? eventType : SelectionType.EITHER);
-				return;
 			}
 			else if(codeBlock instanceof Control) ((Control) codeBlock).formatParams();
 			

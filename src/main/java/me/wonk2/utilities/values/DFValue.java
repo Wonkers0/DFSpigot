@@ -76,13 +76,13 @@ public class DFValue implements Cloneable {
 	public DFType type;
 	
 	public DFValue(Object val, Integer slot, DFType type){
-		this.val = sanitizeInput(val);
+		this.val = sanitizeInput(val, type);
 		this.slot = slot;
 		this.type = type;
 	}
 	
 	public DFValue(Object val, DFType type){
-		this.val = sanitizeInput(val);
+		this.val = sanitizeInput(val, type);
 		this.type = type;
 	}
 	
@@ -97,16 +97,16 @@ public class DFValue implements Cloneable {
 	
 	
 	@SuppressWarnings({"rawtypes"})
-	private Object sanitizeInput(Object val){
+	private Object sanitizeInput(Object val, DFType type){
 		if(val instanceof ArrayList){
 			ArrayList<DFValue> result = new ArrayList<>();
-			for(LinkedHashMap item : (ArrayList<LinkedHashMap>) val){
+			for(Object item : (ArrayList<Object>) val){
 				if(item == null){
 					result.add(new DFValue(null, DFType.ANY));
 					continue;
 				}
 				
-				result.add(new DFValue(item.get("val"), DFType.valueOf((String) item.get("type"))));
+				result.add(new DFValue(item, type));
 			}
 			
 			return result.toArray(new DFValue[0]);

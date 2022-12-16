@@ -26,7 +26,29 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class DFPlugin extends JavaPlugin implements Listener, CommandExecutor{
   public static HashMap<String, TreeMap<Integer, BossBar>> bossbarHandler = new HashMap<>();
-  public static HashMap<String, Object[]> functions = new HashMap<>();
+  public static HashMap<String, Object[]> functions = new HashMap<>(){{
+    put("test", new Object[]{
+      new Control(
+        "selection", null, new ParamManager(
+        new HashMap<>(){{
+          put(0, new DFValue("10", 0, DFType.NUM));
+        }},
+        new HashMap<>(){{
+          put("Time Unit", "Ticks");
+        }}, "CONTROL:Wait", null), "Wait"
+      ),
+      new PlayerAction(
+        "selection", null, new ParamManager(
+        new HashMap<>(){{
+          put(0, new DFValue("bye ☹", 0, DFType.TXT));
+        }},
+        new HashMap<>(){{
+          put("Text Value Merging", "Add spaces");
+          put("Alignment Mode", "Regular");
+        }}, "PLAYERACTION:SendMessage", null), "SendMessage"
+      ),
+    });
+  }};
   public static Location origin = new Location(null, 0, 0, 0);
   public static JavaPlugin plugin;
   
@@ -47,53 +69,19 @@ public class DFPlugin extends JavaPlugin implements Listener, CommandExecutor{
     if((event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR) && event.getHand() == EquipmentSlot.HAND)
       CodeExecutor.executeThread(
         new Object[]{
-          new Repeat(
-            null, null, new ParamManager(
-            new HashMap<>(){{
-              put(0, new DFValue(new DFVar("i", Scope.LOCAL), 0, DFType.VAR));
-              put(1, new DFValue("10", 1, DFType.NUM));
-            }},
-            new HashMap<>(){}, "REPEAT:Multiple", localVars), "Multiple", false, localVars
+          new StartProcess(
+            functions.get("test"), StartProcess.TargetMode.COPY_ALL, StartProcess.VarStorage.NEW
           ),
-          new IfVariable(
-            "selection", targets, new ParamManager(
-            new HashMap<>(){{
-              put(0, new DFValue(new DFVar("i", Scope.LOCAL), 0, DFType.VAR));
-              put(1, new DFValue("6", 1, DFType.NUM));
-            }},
-            new HashMap<>(){}, "IFVAR:=", localVars), "=", false, localVars
-          ),
-          new Control(
-            "selection", targets, new ParamManager(
-            new HashMap<>(){},
-            new HashMap<>(){}, "CONTROL:Skip", localVars), "Skip"
-          ),
-          new ClosingBracket(),
-          new IfVariable(
-            "selection", targets, new ParamManager(
-            new HashMap<>(){{
-              put(0, new DFValue(new DFVar("i", Scope.LOCAL), 0, DFType.VAR));
-              put(1, new DFValue("9", 1, DFType.NUM));
-            }},
-            new HashMap<>(){}, "IFVAR:>=", localVars), ">=", false, localVars
-          ),
-          new Control(
-            "selection", targets, new ParamManager(
-            new HashMap<>(){},
-            new HashMap<>(){}, "CONTROL:StopRepeat", localVars), "StopRepeat"
-          ),
-          new ClosingBracket(),
           new PlayerAction(
             "selection", targets, new ParamManager(
             new HashMap<>(){{
-              put(0, new DFValue(new DFVar("i", Scope.LOCAL), 0, DFType.VAR));
+              put(0, new DFValue("hello! ☺", 0, DFType.TXT));
             }},
             new HashMap<>(){{
               put("Text Value Merging", "Add spaces");
               put("Alignment Mode", "Regular");
             }}, "PLAYERACTION:SendMessage", localVars), "SendMessage"
           ),
-          new RepeatingBracket(),
         }, targets, localVars, event, SelectionType.PLAYER);
   }
   
@@ -106,9 +94,7 @@ public class DFPlugin extends JavaPlugin implements Listener, CommandExecutor{
   public void onEnable(){
     plugin = this;
     
-    DFListeners.updateArgInfo();
-    DFVar.deserializeSavedVars();
-    DFUtilities.playerConfig = new FileManager(plugin, "playerData.yml");
+    DFUtilities.init();
     getServer().getPluginManager().registerEvents(this, this);
     getServer().getPluginManager().registerEvents(new DFListeners(), this);
     this.getCommand("dfspigot").setExecutor(new DFListeners());

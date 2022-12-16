@@ -4,7 +4,8 @@ author: Wonk0
 website: https://dfspigot.wonk2.repl.co/
 main: me.wonk2.DFPlugin
 api-version: 1.19
-softdepend: [WorldEdit]
+depend:
+  - WorldEdit
 commands:
   dfspigot:
     description: QOL Commands for DF Spigotifier
