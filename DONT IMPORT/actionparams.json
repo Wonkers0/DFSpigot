@@ -4097,5 +4097,73 @@
         "defaultValue": null
       }
     ]
+  ],
+  "SETVAR:VoronoiNoise": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "frequency",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 1
+      },
+      {
+        "name": "scatter",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 10
+      },
+      {
+        "name": "seed",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 0
+      }
+    ]
+  ],
+  "SETVAR:WorleyNoise": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "frequency",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 1
+      },
+      {
+        "name": "scatter",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 10
+      },
+      {
+        "name": "seed",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 0
+      }
+    ]
   ]
 }
