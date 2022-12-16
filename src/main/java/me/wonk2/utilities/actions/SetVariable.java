@@ -557,6 +557,52 @@ public class SetVariable extends Action {
 					
 					DFVar.setVar(var, new DFValue(dist, DFType.NUM), localStorage);
 				}
+				
+				case "VoronoiNoise" -> {
+					DFVar var = (DFVar) args.get("var").getVal();
+					Location loc = (Location) args.get("loc").getVal();
+					double frequency = (double) args.get("frequency").getVal() / 50;
+					double scatter = DFUtilities.clampNum((double) args.get("scatter").getVal(), 5, 15);
+					int seed = (int) Math.round((double) args.get("seed").getVal());
+					
+					HashMap<String, Noise.CellEdgeType> cellEdgeTypes = new HashMap<>(){{
+						put("Euclidean", Noise.CellEdgeType.EUCLIDEAN);
+						put("Manhattan", Noise.CellEdgeType.MANHATTAN);
+						put("Natural", Noise.CellEdgeType.NATURAL);
+					}};
+					Noise.CellEdgeType cellEdgeType = cellEdgeTypes.get(tags.get("Cell Edge Type"));
+					
+					double noiseValue = Noise.getCellular(loc, frequency, (float) scatter, seed, Noise.CellularReturnType.VORONOI, cellEdgeType);
+					DFVar.setVar(var, new DFValue(noiseValue, DFType.NUM), localStorage);
+				}
+				
+				case "WorleyNoise" -> {
+					DFVar var = (DFVar) args.get("var").getVal();
+					Location loc = (Location) args.get("loc").getVal();
+					double frequency = (double) args.get("frequency").getVal() / 50;
+					double scatter = DFUtilities.clampNum((double) args.get("scatter").getVal(), 5, 15) / 10;
+					int seed = (int) Math.round((double) args.get("seed").getVal());
+					
+					HashMap<String, Noise.CellEdgeType> cellEdgeTypes = new HashMap<>(){{
+						put("Euclidean", Noise.CellEdgeType.EUCLIDEAN);
+						put("Manhattan", Noise.CellEdgeType.MANHATTAN);
+						put("Natural", Noise.CellEdgeType.NATURAL);
+					}};
+					Noise.CellEdgeType cellEdgeType = cellEdgeTypes.get(tags.get("Cell Edge Type"));
+					
+					HashMap<String, Noise.CellularReturnType> cellularReturnTypes = new HashMap<>(){{
+						put("Primary", Noise.CellularReturnType.PRIMARY_DISTANCE);
+						put("Secondary", Noise.CellularReturnType.SECONDARY_DISTANCE);
+						put("Additive", Noise.CellularReturnType.ADDITIVE_DISTANCES);
+						put("Subtractive", Noise.CellularReturnType.SUBTRACTIVE_DISTANCES);
+						put("Multiplicative", Noise.CellularReturnType.MULTIPLICATIVE_DISTANCES);
+						put("Divisive", Noise.CellularReturnType.DIVISIVE_DISTANCES);
+					}};
+					Noise.CellularReturnType cellularReturnType = cellularReturnTypes.get(tags.get("Distance Calculation"));
+					
+					double noiseValue = Noise.getCellular(loc, frequency, (float) scatter, seed, cellularReturnType, cellEdgeType);
+					DFVar.setVar(var, new DFValue(noiseValue, DFType.NUM), localStorage);
+				}
 			}
 	}
 	

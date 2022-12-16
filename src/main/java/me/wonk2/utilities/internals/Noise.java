@@ -25,6 +25,8 @@
 
 package me.wonk2.utilities.internals;
 
+import me.wonk2.utilities.DFUtilities;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 public class Noise {
@@ -170,7 +172,7 @@ public class Noise {
 		return 1 / ampFractal;
 	}
 	
-	public static Object getCellular(Location location, double frequency, float scatter, int seed, CellularReturnType returnType, CellEdgeType edgeType) {
+	public static double getCellular(Location location, double frequency, float scatter, int seed, CellularReturnType returnType, CellEdgeType edgeType) {
 		float x = (float) (location.getX() * frequency);
 		float y = (float) (location.getY() * frequency);
 		float z = (float) (location.getZ() * frequency);
@@ -181,7 +183,7 @@ public class Noise {
 		};
 	}
 	
-	private static Object singleCellular(float x, float y, float z, float scatter, int seed, CellularReturnType returnType, CellEdgeType edgeType) {
+	private static float singleCellular(float x, float y, float z, float scatter, int seed, CellularReturnType returnType, CellEdgeType edgeType) {
 		int xr = fastRound(x);
 		int yr = fastRound(y);
 		int zr = fastRound(z);
@@ -264,7 +266,7 @@ public class Noise {
 			default -> 0;
 		};
 		
-		if (value > 0.99) return 0.99;
+		if (value > 0.99) return 0.99f;
 		
 		// Absolute 0 to 1
 		value = (value / 2f) + 0.5f;

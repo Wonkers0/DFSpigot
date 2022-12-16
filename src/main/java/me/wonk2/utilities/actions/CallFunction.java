@@ -21,16 +21,16 @@ public class CallFunction extends Action{
 		this.funcName = func;
 	}
 	
-	public ObjectArrWrapper getFunc(HashMap<String, LivingEntity[]> targetMap, HashMap<String, DFValue> localVars){
+	public ObjectArrWrapper getFunc(HashMap<String, LivingEntity[]> targetMap, HashMap<String, DFValue> localVars, HashMap<String, Object> specifics){
 		if(!DFPlugin.functions.containsKey(funcName)) return new ObjectArrWrapper(new Object[0]);
 		
 		Object[] function = DFPlugin.functions.get(funcName);
 		for(Object codeBlock : function)
-			if(codeBlock instanceof Action){
-				Action action = (Action) codeBlock;
+			if(codeBlock instanceof Action action){
 				action.targetMap = targetMap;
 				action.localStorage = localVars;
 				if(action.paramManager != null) action.paramManager.localStorage = localVars; // Call Function & Start Process don't have param managers
+				if(action instanceof IfGame x) x.specifics = specifics;
 			}
 		
 		

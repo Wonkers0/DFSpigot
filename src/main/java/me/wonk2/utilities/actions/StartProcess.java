@@ -32,12 +32,13 @@ public class StartProcess extends Action {
 		ALIAS // Share
 	}
 	
-	public ObjectArrWrapper getProcess(HashMap<String, LivingEntity[]> targetMap, HashMap<String, DFValue> localVars){
+	public ObjectArrWrapper getProcess(HashMap<String, LivingEntity[]> targetMap, HashMap<String, DFValue> localVars, HashMap<String, Object> specifics){
 		for(Object codeBlock : process)
-			if(codeBlock instanceof Action){
-				((Action) codeBlock).targetMap = targetMap;
-				((Action) codeBlock).localStorage = localVars;
-				((Action) codeBlock).paramManager.localStorage = localVars;
+			if(codeBlock instanceof Action action){
+				action.targetMap = targetMap;
+				action.localStorage = localVars;
+				if(action.paramManager != null) action.paramManager.localStorage = localVars;
+				if(codeBlock instanceof IfGame x) x.specifics = specifics;
 			}
 		
 		

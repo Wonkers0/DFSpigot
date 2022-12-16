@@ -23,32 +23,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import me.wonk2.utilities.internals.FileManager;
 import java.util.*;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.Bukkit;
 
 public class DFPlugin extends JavaPlugin implements Listener, CommandExecutor{
   public static HashMap<String, TreeMap<Integer, BossBar>> bossbarHandler = new HashMap<>();
-  public static HashMap<String, Object[]> functions = new HashMap<>(){{
-    put("test", new Object[]{
-      new Control(
-        "selection", null, new ParamManager(
-        new HashMap<>(){{
-          put(0, new DFValue("10", 0, DFType.NUM));
-        }},
-        new HashMap<>(){{
-          put("Time Unit", "Ticks");
-        }}, "CONTROL:Wait", null), "Wait"
-      ),
-      new PlayerAction(
-        "selection", null, new ParamManager(
-        new HashMap<>(){{
-          put(0, new DFValue("bye ☹", 0, DFType.TXT));
-        }},
-        new HashMap<>(){{
-          put("Text Value Merging", "Add spaces");
-          put("Alignment Mode", "Regular");
-        }}, "PLAYERACTION:SendMessage", null), "SendMessage"
-      ),
-    });
-  }};
+  public static HashMap<String, Object[]> functions = new HashMap<>();
   public static Location origin = new Location(null, 0, 0, 0);
   public static JavaPlugin plugin;
   
@@ -69,20 +48,55 @@ public class DFPlugin extends JavaPlugin implements Listener, CommandExecutor{
     if((event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR) && event.getHand() == EquipmentSlot.HAND)
       CodeExecutor.executeThread(
         new Object[]{
-          new StartProcess(
-            functions.get("test"), StartProcess.TargetMode.COPY_ALL, StartProcess.VarStorage.NEW
+          new Repeat(
+            null, null, new ParamManager(
+            new HashMap<>(){{
+              put(0, new DFValue(new DFVar("block", Scope.LOCAL), 0, DFType.VAR));
+              put(1, new DFValue(new Location(Bukkit.getWorlds().get(0), 0d, 50.5d, 0d, 0f, 0f), 1, DFType.LOC));
+              put(2, new DFValue(new Location(Bukkit.getWorlds().get(0), 80d, 50.5d, 80d, 0f, 0f), 2, DFType.LOC));
+            }},
+            new HashMap<>(){}, "REPEAT:Grid", localVars), "Grid", false, localVars
           ),
-          new PlayerAction(
+          new SetVariable(
             "selection", targets, new ParamManager(
             new HashMap<>(){{
-              put(0, new DFValue("hello! ☺", 0, DFType.TXT));
+              put(0, new DFValue(new DFVar("voronoi", Scope.LOCAL), 0, DFType.VAR));
+              put(1, new DFValue(new DFVar("block", Scope.LOCAL), 1, DFType.VAR));
             }},
             new HashMap<>(){{
-              put("Text Value Merging", "Add spaces");
-              put("Alignment Mode", "Regular");
-            }}, "PLAYERACTION:SendMessage", localVars), "SendMessage"
+              put("Cell Edge Type", "Euclidean");
+              put("Distance Calculation", "Primary");
+            }}, "SETVAR:VoronoiNoise", localVars), "VoronoiNoise", localVars
           ),
-        }, targets, localVars, event, SelectionType.PLAYER);
+          new SetVariable(
+            "selection", targets, new ParamManager(
+            new HashMap<>(){{
+              put(0, new DFValue(new DFVar("voronoi", Scope.LOCAL), 0, DFType.VAR));
+              put(1, new DFValue(new DFVar("voronoi", Scope.LOCAL), 1, DFType.VAR));
+              put(2, new DFValue("5", 2, DFType.NUM));
+            }},
+            new HashMap<>(){}, "SETVAR:x", localVars), "x", localVars
+          ),
+          new SetVariable(
+            "selection", targets, new ParamManager(
+            new HashMap<>(){{
+              put(0, new DFValue(new DFVar("block", Scope.LOCAL), 0, DFType.VAR));
+              put(1, new DFValue(new DFVar("voronoi", Scope.LOCAL), 1, DFType.VAR));
+            }},
+            new HashMap<>(){{
+              put("Coordinate", "Y");
+            }}, "SETVAR:ShiftOnAxis", localVars), "ShiftOnAxis", localVars
+          ),
+          new GameAction(
+            "selection", targets, new ParamManager(
+            new HashMap<>(){{
+              put(0, new DFValue(DFUtilities.parseItemNBT("{Count:1b,DF_NBT:3105,id:\"minecraft:white_wool\"}"), 0, DFType.ITEM));
+              put(1, new DFValue(new DFVar("block", Scope.LOCAL), 1, DFType.VAR));
+            }},
+            new HashMap<>(){}, "GAMEACTION:SetBlock", localVars), "SetBlock"
+          ),
+          new RepeatingBracket()
+        }, targets, localVars, event, SelectionType.PLAYER, specifics);
   }
   
   @Override

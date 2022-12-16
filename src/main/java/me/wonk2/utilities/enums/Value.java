@@ -4,5 +4,6 @@ public enum Value {
 	Location,
 	EyeLocation,
 	PlayerCount,
+	Timestamp,
 	Name
 }

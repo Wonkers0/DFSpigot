@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public abstract class CodeExecutor {
-	private static void runCodeBlock(Object codeBlock, HashMap<String, LivingEntity[]> targetMap, HashMap<String, DFValue> localVars, @Nullable Cancellable event, SelectionType eventType){
+	private static void runCodeBlock(Object codeBlock, HashMap<String, LivingEntity[]> targetMap, HashMap<String, DFValue> localVars, @Nullable Cancellable event, SelectionType eventType, HashMap<String, Object> specifics){
 		boolean stoppedLoop = false, skippedIteration = false;
 		ArrayList<Repeat> encounteredLoops = new ArrayList<>();
 		
@@ -61,7 +61,7 @@ public abstract class CodeExecutor {
 			}
 			
 			if (codeBlock instanceof CallFunction) {
-				runCodeBlock(((CallFunction) codeBlock).getFunc(targetMap, localVars).get(0), targetMap, localVars, event, eventType);
+				runCodeBlock(((CallFunction) codeBlock).getFunc(targetMap, localVars, specifics).get(0), targetMap, localVars, event, eventType, specifics);
 				return;
 			} else if (codeBlock instanceof StartProcess) {
 				
@@ -78,9 +78,9 @@ public abstract class CodeExecutor {
 							}};
 							
 							SelectionType processType = targets.get("selection")[0] instanceof Player ? SelectionType.PLAYER : SelectionType.ENTITY;
-							runCodeBlock(p.getProcess(targets, vars).get(0), targets, vars, null, processType);
+							runCodeBlock(p.getProcess(targets, vars, specifics).get(0), targets, vars, null, processType, specifics);
 						}
-					} else runCodeBlock(p.getProcess(targets, vars).get(0), targets, vars, null, p.targetMode == StartProcess.TargetMode.COPY_ALL ? eventType : SelectionType.EITHER);
+					} else runCodeBlock(p.getProcess(targets, vars, specifics).get(0), targets, vars, null, p.targetMode == StartProcess.TargetMode.COPY_ALL ? eventType : SelectionType.EITHER, specifics);
 				});
 				codeBlock = codeBlockPointer;
 				continue;
@@ -90,7 +90,7 @@ public abstract class CodeExecutor {
 			
 			switch (((Action) codeBlock).action) {
 				case "Wait":
-					Bukkit.getScheduler().runTaskLater(DFPlugin.plugin, () -> runCodeBlock(codeBlockPointer, targetMap, localVars, event, eventType),
+					Bukkit.getScheduler().runTaskLater(DFPlugin.plugin, () -> runCodeBlock(codeBlockPointer, targetMap, localVars, event, eventType, specifics),
 						DFUtilities.getWait(((Control) codeBlock).args, ((Control) codeBlock).tags));
 					return;
 				
@@ -138,9 +138,9 @@ public abstract class CodeExecutor {
 			((Action) codeBlock).pointer;
 	}
 		
-	public static void executeThread(Object[] threadContents, HashMap<String, LivingEntity[]> targetMap, HashMap<String, DFValue> localVars, @Nullable Cancellable event, SelectionType eventType){
+	public static void executeThread(Object[] threadContents, HashMap<String, LivingEntity[]> targetMap, HashMap<String, DFValue> localVars, @Nullable Cancellable event, SelectionType eventType, HashMap<String, Object> specifics){
 		//stringifyThread(assignPointers(new ObjectArrWrapper(threadContents)));
-		runCodeBlock(assignPointers(new ObjectArrWrapper(threadContents)).get(0), targetMap, localVars, event, eventType);
+		runCodeBlock(assignPointers(new ObjectArrWrapper(threadContents)).get(0), targetMap, localVars, event, eventType, specifics);
 	}
 	
 	public static void stringifyThread(ObjectArrWrapper thread){
