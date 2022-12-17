@@ -63,14 +63,16 @@ export function generate() {
     "org.bukkit.event.block.Action",
     "org.bukkit.plugin.java.JavaPlugin",
     "me.wonk2.utilities.internals.FileManager",
-    "java.util.*"
+    "java.util.*",
+    "java.util.logging.Logger"
   ]
   code = [
     "public class DFPlugin extends JavaPlugin implements Listener, CommandExecutor{",
     "public static HashMap<String, TreeMap<Integer, BossBar>> bossbarHandler = new HashMap<>();",
-    "funcs here (if you see this something went wrong)",
     "public static Location origin = new Location(null, 0, 0, 0);",
     "public static JavaPlugin plugin;",
+    "public static Logger logger;",
+    "funcs here (if you see this something went wrong)",
     ""
   ]
 
@@ -130,7 +132,7 @@ export function generate() {
     code.push("")
   }
   
-  code[2] = functions.length == 0 ? 
+  code[5] = functions.length == 0 ? 
     "public static HashMap<String, Object[]> functions = new HashMap<>();" :
     ["public static HashMap<String, Object[]> functions = new HashMap<>(){{"].concat(functions)
   if(functions.length != 0) code.splice(3, 0, "}};");
@@ -148,6 +150,7 @@ export function generate() {
       [
         "public void onEnable(){",
         "plugin = this;",
+        "logger = Bukkit.getLogger()",
         "",
         "DFUtilities.init();",
         "getServer().getPluginManager().registerEvents(this, this);",
