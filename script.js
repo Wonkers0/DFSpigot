@@ -425,7 +425,7 @@ function blockParams(codeBlock, isFunc) {
     "if_player": `${target}, ${targets}, ${args}, "${action}", ${inverted}`,
     "if_var": `${target}, ${targets}, ${args}, "${action}", ${inverted}, ${localVars}`,
     "if_game": `${target}, ${targets}, ${args}, "${action}", ${inverted}, ${isFunc ? "null" : "specifics"}`,
-    "repeat": `null, null, ${args}, "${action}", ${inverted}, ${localVars}`,
+    "repeat": `null, ${targets}, ${args}, "${action}", ${inverted}, ${localVars}`,
     "control": `${target}, ${targets}, ${args}, "${action}"`,
     "entity_action": `${target}, ${targets}, ${args}, "${action}", ${localVars}`,
     "call_func": `"${codeBlock.data}"`,
