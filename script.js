@@ -62,7 +62,7 @@ export function generate() {
     "org.bukkit.event.EventHandler",
     "org.bukkit.event.block.Action",
     "org.bukkit.plugin.java.JavaPlugin",
-    "me.wonk2.utilities.internals.FileManager",
+    "org.bukkit.Bukkit",
     "java.util.*",
     "java.util.logging.Logger"
   ]
@@ -150,7 +150,7 @@ export function generate() {
       [
         "public void onEnable(){",
         "plugin = this;",
-        "logger = Bukkit.getLogger()",
+        "logger = Bukkit.getLogger();",
         "",
         "DFUtilities.init();",
         "getServer().getPluginManager().registerEvents(this, this);",
@@ -291,7 +291,6 @@ function javafyParam(arg, slot, codeBlock) {
       return `new DFSound("${arg.data.sound}", ${arg.data.pitch}f, ${arg.data.vol}f)`
     case "loc":
       let loc = arg.data.loc
-      newImport(["org.bukkit.Bukkit"])
       return `new Location(Bukkit.getWorlds().get(0), ${loc.x}d, ${loc.y}d, ${loc.z}d, ${loc.yaw}f, ${loc.pitch}f)`
     case "item":
       return `DFUtilities.parseItemNBT("${removeQuotes(arg.data.item)}")`
