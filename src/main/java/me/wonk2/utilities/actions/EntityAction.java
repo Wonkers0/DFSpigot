@@ -39,6 +39,7 @@ public class EntityAction extends Action {
 		HashMap<String, DFValue> args = DFUtilities.getArgs(inputArray);
 		HashMap<String, String> tags = DFUtilities.getTags(inputArray);
 		
+		Bukkit.broadcastMessage("Entity get Targets with target map " + targetMap);
 		for(LivingEntity target : DFUtilities.getTargets(targetName, targetMap, SelectionType.ENTITY))
 			switch(action){
 				case "Damage": {

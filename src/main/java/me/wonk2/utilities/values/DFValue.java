@@ -14,6 +14,12 @@ import java.util.LinkedHashMap;
 
 public class DFValue implements Cloneable {
 	
+	public static DFValue[] formObjArr(Object[] arr, DFType type){
+		DFValue[] result = new DFValue[arr.length];
+		for(int i = 0; i < arr.length; i++) result[i] = new DFValue(arr[i], type);
+		return result;
+	}
+	
 	public static String[] castTxt(DFValue[] arr){
 		if(arr == null) return new String[0];
 		return DFUtilities.parseTxt(arr);

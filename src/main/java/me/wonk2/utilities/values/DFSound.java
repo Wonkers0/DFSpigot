@@ -182,11 +182,11 @@ public class DFSound {
 		put("Sand Hit", "block.sand.hit");
 		put("Sand Place", "block.sand.place");
 		put("Sand Step", "block.sand.step");
-		put("Seagrass Break", "block.seagrass.break");
-		put("Seagrass Fall", "block.seagrass.fall");
-		put("Seagrass Hit", "block.seagrass.hit");
-		put("Seagrass Place", "block.seagrass.place");
-		put("Seagrass Step", "block.seagrass.step");
+		put("Seagrass Break", "block.wet_grass.break");
+		put("Seagrass Fall", "block.wet_grass.fall");
+		put("Seagrass Hit", "block.wet_grass.hit");
+		put("Seagrass Place", "block.wet_grass.place");
+		put("Seagrass Step", "block.wet_grass.step");
 		put("Small Dripleaf Break", "block.small_dripleaf.break");
 		put("Small Dripleaf Fall", "block.small_dripleaf.fall");
 		put("Small Dripleaf Hit", "block.small_dripleaf.hit");

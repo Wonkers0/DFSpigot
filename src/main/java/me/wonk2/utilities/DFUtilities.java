@@ -49,12 +49,14 @@ import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 import org.codehaus.plexus.util.StringUtils;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -67,6 +69,18 @@ public abstract class DFUtilities {
 		playerConfig = new FileManager(DFPlugin.plugin, "playerData.yml");
 		DFListeners.updateArgInfo();
 		DFVar.deserializeSavedVars();
+	}
+	
+	public static void log(String msg){
+		DFPlugin.logger.log(Level.INFO, msg);
+	}
+	
+	public static void logWarning(String msg){
+		DFPlugin.logger.log(Level.WARNING, msg);
+	}
+	
+	public static void logError(String msg){
+		DFPlugin.logger.log(Level.SEVERE, msg);
 	}
 	
 	public static Vector getTangent(Vector normal){
@@ -146,51 +160,26 @@ public abstract class DFUtilities {
 		}
 	}
 	
-	public static String textCodes(String str, HashMap<String, LivingEntity[]> targetMap, HashMap<String, DFValue> localStorage){
-		boolean foundPercentage = false;
-		int brackets = 0;
-		int percentIndex = 0;
-		int startIndex = 0;
-		
-		String[] foundCodes = Arrays.stream(removeDuplicates(regex("%([^\\s]+)", str))).toArray(String[]::new);
-		for(String code : foundCodes)
-			str = str.replaceAll(code, TextCode.getTargetName(targetMap, code));
+	public static String textCodes(String str, HashMap<String, LivingEntity[]> targetMap, HashMap<String, DFValue> localStorage, boolean debug){
+		if(debug) Bukkit.broadcastMessage("Evaluating text codes of " + str);
+		String[] targetCodes = Arrays.stream(removeDuplicates(regex("\"%([^\\s]+)\"gm", str))).toArray(String[]::new);
+		for(String code : targetCodes) str = str.replace(code, TextCode.getTargetName(targetMap, code));
 		
 		
 		
-		for(int i = 0; i < str.length(); i++){
-			char chr = str.charAt(i);
+		String[] contextCodes = Arrays.stream(removeDuplicates(regex("%([^\\s\\(]+)\\(.+?\\)", str))).toArray(String[]::new);
+		for(String code : contextCodes){
+			String prefix = regex("%[^\\(]+", code)[0];
+			String contents = regex("\\(.+", code)[0];
 			
-			switch(chr){
-				case '%':
-					if(!foundPercentage){
-						foundPercentage = true;
-						percentIndex = i;
-					}
-					break;
-				case '(':
-					if(foundPercentage){
-						if(brackets == 0) startIndex = i;
-						brackets++;
-					}
-					break;
-				case ')':
-					if(foundPercentage){
-						brackets--;
-						if(brackets == 0)
-							str = str.substring(0, percentIndex) +
-								TextCode.getCodeValue(
-									targetMap,
-									localStorage,
-									str.substring(percentIndex, startIndex),
-									textCodes(str.substring(startIndex + 1, i), targetMap, localStorage)) +
-								str.substring(i + 1);
-						
-					}
-					break;
-			}
+			// (contents) -> Remove the first and last char to exclude brackets
+			contents = textCodes(contents.substring(1, contents.length() - 1), targetMap, localStorage, debug);
+			
+			if(debug) Bukkit.broadcastMessage("Replacing " + code + " from " + str + "...");
+			str = str.replace(code, TextCode.getCodeValue(targetMap, localStorage, prefix, contents));
 		}
 		
+		if(debug) Bukkit.broadcastMessage("Returned value: " + str);
 		return str;
 	}
 	
@@ -266,6 +255,8 @@ public abstract class DFUtilities {
 					"lastentity"
 				};
 				
+				
+				if(DFUtilities.lastEntity != null) targetMap.put("lastentity", new LivingEntity[]{DFUtilities.lastEntity}); // Otherwise "lastentity" will always be considered invalid even when present
 				if(targetName.equals("selection"))
 					for (String target : targetSet){
 						if (isTargetValid(target, targetMap, selectionType)) {
@@ -275,7 +266,7 @@ public abstract class DFUtilities {
 						targetName = "notargets"; // Will result in empty LivingEntity array
 					}
 					
-				return !targetMap.containsKey(targetName) ? new LivingEntity[0] : targetMap.get(targetName);
+				return !targetMap.containsKey(targetName) ? new LivingEntity[1] : targetMap.get(targetName);
 		}
 	}
 	
@@ -284,7 +275,7 @@ public abstract class DFUtilities {
 		if(selectionType == SelectionType.EITHER) return true; // Can't be invalid
 		if(targetMap.get(targetName).length == 0) return true; // Empty selections can't be invalid, because they don't have mobs/entities nor players
 		
-		SelectionType selectionSelType = targetMap.get(targetName)[0] instanceof Player ? SelectionType.PLAYER : SelectionType.EITHER; // The selection type of the current selection
+		SelectionType selectionSelType = targetMap.get(targetName)[0] instanceof Player ? SelectionType.PLAYER : SelectionType.ENTITY; // The selection type of the current selection
 		return selectionSelType == selectionType;
 	}
 	
@@ -379,18 +370,44 @@ public abstract class DFUtilities {
 		return null;
 	}
 	
+	/**
+	 * Gets the block that an entity is looking at, relative to the origin location
+	 * @param e The entity to get the target block of
+	 * @return The location of the block that the entity is looking at
+	 * @author Wonk0
+	 */
 	public static Location getTargetBlock(LivingEntity e){
 		return getRelativeLoc(e.getTargetBlock(null, 5).getLocation());
 	}
 	
+	/**
+	 * Gets the entity or player that the uuid / name inputted belongs to
+	 * @param uuidOrName The uuid or player name of
+	 * @return A player if the uuid or name belongs to one, an entity if the uuid or name belongs to one, or null if neither
+	 * @author Wonk0
+	 */
+	@Nullable
 	public static Entity getEntityOrPlayer(String uuidOrName){
 		return getPlayer(uuidOrName) == null ? getEntity(uuidOrName) : getPlayer(uuidOrName);
 	}
 	
+	/**
+	 * Removes all of the specified potion effects from an entity
+	 * @param entity The entity to remove the effects from
+	 * @param effects An array of the PotionEffects to remove
+	 * @author Wonk0
+	 */
 	public static void removePotions(LivingEntity entity, PotionEffect[] effects){
 		for(PotionEffect effect : effects) entity.removePotionEffect(effect.getType());
 	}
 	
+	/**
+	 * Returns the amount of ticks to wait based on the time unit from the block tag
+	 * @param args Formatted block arguments
+	 * @param tags Block Tags
+	 * @return The wait time in ticks
+	 * @author Wonk0
+	 */
 	public static long getWait(HashMap<String, DFValue> args, HashMap<String, String> tags){
 		switch(tags.get("Time Unit")){
 			case "Ticks": return args.get("wait").getInt();
@@ -398,9 +415,15 @@ public abstract class DFUtilities {
 			case "Minutes": return (long) (double) args.get("wait").getVal() * 1200L;
 		}
 		
-		throw new IllegalArgumentException("The tag \"Time Unit\" on CONTROL:Wait yields none of the expected fields. This may be the result of an unsupported DiamondFire Update.");
+		throw new IllegalArgumentException("The tag \"Time Unit\" on CONTROL:Wait yields none of the expected fields. This may be the result of an unsupported DiamondFire Update. " + tags.get("Time Unit"));
 	}
 	
+	/**
+	 * Returns a boolean determining if a PlayerMoveEvent was triggered by a jump
+	 * @param e The PlayerMoveEvent to check
+	 * @return True if the player jumped, otherwise False
+	 * @author Wonk0
+	 */
 	public static boolean playerDidJump(PlayerMoveEvent e){ //TODO: Find a better alternative, this check is unreliable.
 		Player player = e.getPlayer();
 		PlayerData playerData = PlayerData.getPlayerData(player.getUniqueId());
@@ -418,17 +441,33 @@ public abstract class DFUtilities {
 		return false;
 	}
 	
+	/**
+	 * I have no idea why this exists 💀
+	 * @author Wonk0
+	 */
 	public static boolean cloudAffectedPlayer(List<LivingEntity> entities){
 		for(LivingEntity entity : entities) if(entity instanceof Player) return true;
 		return false;
 	}
 	
-	public static Location getRelativeLoc(Location l1){
-		Location temp = subtractLocs(l1, DFPlugin.origin);
-		temp.setY(l1.getY());
+	/**
+	 * Subtracts the origin location from another location whilst preserving its Y coordinate
+	 * @param loc The location to be subtracted from
+	 * @return The relative location
+	 * @author Wonk0
+	 */
+	public static Location getRelativeLoc(Location loc){
+		Location temp = subtractLocs(loc, DFPlugin.origin);
+		temp.setY(loc.getY());
 		return temp;
 	}
 	
+	/**
+	 * Pastes a schematic from a file at a specific location
+	 * @param loc The position that the corner of the build should be pasted at
+	 * @param schematic A .schem file referencing the schematic that should be pasted
+	 * @author Wonk0
+	 */
 	public static void pasteSchematic(Location loc, File schematic){
 		ClipboardFormat format = ClipboardFormats.findByFile(schematic);
 		try {
@@ -491,22 +530,14 @@ public abstract class DFUtilities {
 	
 	public static String[] regex(String pattern, String str) {
 		ArrayList<String> result = new ArrayList<>();
+		Matcher m = Pattern.compile(pattern).matcher(str);
+		while(m.find()) result.add(m.group());
 		
-		Pattern p = Pattern.compile(pattern);
-		
-		Matcher m = p.matcher(str);
-		while(m.find()) {
-			result.add(m.group());
-		}
-		
-		String[] r = new String[result.size()];
-		r = result.toArray(r);
-		
-		return r;
+		return result.toArray(String[]::new);
 	}
 	
 	public static Object[] removeDuplicates(Object[] arr){
-		ArrayList<Object> list = new ArrayList<>(List.of(arr));
+		ArrayList<Object> list = new ArrayList<>();
 		ArrayList<Object> duplicates = new ArrayList<>();
 		
 		for(Object obj : arr){

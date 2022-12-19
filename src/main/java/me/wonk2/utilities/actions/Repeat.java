@@ -1,5 +1,6 @@
 package me.wonk2.utilities.actions;
 
+import me.wonk2.DFPlugin;
 import me.wonk2.utilities.DFUtilities;
 import me.wonk2.utilities.ParamManager;
 import me.wonk2.utilities.actions.pointerclasses.Conditional;
@@ -22,18 +23,18 @@ public class Repeat extends Conditional {
 	
 	@Override
 	public boolean evaluateCondition(){
-		
 		Object[] inputArray = paramManager.formatParameters(targetMap);
 		HashMap<String, DFValue> args = DFUtilities.getArgs(inputArray);
 		HashMap<String, String> tags = DFUtilities.getTags(inputArray);
 		
 		LoopData loopData = LoopData.getLoopData(id);
-		if(Bukkit.getOnlinePlayers().toArray().length == 0) return false;
+		if(Bukkit.getOnlinePlayers().toArray().length == 0) return false; // This might not be needed, but testing is needed before removal
 		
 		switch(action){
 			case "Forever": return true;
 			
 			case "Multiple": {
+				Bukkit.broadcastMessage(id + " | " + loopData.iterationCount);
 				loopData.iterationCount++;
 				
 				if(args.containsKey("var"))
@@ -61,16 +62,16 @@ public class Repeat extends Conditional {
 				Location loc2 = (Location) args.get("loc2").getVal();
 				
 				if(loopData.gridLoc == null) loopData.gridLoc = loc1;
-				else if(loopData.gridLoc.getX() != loc2.getX())
-					loopData.gridLoc.setX(loopData.gridLoc.getX() + DFUtilities.clampNum(loc2.getX() - loopData.gridLoc.getX(), -1, 1));
-				else if(loopData.gridLoc.getZ() != loc2.getZ()){
-					loopData.gridLoc.setZ(loopData.gridLoc.getZ() + DFUtilities.clampNum(loc2.getZ() - loopData.gridLoc.getZ(), -1, 1));
-					loopData.gridLoc.setX(loc1.getX());
+				else if(loopData.gridLoc.getBlockX() != loc2.getBlockX())
+					loopData.gridLoc.setX(loopData.gridLoc.getBlockX() + DFUtilities.clampNum(loc2.getBlockX() - loopData.gridLoc.getBlockX(), -1, 1));
+				else if(loopData.gridLoc.getBlockZ() != loc2.getBlockZ()){
+					loopData.gridLoc.setZ(loopData.gridLoc.getBlockZ() + DFUtilities.clampNum(loc2.getBlockZ() - loopData.gridLoc.getBlockZ(), -1, 1));
+					loopData.gridLoc.setX(loc1.getBlockX());
 				}
-				else if(loopData.gridLoc.getY() != loc2.getY()){
-					loopData.gridLoc = loc1.clone().add(0d, DFUtilities.clampNum(loc2.getZ() - loopData.gridLoc.getZ(), -1, 1), 0d);
-					loopData.gridLoc.setX(loc1.getX());
-					loopData.gridLoc.setZ(loc1.getZ());
+				else if(loopData.gridLoc.getBlockY() != loc2.getBlockY()){
+					loopData.gridLoc.setY(loopData.gridLoc.getBlockY() + DFUtilities.clampNum(loc2.getBlockY() - loopData.gridLoc.getBlockY(), -1, 1));
+					loopData.gridLoc.setX(loc1.getBlockX());
+					loopData.gridLoc.setZ(loc1.getBlockZ());
 				}
 				else return false;
 				

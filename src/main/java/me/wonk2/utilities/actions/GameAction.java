@@ -455,8 +455,8 @@ public class GameAction extends Action {
 					if(name != null){
 						entity.setCustomName(name);
 						entity.setCustomNameVisible(true);
-
 					}
+					
 					if(tags.get("Visibility").equals("Visible (No hitbox)")) entity.setMarker(true);
 					if(tags.get("Visibility").equals("Invisible")) entity.setVisible(false);
 					if(tags.get("Visibility").equals("Invisible (No hitbox)")){
@@ -464,6 +464,7 @@ public class GameAction extends Action {
 						entity.setVisible(false);
 					}
 
+					DFUtilities.lastEntity = entity;
 					break;
 				}
 				case "SetBlock": {

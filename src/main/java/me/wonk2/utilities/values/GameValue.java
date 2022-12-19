@@ -1,5 +1,6 @@
 package me.wonk2.utilities.values;
 
+import me.wonk2.DFPlugin;
 import me.wonk2.utilities.DFUtilities;
 import me.wonk2.utilities.enums.DFType;
 import me.wonk2.utilities.enums.SelectionType;
@@ -8,6 +9,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 
+import java.util.Date;
 import java.util.HashMap;
 
 public class GameValue {
@@ -30,6 +32,8 @@ public class GameValue {
 				return new DFValue(Bukkit.getOnlinePlayers().size(), DFType.NUM);
 			case Name:
 				return new DFValue(target.getCustomName(), DFType.TXT);
+			case Timestamp:
+				return new DFValue(new Date().getTime(), DFType.NUM);
 			default:
 				throw new NotImplementedException("This game value does not exist or is not supported!");
 		}

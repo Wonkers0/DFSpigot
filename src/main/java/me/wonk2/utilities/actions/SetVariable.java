@@ -497,6 +497,7 @@ public class SetVariable extends Action {
 					Location loc;
 					if (args.get("loc").getVal() == null) loc = (Location) DFVar.getVar(var, localStorage).getRawVal();
 					else loc = (Location) args.get("loc").getRawVal();
+					
 					double x = (double) args.get("shiftX").getVal();
 					double y = (double) args.get("shiftY").getVal();
 					double z = (double) args.get("shiftZ").getVal();

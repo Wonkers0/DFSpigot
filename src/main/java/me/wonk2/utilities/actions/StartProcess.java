@@ -1,5 +1,6 @@
 package me.wonk2.utilities.actions;
 
+import me.wonk2.DFPlugin;
 import me.wonk2.utilities.actions.pointerclasses.Action;
 import me.wonk2.utilities.internals.CodeExecutor;
 import me.wonk2.utilities.internals.ObjectArrWrapper;
@@ -9,12 +10,12 @@ import org.bukkit.entity.LivingEntity;
 import java.util.HashMap;
 
 public class StartProcess extends Action {
-	private final Object[] process;
+	private final String processName;
 	public final TargetMode targetMode;
 	public final VarStorage varStorage;
 	
-	public StartProcess(Object[] func, TargetMode targetMode, VarStorage varStorage){
-		this.process = func;
+	public StartProcess(String processName, TargetMode targetMode, VarStorage varStorage){
+		this.processName = processName;
 		this.targetMode = targetMode;
 		this.varStorage = varStorage;
 	}
@@ -33,12 +34,15 @@ public class StartProcess extends Action {
 	}
 	
 	public ObjectArrWrapper getProcess(HashMap<String, LivingEntity[]> targetMap, HashMap<String, DFValue> localVars, HashMap<String, Object> specifics){
+		Object[] process = DFPlugin.functions.get(processName);
+		
 		for(Object codeBlock : process)
 			if(codeBlock instanceof Action action){
 				action.targetMap = targetMap;
 				action.localStorage = localVars;
 				if(action.paramManager != null) action.paramManager.localStorage = localVars;
 				if(codeBlock instanceof IfGame x) x.specifics = specifics;
+				if(action instanceof Repeat r) r.id = Math.random();
 			}
 		
 		
@@ -57,9 +61,7 @@ public class StartProcess extends Action {
 					put("selection", temp);
 				}};
 			case COPY_NONE:
-				return new HashMap<>() {{
-					put("selection", new LivingEntity[]{null});
-				}};
+				return new HashMap<>() {{}};
 			case FOR_EACH:
 				return null; // Handled in CodeExecutor.java
 			default:

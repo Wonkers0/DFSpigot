@@ -1,7 +1,7 @@
 name: DFPlugin
 version: 1.0
 author: Wonk0
-website: https://dfspigot.wonk2.repl.co/
+website: https://wonkers0.github.io/DFSpigot/
 main: me.wonk2.DFPlugin
 api-version: 1.19
 depend:

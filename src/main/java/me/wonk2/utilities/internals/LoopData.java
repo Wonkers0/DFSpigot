@@ -12,6 +12,8 @@ public class LoopData {
 	public DFValue[] forEach;
 	public Location gridLoc;
 	
+	public static void clearLoopData(double id){loopVars.remove(id);}
+	
 	public static LoopData getLoopData(double id){
 		if(!loopVars.containsKey(id)) newData(id);
 		return loopVars.get(id);

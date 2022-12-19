@@ -2,6 +2,8 @@ package me.wonk2.utilities.actions;
 
 import me.wonk2.DFPlugin;
 import me.wonk2.utilities.actions.pointerclasses.Action;
+import me.wonk2.utilities.actions.pointerclasses.Conditional;
+import me.wonk2.utilities.actions.pointerclasses.brackets.ClosingBracket;
 import me.wonk2.utilities.internals.CodeExecutor;
 import me.wonk2.utilities.internals.ObjectArrWrapper;
 import me.wonk2.utilities.values.DFValue;
@@ -31,13 +33,17 @@ public class CallFunction extends Action{
 				action.localStorage = localVars;
 				if(action.paramManager != null) action.paramManager.localStorage = localVars; // Call Function & Start Process don't have param managers
 				if(action instanceof IfGame x) x.specifics = specifics;
+				if(action instanceof Repeat r) r.id = Math.random();
 			}
 		
 		
 		ObjectArrWrapper func = CodeExecutor.assignPointers(new ObjectArrWrapper(function));
-		for(int i = 0; i < func.length; i++)
-			if(func.get(i) instanceof Action && ((Action) func.get(i)).pointer == null)
-				((Action) func.get(i)).pointer = pointer;
+		for(int i = 0; i < func.length; i++){
+			if(func.get(i) instanceof Action x && x.pointer == null)
+				x.pointer = pointer;
+			if(func.get(i) instanceof Conditional x && x.bracketPointer == null)
+				x.bracketPointer = pointer;
+		}
 		
 		return func;
 	}

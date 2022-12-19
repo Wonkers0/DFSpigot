@@ -1,11 +1,13 @@
 package me.wonk2.utilities;
 
+import me.wonk2.DFPlugin;
 import me.wonk2.utilities.enums.DFType;
 import me.wonk2.utilities.values.DFValue;
 import me.wonk2.utilities.values.DFVar;
 import me.wonk2.utilities.values.GameValue;
 import me.wonk2.utilities.values.Parameter;
 import org.apache.commons.lang.NotImplementedException;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 
 import java.util.ArrayList;
@@ -41,7 +43,10 @@ public class ParamManager {
 		ArrayList<Integer> keySet = new ArrayList<>(input.keySet());
 		DFValue currentArg;
 		
-		for(int i = 0; i < params.length; i++) args.put(params[i].name, new DFValue(params[i].defaultValue, i, params[i].type)); // Assign default values
+		for(int i = 0; i < params.length; i++){ // Assign default values
+			if(!params[i].repeating || params[i].defaultValue == null) args.put(params[i].name, new DFValue(params[i].defaultValue, i, params[i].type));
+			else args.put(params[i].name, new DFValue(DFValue.formObjArr(((ArrayList<?>) params[i].defaultValue).toArray(), params[i].type), DFType.LIST));
+		}
 		
 		for (int i = 0; i < 27; i++) {
 			if(paramIndex >= params.length) break;
@@ -52,7 +57,7 @@ public class ParamManager {
 			
 			// If this slot is not empty (has an argument)
 			if(keySet.contains(i)){
-				currentArg = sanitizeValue(input.get(i), paramType, targetMap, localStorage).clone();
+				currentArg = sanitizeValue(input.get(i).clone(), paramType, targetMap, localStorage).clone();
 				
 				// If this argument does not match the type needed, then give it its default value and move on
 				if((currentArg.type != paramType && paramType != DFType.ANY)) {
@@ -93,17 +98,22 @@ public class ParamManager {
 				currentArg = gameValue.getVal(targetMap);
 			}
 			
-			case NUM -> currentArg.setVal(Double.valueOf(DFUtilities.textCodes(String.valueOf(currentArg.getRawVal()), targetMap, localStorage)));
+			case NUM -> currentArg.setVal(Double.valueOf(DFUtilities.textCodes(String.valueOf(currentArg.getRawVal()), targetMap, localStorage, false)));
 			
-			case TXT -> currentArg.setVal(DFUtilities.textCodes(currentArg.getRawVal().toString(), targetMap, localStorage));
+			case TXT -> currentArg.setVal(DFUtilities.textCodes(currentArg.getRawVal().toString(), targetMap, localStorage, currentArg.getRawVal().toString().contains("progress")));
 			// Note the usage of ".toString()" instead of normal casting on the line above 👆
 			// This is because if you have hex colors in your txt values, they will be an instance of the "ChatColor" class upon spigotification. 🤔
 			
 			case VAR -> {
 				DFVar var = (DFVar) currentArg.getVal();
-				var.name = DFUtilities.textCodes(var.name, targetMap, localStorage);
-				if (!DFVar.varExists(var, localStorage) && paramType == DFType.TXT)
-					currentArg = new DFValue("0", currentArg.slot, DFType.TXT);
+				var.name = DFUtilities.textCodes(var.name, targetMap, localStorage, false);
+				if (!DFVar.varExists(var, localStorage)){
+					switch(paramType){
+						case TXT ->	currentArg = new DFValue("0", currentArg.slot, DFType.TXT);
+						case NUM -> currentArg = new DFValue("0", currentArg.slot, DFType.NUM);
+						case LOC -> currentArg = new DFValue(DFPlugin.origin, currentArg.slot, DFType.LOC); // Null location vars default to plot spawn
+					}
+				}
 				else if (paramType != DFType.VAR) // Do we need the var itself here, or its value? ⬅
 					currentArg = DFVar.getVar((DFVar) currentArg.getVal(), localStorage); // Get var value
 			}

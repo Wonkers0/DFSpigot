@@ -2,6 +2,7 @@ package me.wonk2.utilities.values;
 
 import me.wonk2.utilities.DFUtilities;
 import org.apache.commons.lang.NotImplementedException;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 
 import java.util.ArrayList;
@@ -12,12 +13,23 @@ public abstract class TextCode {
 	
 	public static String getCodeValue(HashMap<String, LivingEntity[]> targetMap, HashMap<String, DFValue> localStorage, String code, String contents){
 		switch(code){
-			case "%var":
-				if(contents.equals("")) break;
+			case "%var" -> {
+				if (contents.equals("")) break;
 				return DFUtilities.parseTxt(DFVar.getVar(new DFVar(contents, DFVar.getVarScope(contents, localStorage)), localStorage));
+			}
+			case "%random" -> {
+				if (contents.equals("")) break;
+				
+				String[] nums = contents.split(",");
+				int num1 = Integer.parseInt(nums[0]);
+				int num2 = Integer.parseInt(nums[1]);
+				Bukkit.broadcastMessage(num1 + " | " + num2 + " | " + Math.floor(Math.random() * (num2 - num1) + num1));
+				
+				return String.valueOf(Math.floor(Math.random() * (num2 - num1) + num1));
+			}
 		}
 		
-		throw new NotImplementedException("This text code is either invalid or is not supported yet!");
+		throw new NotImplementedException("This text code is either invalid or is not supported yet: " + code);
 	}
 	
 	public static String getTargetName(HashMap<String, LivingEntity[]> targetMap, String code){
