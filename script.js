@@ -432,7 +432,7 @@ function blockParams(codeBlock, isFunc) {
     "call_func": `"${codeBlock.data}"`,
     "start_process": `"${codeBlock.data}", StartProcess.TargetMode.${TargetModes[tags["Target Mode"]]}, StartProcess.VarStorage.${VarStorage[tags["Local Variables"]]}`,
     "select_obj": `${args}, "${action}", "${subAction}", ${inverted}, ${localVars}, ${isFunc ? "null" : "specifics"}`,
-    "else": `${targets}, ${args}, "${action}", ${inverted}, ${localVars}`
+    "else": ``
   }[codeBlock.block]
 }
 
