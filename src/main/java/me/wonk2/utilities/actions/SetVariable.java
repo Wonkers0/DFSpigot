@@ -564,7 +564,7 @@ public class SetVariable extends Action {
 					Location loc = (Location) args.get("loc").getVal();
 					double frequency = (double) args.get("frequency").getVal() / 50;
 					double scatter = DFUtilities.clampNum((double) args.get("scatter").getVal(), 5, 15);
-					int seed = (int) Math.round((double) args.get("seed").getVal());
+					int seed = args.get("seed").getInt();
 					
 					HashMap<String, Noise.CellEdgeType> cellEdgeTypes = new HashMap<>(){{
 						put("Euclidean", Noise.CellEdgeType.EUCLIDEAN);

@@ -47,6 +47,8 @@ public abstract class CodeExecutor {
 						LoopData.loopVars.remove(x.id); // Clear loop data once it's done
 						encounteredLoops.remove(x);
 					}
+					if(cond.bracketPointer instanceof Else x) x.shouldRun = true;
+					
 					
 					codeBlock = cond.bracketPointer;
 					if(codeBlock instanceof RepeatingBracket x) codeBlock = x.pointer;

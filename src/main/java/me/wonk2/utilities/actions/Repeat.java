@@ -16,8 +16,8 @@ import java.util.HashMap;
 
 public class Repeat extends Conditional {
 	public double id;
-	public Repeat(String targetName, HashMap<String, LivingEntity[]> targetMap, ParamManager paramManager, String action, boolean inverted, HashMap<String, DFValue> localStorage) {
-		super(targetName, targetMap, paramManager, action, localStorage, inverted);
+	public Repeat(HashMap<String, LivingEntity[]> targetMap, ParamManager paramManager, String action, boolean inverted, HashMap<String, DFValue> localStorage) {
+		super(null, targetMap, paramManager, action, localStorage, inverted);
 		id = Math.random();
 	}
 	
