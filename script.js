@@ -381,7 +381,8 @@ function blockClasses() {
     "entity_action": "EntityAction",
     "call_func": "CallFunction",
     "select_obj": "SelectObject",
-    "start_process": "StartProcess"
+    "start_process": "StartProcess",
+    "else": "Else"
   }
 }
 
@@ -425,12 +426,13 @@ function blockParams(codeBlock, isFunc) {
     "if_player": `${target}, ${targets}, ${args}, "${action}", ${inverted}`,
     "if_var": `${target}, ${targets}, ${args}, "${action}", ${inverted}, ${localVars}`,
     "if_game": `${target}, ${targets}, ${args}, "${action}", ${inverted}, ${isFunc ? "null" : "specifics"}`,
-    "repeat": `null, ${targets}, ${args}, "${action}", ${inverted}, ${localVars}`,
+    "repeat": `${targets}, ${args}, "${action}", ${inverted}, ${localVars}`,
     "control": `${target}, ${targets}, ${args}, "${action}"`,
     "entity_action": `${target}, ${targets}, ${args}, "${action}", ${localVars}`,
     "call_func": `"${codeBlock.data}"`,
     "start_process": `"${codeBlock.data}", StartProcess.TargetMode.${TargetModes[tags["Target Mode"]]}, StartProcess.VarStorage.${VarStorage[tags["Local Variables"]]}`,
-    "select_obj": `${args}, "${action}", "${subAction}", ${inverted}, ${localVars}, ${isFunc ? "null" : "specifics"}`
+    "select_obj": `${args}, "${action}", "${subAction}", ${inverted}, ${localVars}, ${isFunc ? "null" : "specifics"}`,
+    "else": `${targets}, ${args}, "${action}", ${inverted}, ${localVars}`
   }[codeBlock.block]
 }
 
