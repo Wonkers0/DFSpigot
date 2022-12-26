@@ -3824,6 +3824,7 @@
   "SELECTOBJ:Invert": [[]],
   "SELECTOBJ:PlayersCond": [[]],
   "SELECTOBJ:FilterCondition": [[]],
+  "SELECTOBJ:Reset": [[]],
   "SETVAR:GetCoord": [
     [
       {
