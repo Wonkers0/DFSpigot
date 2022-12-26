@@ -436,8 +436,8 @@ public class SetVariable extends Action {
 						case "X" -> value.setVal(loc.getX());
 						case "Y" -> value.setVal(loc.getY());
 						case "Z" -> value.setVal(loc.getZ());
-						case "Yaw" -> value.setVal(loc.getYaw());
-						case "Pitch" -> value.setVal(loc.getPitch());
+						case "Yaw" -> value.setVal((double) loc.getYaw());
+						case "Pitch" -> value.setVal((double) loc.getPitch());
 					}
 					DFVar.setVar(var, value, localStorage);
 				}

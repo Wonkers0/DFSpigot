@@ -38,25 +38,22 @@ public class SelectObject extends Action {
 		super.targetMap = targetMap;
 		existingSelection = targetMap.get("selection") == null ? new ArrayList<>() : Arrays.asList(targetMap.get("selection"));
 		
-		switch(action){
-			case "AllEntities": {
+		switch (action) {
+			case "AllEntities" -> {
 				return getAllLivingEntities().toArray(LivingEntity[]::new);
 			}
-			
-			case "AllPlayers": {
+			case "AllPlayers" -> {
 				return Bukkit.getOnlinePlayers().toArray(LivingEntity[]::new);
 			}
-			
-			case "EventTarget": {
+			case "EventTarget" -> {
 				return targetMap.get(tags.get("Event Target").toLowerCase());
 			}
-			
-			case "RandomPlayer": {
+			case "RandomPlayer" -> {
 				int size = args.get("size").getInt();
 				LivingEntity[] selectedPlayers = new LivingEntity[size];
 				ArrayList<Player> players = getOnlinePlayers();
 				
-				for(int i = 0; i < size; i++) {
+				for (int i = 0; i < size; i++) {
 					Player player = players.get(new Random().nextInt(size));
 					players.remove(player);
 					
@@ -65,50 +62,45 @@ public class SelectObject extends Action {
 				
 				return selectedPlayers;
 			}
-			
-			case "LastEntity": {
-				return new LivingEntity[] { DFUtilities.lastEntity };
+			case "LastEntity" -> {
+				return new LivingEntity[]{DFUtilities.lastEntity};
 			}
-			
-			case "PlayerName": {
+			case "PlayerName" -> {
 				String[] names = DFValue.castTxt((DFValue[]) args.get("names").getVal());
-				for(Player p : Bukkit.getOnlinePlayers())
-					for(String name : names)
-						if(p.getName().equals(name)) return new LivingEntity[]{p};
+				for (Player p : Bukkit.getOnlinePlayers())
+					for (String name : names)
+						if (p.getName().equals(name)) return new LivingEntity[]{p};
 				
 				return new LivingEntity[0];
 			}
-			
-			case "EntityName": {
+			case "EntityName" -> {
 				String[] names = DFValue.castTxt((DFValue[]) args.get("names").getVal());
 				ArrayList<LivingEntity> result = new ArrayList<>();
 				
-				for(LivingEntity e : getAllLivingEntities())
-					for(String name : names)
-						if(e.getName().equals(name))
+				for (LivingEntity e : getAllLivingEntities())
+					for (String name : names)
+						if (e.getName().equals(name))
 							result.add(e);
 				
 				return result.toArray(LivingEntity[]::new);
 			}
-			
-			case "Invert": {
-				if(existingSelection.size() == 0) return targetMap.get("default");
+			case "Invert" -> {
+				if (existingSelection.size() == 0) return targetMap.get("default");
 				ArrayList<? extends LivingEntity> newSelection = existingSelection.get(0) instanceof Player ? getOnlinePlayers() : getAllLivingEntities();
 				
 				newSelection.removeIf(e -> existingSelection.contains(e));
 				return newSelection.toArray(LivingEntity[]::new);
 			}
-			
-			case "PlayersCond": {
+			case "PlayersCond" -> {
 				return filterSelection(Bukkit.getOnlinePlayers().toArray(LivingEntity[]::new));
 			}
-			
-			case "FilterCondition": {
+			case "FilterCondition" -> {
 				return filterSelection(existingSelection.toArray(LivingEntity[]::new));
 			}
-			
-			default:
-				throw new NotImplementedException("This select action is either not supported yet, or it is invalid.");
+			case "Reset" -> {
+				return null;
+			}
+			default -> throw new NotImplementedException("This select action is either not supported yet, or it is invalid.");
 		}
 	}
 	

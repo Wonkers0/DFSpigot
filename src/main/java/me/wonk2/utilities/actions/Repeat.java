@@ -34,7 +34,6 @@ public class Repeat extends Conditional {
 			case "Forever": return true;
 			
 			case "Multiple": {
-				Bukkit.broadcastMessage(id + " | " + loopData.iterationCount);
 				loopData.iterationCount++;
 				
 				if(args.containsKey("var"))

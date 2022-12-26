@@ -68,18 +68,19 @@ public abstract class CodeExecutor {
 			} else if (codeBlock instanceof StartProcess) {
 				
 				StartProcess p = (StartProcess) codeBlock;
+				LivingEntity[] selectedEntities = targetMap.get("selection");
 				
 				Bukkit.getScheduler().runTask(DFPlugin.plugin, () -> {
 					HashMap<String, DFValue> vars = p.getVars(localVars);
 					HashMap<String, LivingEntity[]> targets = p.getTargets(targetMap);
 					
 					if (p.targetMode == StartProcess.TargetMode.FOR_EACH) {
-						for (LivingEntity e : targetMap.get("selection")) {
+						for (LivingEntity e : selectedEntities) {
 							targets = new HashMap<>() {{
-								put("selection", new LivingEntity[]{e});
+								put("default", new LivingEntity[]{e});
 							}};
 							
-							SelectionType processType = targets.get("selection")[0] instanceof Player ? SelectionType.PLAYER : SelectionType.ENTITY;
+							SelectionType processType = selectedEntities[0] instanceof Player ? SelectionType.PLAYER : SelectionType.ENTITY;
 							runCodeBlock(p.getProcess(targets, vars, specifics).get(0), targets, vars, null, processType, specifics);
 						}
 					} else runCodeBlock(p.getProcess(targets, vars, specifics).get(0), targets, vars, null, p.targetMode == StartProcess.TargetMode.COPY_ALL ? eventType : SelectionType.EITHER, specifics);
@@ -102,7 +103,6 @@ public abstract class CodeExecutor {
 				
 				case "Skip":
 					skippedIteration = true;
-					Bukkit.broadcastMessage("Skipped iteration");
 					break;
 				
 				case "StopRepeat":
@@ -115,7 +115,12 @@ public abstract class CodeExecutor {
 					event.setCancelled(((Action) codeBlock).action.equals("CancelEvent"));
 				
 				default:
-					if (codeBlock instanceof SelectObject) targetMap.put("selection", ((SelectObject) codeBlock).getSelectedEntities(targetMap));
+					if (codeBlock instanceof SelectObject){
+						LivingEntity[] selectedEntities = ((SelectObject) codeBlock).getSelectedEntities(targetMap);
+						
+						if(selectedEntities == null) targetMap.remove("selection");
+						else targetMap.put("selection", selectedEntities);
+					}
 					else ((Action) codeBlock).invokeAction();
 			}
 			
