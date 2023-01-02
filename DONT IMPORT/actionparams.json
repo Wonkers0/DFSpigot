@@ -4160,5 +4160,27 @@
         "defaultValue": 0
       }
     ]
+  ],
+  "SETVAR:SetItemName": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "item",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "name",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
   ]
 }
