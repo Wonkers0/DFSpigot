@@ -604,6 +604,19 @@ public class SetVariable extends Action {
 					double noiseValue = Noise.getCellular(loc, frequency, (float) scatter, seed, cellularReturnType, cellEdgeType);
 					DFVar.setVar(var, new DFValue(noiseValue, DFType.NUM), localStorage);
 				}
+				
+				case "SetItemName" -> {
+					DFVar var = (DFVar) args.get("var").getVal();
+					ItemStack item = (ItemStack) args.get("item").getVal();
+					if(item == null) item = (ItemStack) DFVar.getVar(var, localStorage).getVal();
+					String name = (String) args.get("name").getVal();
+					
+					ItemMeta newItemMeta = item.getItemMeta();
+					newItemMeta.setDisplayName(name);
+					item.setItemMeta(newItemMeta);
+					
+					DFVar.setVar(var, new DFValue(item, DFType.ITEM), localStorage);
+				}
 			}
 	}
 	

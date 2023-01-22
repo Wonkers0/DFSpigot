@@ -5,5 +5,6 @@ public enum Value {
 	EyeLocation,
 	PlayerCount,
 	Timestamp,
-	Name
+	Name,
+	SelectionSize
 }

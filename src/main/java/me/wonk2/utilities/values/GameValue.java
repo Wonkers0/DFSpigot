@@ -23,19 +23,14 @@ public class GameValue {
 	
 	public DFValue getVal(HashMap<String, LivingEntity[]> targetMap){
 		LivingEntity target = DFUtilities.getTargets(targetName, targetMap, SelectionType.EITHER)[0];
-		switch(val){
-			case Location:
-				return new DFValue(DFUtilities.getRelativeLoc(target.getLocation()), DFType.LOC);
-			case EyeLocation:
-				return new DFValue(DFUtilities.getRelativeLoc(target.getEyeLocation()), DFType.LOC);
-			case PlayerCount:
-				return new DFValue(Bukkit.getOnlinePlayers().size(), DFType.NUM);
-			case Name:
-				return new DFValue(target.getCustomName(), DFType.TXT);
-			case Timestamp:
-				return new DFValue(new Date().getTime(), DFType.NUM);
-			default:
-				throw new NotImplementedException("This game value does not exist or is not supported!");
-		}
+		return switch (val) {
+			case Location -> new DFValue(DFUtilities.getRelativeLoc(target.getLocation()), DFType.LOC);
+			case EyeLocation -> new DFValue(DFUtilities.getRelativeLoc(target.getEyeLocation()), DFType.LOC);
+			case PlayerCount -> new DFValue(Bukkit.getOnlinePlayers().size(), DFType.NUM);
+			case Name -> new DFValue(target.getCustomName(), DFType.TXT);
+			case Timestamp -> new DFValue(new Date().getTime(), DFType.NUM);
+			case SelectionSize -> new DFValue(targetMap.get("selection") == null ? 0 : targetMap.get("selection").length, DFType.NUM);
+			default -> throw new NotImplementedException("This game value is not implemented yet: " + val);
+		};
 	}
 }

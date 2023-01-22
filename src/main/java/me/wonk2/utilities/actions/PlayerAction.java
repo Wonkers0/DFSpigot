@@ -176,7 +176,7 @@ public class PlayerAction extends Action {
 				case "SetHotbar": {
 					DFValue[] items = (DFValue[]) args.get("items").getVal();
 					int itemIndex = 0;
-					for(int i = 0; i < 9; i++)
+					for(int i = 1; i < 9; i++)
 						if(items[itemIndex].slot != i) ((Player) target).getInventory().clear(i);
 						else {
 							((Player) target).getInventory().setItem(i, (ItemStack) items[itemIndex].getVal());
@@ -259,7 +259,7 @@ public class PlayerAction extends Action {
 					
 					Integer[] clearIndices = clearTypes.get(tags.get("Clear Mode"));
 					
-					clearInv((Player) target, clearIndices[1], clearIndices[2], tags.get("Clear Crafting and Cursor") == "True");
+					clearInv((Player) target, clearIndices[0], clearIndices[1], tags.get("Clear Crafting and Cursor").equals("True"));
 					break;
 				}
 				
