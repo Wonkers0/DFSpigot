@@ -72,6 +72,7 @@ export function generate() {
     "public static Location origin = new Location(null, 0, 0, 0);",
     "public static JavaPlugin plugin;",
     "public static Logger logger;",
+    'public static World world = Bukkit.getWorld("world");',
     "funcs here (if you see this something went wrong)",
     ""
   ]
@@ -132,7 +133,7 @@ export function generate() {
     code.push("")
   }
   
-  code[5] = functions.length == 0 ? 
+  code[6] = functions.length == 0 ? 
     "public static HashMap<String, Object[]> functions = new HashMap<>();" :
     ["public static HashMap<String, Object[]> functions = new HashMap<>(){{"].concat(functions)
   if(functions.length != 0) code.splice(6, 0, "}};");
