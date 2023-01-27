@@ -136,7 +136,7 @@ export function generate() {
   code[6] = functions.length == 0 ? 
     "public static HashMap<String, Object[]> functions = new HashMap<>();" :
     ["public static HashMap<String, Object[]> functions = new HashMap<>(){{"].concat(functions)
-  if(functions.length != 0) code.splice(6, 0, "}};");
+  if(functions.length != 0) code.splice(7, 0, "}};");
   
   code = code.concat(
     [
