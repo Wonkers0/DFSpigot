@@ -94,8 +94,7 @@ export function generate() {
       "targets": {
         "default": "event.getPlayer()"
       },
-      "item": "new ItemStack(Material.AIR)",
-      "cancelled": "event.isCancelled()"
+      "item": "new ItemStack(Material.AIR)"
     }
     if (isEvent) {
       rootEvent = eventTypes[root.action]["name"].split(".")
@@ -124,8 +123,7 @@ export function generate() {
       }
       libraries.push(`org.bukkit.event.${eventTypes[root.action]["name"]}`)
       mainFunc.push(spigotify(decodedJson.blocks, root))
-      let temp = specifics["cancelled"] == "false" ? "null" : "event"
-      mainFunc.push(`}, targets, localVars, ${temp}, SelectionType.PLAYER, specifics);`)
+      mainFunc.push(`}, targets, localVars, "event", SelectionType.PLAYER, specifics);`)
     }
 
 
