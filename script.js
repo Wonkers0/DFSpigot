@@ -290,7 +290,7 @@ function javafyParam(arg, slot, codeBlock) {
       return `new DFSound("${arg.data.sound}", ${arg.data.pitch}f, ${arg.data.vol}f)`
     case "loc":
       let loc = arg.data.loc
-      return `new Location(Bukkit.getWorlds().get(0), ${loc.x}d, ${loc.y}d, ${loc.z}d, ${loc.yaw}f, ${loc.pitch}f)`
+      return `new Location(world, ${loc.x}d, ${loc.y}d, ${loc.z}d, ${loc.yaw}f, ${loc.pitch}f)`
     case "item":
       return `DFUtilities.parseItemNBT("${removeQuotes(arg.data.item)}")`
     case "pot":
