@@ -284,8 +284,8 @@ export default {
   },
   KillMob:
   {
-    "name": "entity.EntityDamageByEntityEvent",
-    "check": "event.getDamager() instanceof Player && event.getEntity().isDead()",
+    "name": "entity.EntityDeathEvent",
+    "check": "!(event.getEntity() instanceof Player) && (event.getEntity().getKiller() != null)",
     "specifics": {}
   },
   EntityDmgPlayer:
