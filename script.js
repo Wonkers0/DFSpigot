@@ -123,7 +123,7 @@ export function generate() {
       }
       libraries.push(`org.bukkit.event.${eventTypes[root.action]["name"]}`)
       mainFunc.push(spigotify(decodedJson.blocks, root))
-      mainFunc.push(`}, targets, localVars, "event", SelectionType.PLAYER, specifics);`)
+      mainFunc.push(`}, targets, localVars, event, SelectionType.PLAYER, specifics);`)
     }
 
 
