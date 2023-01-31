@@ -1106,7 +1106,7 @@
       }
     ]
   ],
-  "SETVAR:Round": [
+  "SETVAR:RoundNumber": [
     [
       {
         "name": "var",
@@ -1246,7 +1246,30 @@
   ],
   "SETVAR:JoinText": [
     [
-      
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "texts",
+        "type": "LIST",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "joiningTxt",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": ""
+      },
+      {
+        "name": "finalJoiningTxt",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": ""
+      }
     ]
   ],
   "SETVAR:SetCase": [
@@ -1466,6 +1489,254 @@
       {
         "name": "list",
         "type": "LIST",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:ShiftInDirection": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "shift",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 1
+      }
+    ]
+  ],
+  "SETVAR:ShiftAllDirections": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "fwdShift",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "upwardShift",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 0
+      },
+      {
+        "name": "sideShift",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 0
+      }
+    ]
+  ],
+  "SETVAR:ShiftToward": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "target",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "shift",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 1
+      }
+    ]
+  ],
+  "SETVAR:ShiftOnVector": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "vector",
+        "type": "VEC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "shift",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:GetDirection": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:SetDirection": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "dir",
+        "type": "VEC",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:ShiftRotation": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "shift",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:FaceLocation": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "target",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:AlignLoc": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:GetCenterLoc": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "locs",
+        "type": "LOC",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:RandomLoc": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc1",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc2",
+        "type": "LOC",
         "repeating": false,
         "defaultValue": null
       }
@@ -2561,6 +2832,54 @@
       {
         "name": "tag",
         "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:Sine": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "angle",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:Cosine": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "angle",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:Tangent": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "angle",
+        "type": "NUM",
         "repeating": false,
         "defaultValue": null
       }
