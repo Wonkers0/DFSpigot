@@ -55,14 +55,13 @@ export function generate() {
     "org.bukkit.command.Command",
     "org.bukkit.command.CommandExecutor",
     "org.bukkit.entity.LivingEntity",
-    "org.bukkit.Location",
-    "org.bukkit.Material", // Event Item, don't remove
+    "org.bukkit.entity.Player",
     "org.bukkit.inventory.ItemStack", // Event Item, don't remove
     "org.bukkit.event.Listener",
     "org.bukkit.event.EventHandler",
     "org.bukkit.event.block.Action",
     "org.bukkit.plugin.java.JavaPlugin",
-    "org.bukkit.Bukkit",
+    "org.bukkit.*",
     "java.util.*",
     "java.util.logging.Logger"
   ]
