@@ -8,7 +8,8 @@ export default {
   Join: 
   {
     "name": "player.PlayerJoinEvent",
-    "check": null
+    "check": null,
+    "specifics": {}
   },
   RightClick: 
   {
