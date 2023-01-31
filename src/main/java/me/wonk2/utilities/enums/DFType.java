@@ -14,3 +14,4 @@ public enum DFType {
 	GAMEVAL, // This is only used internally for retrieving certain game values
 	ANY // This is only used internally for parameter types.
 }
+

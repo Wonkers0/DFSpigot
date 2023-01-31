@@ -320,9 +320,7 @@ public class SetVariable extends Action {
 					String text = (String) args.get("txt").getVal();
 					int amount = args.get("amount").getInt();
 					
-					StringBuilder result = new StringBuilder();
-					for (int i = 0; i < amount; i++) result.append(text);
-					DFVar.setVar(var, new DFValue(result.toString(), DFType.TXT), localStorage);
+					DFVar.setVar(var, new DFValue(text.repeat(Math.max(0, amount)), DFType.TXT), localStorage);
 				}
 				
 				case "FormatTime" -> {
@@ -376,8 +374,11 @@ public class SetVariable extends Action {
 				case "GetListValue" -> {
 					DFVar var = (DFVar) args.get("var").getVal();
 					DFValue[] list = (DFValue[]) args.get("list").getVal();
+					
 					int index = args.get("index").getInt() - 1;
-					DFValue val = index >= list.length ? DFValue.nullVar() : list[index];
+					
+					boolean outsideBounds = index >= list.length || index < 0;
+					DFValue val = outsideBounds ? DFValue.nullVar() : list[index];
 					
 					DFVar.setVar(var, val, localStorage);
 				}

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.wonk2.DFPlugin;
 import me.wonk2.utilities.enums.Scope;
+import org.bukkit.Bukkit;
 
 import java.io.*;
 import java.util.HashMap;
@@ -11,10 +12,10 @@ import java.util.HashMap;
 public class DFVar {
 	public static HashMap<String, DFValue> globalVars = new HashMap<>();
 	public static HashMap<String, DFValue> savedVars = new HashMap<>();
-    /*
-    Variables are mostly just DFValue instances tied to a String (their name). Instances of this class will only be used
-    when formatting arguments to mimic the in-game variable data structure.
-     */
+	/*
+	Variables are mostly just DFValue instances tied to a String (their name). Instances of this class will only be used
+	when formatting arguments to mimic the in-game variable data structure.
+	 */
 	
 	public Scope scope;
 	public String name;
@@ -90,5 +91,8 @@ public class DFVar {
 		}
 	}
 	
-
+	public DFVar(DFVar var){
+		this.name = var.name;
+		this.scope = var.scope;
+	}
 }

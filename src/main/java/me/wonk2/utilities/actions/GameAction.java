@@ -136,7 +136,7 @@ public class GameAction extends Action {
 				Material spawnEgg = ((ItemStack) args.get("mob").getVal()).getType();
 				Location loc = (Location) args.get("loc").getVal();
 				
-				LivingEntity entity = (LivingEntity) loc.getWorld().spawnEntity(loc, mobTypes.get(spawnEgg));
+				LivingEntity entity = (LivingEntity) DFPlugin.world.spawnEntity(loc, mobTypes.get(spawnEgg));
 				
 				if (args.get("health").getVal() == null)
 					entity.setHealth(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
@@ -169,7 +169,7 @@ public class GameAction extends Action {
 				String customName = (String) args.get("customName").getVal();
 				
 				for (ItemStack item : items) {
-					Entity itemEntity = target.getWorld().dropItem(loc, item);
+					Entity itemEntity = DFPlugin.world.dropItem(loc, item);
 					if (customName != null) itemEntity.setCustomName(customName);
 					if (tags.get("Apply Item Motion").equals("False")) itemEntity.setVelocity(new Vector());
 					itemEntity.setCustomNameVisible(true);
@@ -203,7 +203,7 @@ public class GameAction extends Action {
 					put(Material.TNT_MINECART, EntityType.MINECART_TNT);
 				}};
 				
-				Vehicle vehicle = (Vehicle) target.getWorld().spawnEntity(loc, vehicleTypes.get(vehicleType));
+				Vehicle vehicle = (Vehicle) DFPlugin.world.spawnEntity(loc, vehicleTypes.get(vehicleType));
 				switch (vehicleType) {
 					case OAK_BOAT, OAK_CHEST_BOAT -> ((Boat) vehicle).setBoatType(Boat.Type.OAK);
 					case SPRUCE_BOAT, SPRUCE_CHEST_BOAT -> ((Boat) vehicle).setBoatType(Boat.Type.SPRUCE);
@@ -223,7 +223,7 @@ public class GameAction extends Action {
 				String customName = (String) args.get("customName").getVal();
 				
 				for (int i = 0; i < amount; i++) {
-					ExperienceOrb orb = (ExperienceOrb) target.getWorld().spawnEntity(loc, EntityType.EXPERIENCE_ORB);
+					ExperienceOrb orb = (ExperienceOrb) DFPlugin.world.spawnEntity(loc, EntityType.EXPERIENCE_ORB);
 					if (customName != null) orb.setCustomName(customName);
 					orb.setCustomNameVisible(true);
 				}
@@ -232,7 +232,7 @@ public class GameAction extends Action {
 				Location loc = (Location) args.get("loc").getVal();
 				float power = (float) DFUtilities.clampNum((double) args.get("power").getVal(), 0, 4);
 				
-				target.getWorld().createExplosion(loc, power);
+				DFPlugin.world.createExplosion(loc, power);
 			}
 			case "SpawnTNT" -> {
 				Location loc = (Location) args.get("loc").getVal();
@@ -240,7 +240,7 @@ public class GameAction extends Action {
 				int fuse = args.get("fuse").getInt();
 				String customName = (String) args.get("customName").getVal();
 				
-				TNTPrimed tnt = (TNTPrimed) target.getWorld().spawnEntity(loc, EntityType.PRIMED_TNT);
+				TNTPrimed tnt = (TNTPrimed) DFPlugin.world.spawnEntity(loc, EntityType.PRIMED_TNT);
 				
 				EntityData.getEntityData(tnt.getUniqueId()).tntPower = power;
 				tnt.setFuseTicks(fuse);
@@ -250,14 +250,14 @@ public class GameAction extends Action {
 				Location loc = (Location) args.get("loc").getVal();
 				String customName = (String) args.get("customName").getVal();
 				
-				EvokerFangs evokerFangs = (EvokerFangs) target.getWorld().spawnEntity(loc, EntityType.EVOKER_FANGS);
+				EvokerFangs evokerFangs = (EvokerFangs) DFPlugin.world.spawnEntity(loc, EntityType.EVOKER_FANGS);
 				if (customName != null) evokerFangs.setCustomName(customName);
 			}
 			case "Firework" -> {
 				ItemStack fireworkType = (ItemStack) args.get("firework").getVal();
 				Location loc = (Location) args.get("loc").getVal();
 				
-				Firework firework = (Firework) target.getWorld().spawnEntity(loc, EntityType.FIREWORK);
+				Firework firework = (Firework) DFPlugin.world.spawnEntity(loc, EntityType.FIREWORK);
 				FireworkMeta meta = (FireworkMeta) fireworkType.getItemMeta();
 				firework.setFireworkMeta(meta);
 				if (tags.get("Instant").equalsIgnoreCase("true")) firework.detonate();
@@ -285,17 +285,17 @@ public class GameAction extends Action {
 				
 				
 				EntityType type = projectiles.get(projType);
-				Arrow arrow = target.getWorld().spawnArrow(loc, loc.getDirection(), (float) speed, (float) inaccuracy);
+				Arrow arrow = DFPlugin.world.spawnArrow(loc, loc.getDirection(), (float) speed, (float) inaccuracy);
 				switch (specialProj.getType()) {
 					case FIRE_CHARGE -> {
 						if (specialProj.getAmount() >= 2) {
-							Fireball proj = (Fireball) target.getWorld().spawnEntity(loc, EntityType.FIREBALL);
+							Fireball proj = (Fireball) DFPlugin.world.spawnEntity(loc, EntityType.FIREBALL);
 							proj.setDirection(arrow.getVelocity());
 							
 							if (customName != null) proj.setCustomName(customName);
 							proj.setCustomNameVisible(true);
 						} else {
-							SmallFireball proj = (SmallFireball) target.getWorld().spawnEntity(loc, EntityType.SMALL_FIREBALL);
+							SmallFireball proj = (SmallFireball) DFPlugin.world.spawnEntity(loc, EntityType.SMALL_FIREBALL);
 							proj.setDirection(arrow.getVelocity());
 							
 							if (customName != null) proj.setCustomName(customName);
@@ -320,7 +320,7 @@ public class GameAction extends Action {
 						proj.setCustomNameVisible(true);
 					}
 					case SPLASH_POTION, LINGERING_POTION -> {
-						ThrownPotion proj = (ThrownPotion) target.getWorld().spawnEntity(loc, EntityType.SPLASH_POTION);
+						ThrownPotion proj = (ThrownPotion) DFPlugin.world.spawnEntity(loc, EntityType.SPLASH_POTION);
 						proj.setItem(specialProj);
 						proj.setVelocity(arrow.getVelocity());
 						
@@ -328,7 +328,7 @@ public class GameAction extends Action {
 						proj.setCustomNameVisible(true);
 					}
 					case EXPERIENCE_BOTTLE -> {
-						ThrownExpBottle proj = (ThrownExpBottle) target.getWorld().spawnEntity(loc, EntityType.THROWN_EXP_BOTTLE);
+						ThrownExpBottle proj = (ThrownExpBottle) DFPlugin.world.spawnEntity(loc, EntityType.THROWN_EXP_BOTTLE);
 						proj.setVelocity(arrow.getVelocity());
 						
 						if (customName != null) proj.setCustomName(customName);
@@ -336,7 +336,7 @@ public class GameAction extends Action {
 					}
 					default -> {
 						if (projectiles.containsKey(projType)) {
-							Entity proj = target.getWorld().spawnEntity(loc, type);
+							Entity proj = DFPlugin.world.spawnEntity(loc, type);
 							proj.setVelocity(arrow.getVelocity());
 							
 							if (customName != null) proj.setCustomName(customName);
@@ -347,13 +347,13 @@ public class GameAction extends Action {
 				
 				arrow.remove();
 			}
-			case "Lightning" -> target.getWorld().strikeLightning((Location) args.get("loc").getVal());
+			case "Lightning" -> DFPlugin.world.strikeLightning((Location) args.get("loc").getVal());
 			case "SpawnPotionCloud" -> {
 				Location loc = (Location) args.get("loc").getVal();
 				double rad = (double) args.get("radius").getVal();
 				double dur = (double) args.get("duration").getVal();
 				
-				AreaEffectCloud cloud = (AreaEffectCloud) target.getWorld().spawnEntity(loc, EntityType.AREA_EFFECT_CLOUD);
+				AreaEffectCloud cloud = (AreaEffectCloud) DFPlugin.world.spawnEntity(loc, EntityType.AREA_EFFECT_CLOUD);
 				for (PotionEffect effect : DFValue.castPotion((DFValue[]) args.get("potion").getVal()))
 					cloud.addCustomEffect(effect, false);
 				
@@ -377,7 +377,7 @@ public class GameAction extends Action {
 					BlockData data = block.createBlockData(String.valueOf(builder));
 					finalData = data.merge(finalData);
 				}
-				FallingBlock fb = target.getWorld().spawnFallingBlock(loc, finalData);
+				FallingBlock fb = DFPlugin.world.spawnFallingBlock(loc, finalData);
 				
 				if (tags.get("Reform on Impact").equalsIgnoreCase("false"))
 					fb.setMetadata("dontreform1176", new FixedMetadataValue(DFPlugin.plugin, "1")); //TODO: This tag does not work properly!

@@ -68,6 +68,7 @@ public class PlayerAction extends Action {
 			put("Voice/Speech", SoundCategory.VOICE);
 		}};
 		
+		
 		for(LivingEntity target : DFUtilities.getTargets(targetName, targetMap, SelectionType.PLAYER))
 			switch(action){
 				case "SendMessage": {
@@ -176,11 +177,11 @@ public class PlayerAction extends Action {
 				case "SetHotbar": {
 					DFValue[] items = (DFValue[]) args.get("items").getVal();
 					int itemIndex = 0;
-					for(int i = 1; i < 9; i++)
-						if(items[itemIndex].slot != i) ((Player) target).getInventory().clear(i);
+					for(int i = 0; i < 9; i++)
+						if (items[itemIndex].slot != i) ((Player) target).getInventory().clear(i);
 						else {
 							((Player) target).getInventory().setItem(i, (ItemStack) items[itemIndex].getVal());
-							if(itemIndex != items.length - 1) itemIndex++;
+							if (itemIndex != items.length - 1) itemIndex++;
 						}
 					
 					break;
@@ -327,8 +328,9 @@ public class PlayerAction extends Action {
 				
 				case "Heal": {
 					Integer amount = args.get("amount").getInt();
-					if(amount == null) target.setHealth(target.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-					else target.setHealth(target.getHealth() + amount);
+					double maxHealth = target.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+					if(amount == null) target.setHealth(maxHealth);
+					else target.setHealth(DFUtilities.clampNum(target.getHealth() + amount, 0, maxHealth));
 					break;
 				}
 				
@@ -888,7 +890,7 @@ public class PlayerAction extends Action {
 					if(x <= min.getX() || x >= max.getX() ||
 						 y <= min.getY() || y >= max.getY() ||
 						 z <= min.getZ() || z >= max.getZ())
-						particle.play(player, new Location(player.getWorld(),x,y,z));
+						particle.play(player, new Location(DFPlugin.world,x,y,z));
 	}
 	
 	private static void drawHollowCuboid(Player player, DFParticle particle, Location loc1, Location loc2, double spacing, long ticks){
@@ -917,7 +919,7 @@ public class PlayerAction extends Action {
 						new BukkitRunnable(){
 							@Override
 							public void run() {
-								particle.play(player, new Location(player.getWorld(), finalX, finalY, finalZ));
+								particle.play(player, new Location(DFPlugin.world, finalX, finalY, finalZ));
 							}
 						}.runTaskLater(DFPlugin.plugin, (long) wait);
 						if(wait >= 1) wait -= Math.floor(wait);
@@ -933,7 +935,7 @@ public class PlayerAction extends Action {
 		for (double y = min.getY(); y <= max.getY() + Math.ceil(height/spacing - Math.floor(height/spacing)); y += spacing)
 			for (double z = min.getZ(); z <= max.getZ() + Math.ceil(length/spacing - Math.floor(length/spacing)); z += spacing)
 				for (double x = min.getX(); x <= max.getX() + Math.ceil(width/spacing - Math.floor(width/spacing)); x += spacing)
-						particle.play(player, new Location(player.getWorld(), x, y, z));
+						particle.play(player, new Location(DFPlugin.world, x, y, z));
 	}
 	
 	private static void drawSolidCuboid(Player player, DFParticle particle, Location loc1, Location loc2, double spacing, long ticks){
@@ -958,7 +960,7 @@ public class PlayerAction extends Action {
 					new BukkitRunnable(){
 						@Override
 						public void run() {
-							particle.play(player, new Location(player.getWorld(), finalX, finalY, finalZ));
+							particle.play(player, new Location(DFPlugin.world, finalX, finalY, finalZ));
 						}
 					}.runTaskLater(DFPlugin.plugin, (long) wait);
 					if(wait >= 1) wait -= Math.floor(wait);
@@ -1244,7 +1246,7 @@ public class PlayerAction extends Action {
 	
 	private static void openContainerInv(Player p, Location loc){
 		if(loc == null) return;
-		Block block = p.getWorld().getBlockAt(loc);
+		Block block = DFPlugin.world.getBlockAt(loc);
 		switch(block.getType()){
 			case CRAFTING_TABLE:
 				p.openWorkbench(loc, true);

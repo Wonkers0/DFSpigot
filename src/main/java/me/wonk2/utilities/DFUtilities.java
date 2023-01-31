@@ -162,7 +162,7 @@ public abstract class DFUtilities {
 	
 	public static String textCodes(String str, HashMap<String, LivingEntity[]> targetMap, HashMap<String, DFValue> localStorage, boolean debug){
 		if(debug) Bukkit.broadcastMessage("Evaluating text codes of " + str);
-		String[] targetCodes = Arrays.stream(removeDuplicates(regex("\"%([^\\s]+)\"gm", str))).toArray(String[]::new);
+		String[] targetCodes = Arrays.stream(removeDuplicates(regex("%([^\\s]+)", str))).toArray(String[]::new);
 		for(String code : targetCodes) str = str.replace(code, TextCode.getTargetName(targetMap, code));
 		
 		

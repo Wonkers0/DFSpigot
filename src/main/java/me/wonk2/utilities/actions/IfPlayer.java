@@ -5,6 +5,7 @@ import me.wonk2.utilities.ParamManager;
 import me.wonk2.utilities.actions.pointerclasses.Conditional;
 import me.wonk2.utilities.enums.SelectionType;
 import me.wonk2.utilities.values.DFValue;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.WorldBorder;
@@ -97,19 +98,18 @@ public class IfPlayer extends Conditional {
 					PlayerInventory targetInv = target.getInventory();
 					
 					for(ItemStack item : items){
-						switch(tags.get("Hand Slot")){
-							case "Either hand": {
-								if(targetInv.getItemInOffHand() == item || targetInv.getItemInMainHand() == item) return true;
-								break;
+						switch (tags.get("Hand Slot")) {
+							case "Either hand" -> {
+								if (targetInv.getItemInOffHand().isSimilar(item) || targetInv.getItemInMainHand().isSimilar(item)) return true;
 							}
-							case "Main hand": {
-								if(targetInv.getItemInMainHand() == item) return true;
-								break;
+							case "Main hand" -> {
+								if (targetInv.getItemInMainHand().isSimilar(item)) return true;
 							}
-							case "Off hand": {
-								if(targetInv.getItemInOffHand() == item) return true;
-								break;
+							
+							case "Off hand" -> {
+								if (targetInv.getItemInOffHand().isSimilar(item)) return true;
 							}
+							
 						}
 					}
 					

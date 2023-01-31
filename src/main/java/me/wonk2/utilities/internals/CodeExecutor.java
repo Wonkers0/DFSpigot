@@ -14,13 +14,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public abstract class CodeExecutor {
-	private static void runCodeBlock(Object codeBlock, HashMap<String, LivingEntity[]> targetMap, HashMap<String, DFValue> localVars, @Nullable Cancellable event, SelectionType eventType, HashMap<String, Object> specifics){
+	private static void runCodeBlock(Object codeBlock, HashMap<String, LivingEntity[]> targetMap, HashMap<String, DFValue> localVars, @Nullable Event event, SelectionType eventType, HashMap<String, Object> specifics){
 		boolean stoppedLoop = false, skippedIteration = false;
 		ArrayList<Repeat> encounteredLoops = new ArrayList<>();
 		
@@ -56,11 +61,13 @@ public abstract class CodeExecutor {
 			}
 			if (codeBlock == null) return;
 			
+			
 			Object codeBlockPointer = getPointer(codeBlock);
 			if(stoppedLoop || skippedIteration){
 				codeBlock = codeBlockPointer; // We still need to advance to the next codeblock, otherwise we'd cause an infinite loop.
 				continue; // Don't run code blocks after a StopRepeat or Skip block
 			}
+			
 			
 			if (codeBlock instanceof CallFunction) {
 				runCodeBlock(((CallFunction) codeBlock).getFunc(targetMap, localVars, specifics).get(0), targetMap, localVars, event, eventType, specifics);
@@ -93,8 +100,11 @@ public abstract class CodeExecutor {
 			
 			switch (((Action) codeBlock).action) {
 				case "Wait":
-					Bukkit.getScheduler().runTaskLater(DFPlugin.plugin, () -> runCodeBlock(codeBlockPointer, targetMap, localVars, event, eventType, specifics),
-						DFUtilities.getWait(((Control) codeBlock).args, ((Control) codeBlock).tags));
+					assert codeBlock instanceof Control;
+					Bukkit.getScheduler().runTaskLater(DFPlugin.plugin,
+						() -> runCodeBlock(codeBlockPointer, targetMap, localVars, event, eventType, specifics),
+						DFUtilities.getWait(((Control) codeBlock).args, ((Control) codeBlock).tags)
+					);
 					return;
 				
 				case "Return":
@@ -112,7 +122,8 @@ public abstract class CodeExecutor {
 				case "UncancelEvent":
 				case "CancelEvent":
 					assert event != null;
-					event.setCancelled(((Action) codeBlock).action.equals("CancelEvent"));
+					if(event instanceof Cancellable cancellable) cancellable.setCancelled(((Action) codeBlock).action.equals("CancelEvent"));
+					break;
 				
 				default:
 					if (codeBlock instanceof SelectObject){
@@ -121,7 +132,12 @@ public abstract class CodeExecutor {
 						if(selectedEntities == null) targetMap.remove("selection");
 						else targetMap.put("selection", selectedEntities);
 					}
-					else ((Action) codeBlock).invokeAction();
+					else {
+						if (codeBlock instanceof IfGame ifGame && event instanceof Cancellable cancellable)
+							ifGame.specifics.put("cancelled", cancellable.isCancelled());
+						
+						((Action) codeBlock).invokeAction();
+					}
 			}
 			
 			codeBlock = codeBlockPointer;
@@ -145,9 +161,22 @@ public abstract class CodeExecutor {
 			((Action) codeBlock).pointer;
 	}
 		
-	public static void executeThread(Object[] threadContents, HashMap<String, LivingEntity[]> targetMap, HashMap<String, DFValue> localVars, @Nullable Cancellable event, SelectionType eventType, HashMap<String, Object> specifics){
-		//stringifyThread(assignPointers(new ObjectArrWrapper(threadContents)));
-		runCodeBlock(assignPointers(new ObjectArrWrapper(threadContents)).get(0), targetMap, localVars, event, eventType, specifics);
+	public static void executeThread(Object[] threadContents, HashMap<String, LivingEntity[]> targetMap, HashMap<String, DFValue> localVars, @Nullable Event event, SelectionType eventType, HashMap<String, Object> specifics){
+		//stringifyThread(assignPointers(new ObjectArrWrapper(threadContents))); // for debugging
+		
+		List<Class<?>> delayedEvents = List.of(new Class[]{PlayerRespawnEvent.class});
+		
+		if(event != null && delayedEvents.contains(event.getClass())){
+			
+			new BukkitRunnable(){
+				@Override
+				public void run(){
+					runCodeBlock(assignPointers(new ObjectArrWrapper(threadContents)).get(0), targetMap, localVars, event, eventType, specifics);
+				}
+			}.runTaskLater(DFPlugin.plugin, 1L);
+			
+		}
+		else runCodeBlock(assignPointers(new ObjectArrWrapper(threadContents)).get(0), targetMap, localVars, event, eventType, specifics);
 	}
 	
 	public static void stringifyThread(ObjectArrWrapper thread){

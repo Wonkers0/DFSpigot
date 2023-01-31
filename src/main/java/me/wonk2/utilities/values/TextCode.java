@@ -23,9 +23,8 @@ public abstract class TextCode {
 				String[] nums = contents.split(",");
 				int num1 = Integer.parseInt(nums[0]);
 				int num2 = Integer.parseInt(nums[1]);
-				Bukkit.broadcastMessage(num1 + " | " + num2 + " | " + Math.floor(Math.random() * (num2 - num1) + num1));
 				
-				return String.valueOf(Math.floor(Math.random() * (num2 - num1) + num1));
+				return String.valueOf(Math.round(Math.random() * (num2 - num1) + num1));
 			}
 		}
 		
