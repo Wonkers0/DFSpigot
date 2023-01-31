@@ -32,6 +32,8 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_19_R1.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
 import org.bukkit.entity.*;
+import org.bukkit.event.Event;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -45,18 +47,19 @@ import java.util.HashMap;
 public class GameAction extends Action {
 	LivingEntity target;
 	Object[] inputArray;
+
 	public GameAction(String targetName, HashMap<String, LivingEntity[]> targetMap, ParamManager paramManager, String action) {
 		super(targetName, targetMap, paramManager, action);
 	}
-	
-	
+
+
 	@Override
 	public void invokeAction() {
 		inputArray = paramManager.formatParameters(targetMap);
 		HashMap<String, DFValue> args = DFUtilities.getArgs(inputArray);
 		HashMap<String, String> tags = DFUtilities.getTags(inputArray);
 		target = DFUtilities.getTargets(targetName, targetMap, SelectionType.EITHER)[0];
-		
+
 		//TODO: Because of how the target system is set up, certain game actions may not work in entity events.
 		HashMap<Integer, DFValue> primitiveInput = DFUtilities.getPrimitiveInput(inputArray);
 		switch (action) {
@@ -135,39 +138,39 @@ public class GameAction extends Action {
 				}};
 				Material spawnEgg = ((ItemStack) args.get("mob").getVal()).getType();
 				Location loc = (Location) args.get("loc").getVal();
-				
+
 				LivingEntity entity = (LivingEntity) loc.getWorld().spawnEntity(loc, mobTypes.get(spawnEgg));
-				
+
 				if (args.get("health").getVal() == null)
 					entity.setHealth(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
 				else {
 					entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue((Double) args.get("health").getVal());
 					entity.setHealth((Double) args.get("health").getVal());
 				}
-				
+
 				String customName = (String) args.get("customName").getVal();
 				if (customName != null) {
 					entity.setCustomName(customName);
 					entity.setCustomNameVisible(true);
 				}
-				
+
 				if (args.get("effects").getVal() != null) {
 					PotionEffect[] effects = DFValue.castPotion((DFValue[]) args.get("effects").getVal());
 					entity.addPotionEffects(Arrays.asList(effects));
 				}
-				
+
 				ItemStack[] equipment = DFValue.castItem(new DFValue[]{primitiveInput.get(18), primitiveInput.get(19), primitiveInput.get(20), primitiveInput.get(21), primitiveInput.get(22), primitiveInput.get(23)});
 				entity.getEquipment().setArmorContents(new ItemStack[]{equipment[4], equipment[3], equipment[2], equipment[1]});
 				entity.getEquipment().setItemInMainHand(equipment[0]);
 				entity.getEquipment().setItemInOffHand(equipment[5]);
-				
+
 				DFUtilities.lastEntity = entity;
 			}
 			case "SpawnItem" -> {
 				ItemStack[] items = DFValue.castItem((DFValue[]) args.get("items").getVal());
 				Location loc = (Location) args.get("loc").getVal();
 				String customName = (String) args.get("customName").getVal();
-				
+
 				for (ItemStack item : items) {
 					Entity itemEntity = target.getWorld().dropItem(loc, item);
 					if (customName != null) itemEntity.setCustomName(customName);
@@ -179,7 +182,7 @@ public class GameAction extends Action {
 				Material vehicleType = ((ItemStack) args.get("vehicle").getVal()).getType();
 				Location loc = (Location) args.get("loc").getVal();
 				String customName = (String) args.get("customName").getVal();
-				
+
 				HashMap<Material, EntityType> vehicleTypes = new HashMap<>() {{
 					put(Material.OAK_BOAT, EntityType.BOAT);
 					put(Material.BIRCH_BOAT, EntityType.BOAT);
@@ -202,7 +205,7 @@ public class GameAction extends Action {
 					put(Material.HOPPER_MINECART, EntityType.MINECART_HOPPER);
 					put(Material.TNT_MINECART, EntityType.MINECART_TNT);
 				}};
-				
+
 				Vehicle vehicle = (Vehicle) target.getWorld().spawnEntity(loc, vehicleTypes.get(vehicleType));
 				switch (vehicleType) {
 					case OAK_BOAT, OAK_CHEST_BOAT -> ((Boat) vehicle).setBoatType(Boat.Type.OAK);
@@ -213,7 +216,7 @@ public class GameAction extends Action {
 					case ACACIA_BOAT, ACACIA_CHEST_BOAT -> ((Boat) vehicle).setBoatType(Boat.Type.ACACIA);
 					case MANGROVE_BOAT, MANGROVE_CHEST_BOAT -> ((Boat) vehicle).setBoatType(Boat.Type.MANGROVE);
 				}
-				
+
 				if (customName != null) vehicle.setCustomName(customName);
 				vehicle.setCustomNameVisible(true);
 			}
@@ -221,7 +224,7 @@ public class GameAction extends Action {
 				Location loc = (Location) args.get("loc").getVal();
 				int amount = args.get("amount").getInt();
 				String customName = (String) args.get("customName").getVal();
-				
+
 				for (int i = 0; i < amount; i++) {
 					ExperienceOrb orb = (ExperienceOrb) target.getWorld().spawnEntity(loc, EntityType.EXPERIENCE_ORB);
 					if (customName != null) orb.setCustomName(customName);
@@ -231,7 +234,7 @@ public class GameAction extends Action {
 			case "Explosion" -> {
 				Location loc = (Location) args.get("loc").getVal();
 				float power = (float) DFUtilities.clampNum((double) args.get("power").getVal(), 0, 4);
-				
+
 				target.getWorld().createExplosion(loc, power);
 			}
 			case "SpawnTNT" -> {
@@ -239,9 +242,9 @@ public class GameAction extends Action {
 				float power = (float) DFUtilities.clampNum((double) args.get("power").getVal(), 0, 4);
 				int fuse = args.get("fuse").getInt();
 				String customName = (String) args.get("customName").getVal();
-				
+
 				TNTPrimed tnt = (TNTPrimed) target.getWorld().spawnEntity(loc, EntityType.PRIMED_TNT);
-				
+
 				EntityData.getEntityData(tnt.getUniqueId()).tntPower = power;
 				tnt.setFuseTicks(fuse);
 				if (customName != null) tnt.setCustomName(customName);
@@ -249,14 +252,14 @@ public class GameAction extends Action {
 			case "SpawnFangs" -> {
 				Location loc = (Location) args.get("loc").getVal();
 				String customName = (String) args.get("customName").getVal();
-				
+
 				EvokerFangs evokerFangs = (EvokerFangs) target.getWorld().spawnEntity(loc, EntityType.EVOKER_FANGS);
 				if (customName != null) evokerFangs.setCustomName(customName);
 			}
 			case "Firework" -> {
 				ItemStack fireworkType = (ItemStack) args.get("firework").getVal();
 				Location loc = (Location) args.get("loc").getVal();
-				
+
 				Firework firework = (Firework) target.getWorld().spawnEntity(loc, EntityType.FIREWORK);
 				FireworkMeta meta = (FireworkMeta) fireworkType.getItemMeta();
 				firework.setFireworkMeta(meta);
@@ -274,16 +277,16 @@ public class GameAction extends Action {
 					put(Material.MILK_BUCKET, EntityType.LLAMA_SPIT);
 					put(Material.DRAGON_BREATH, EntityType.DRAGON_FIREBALL);
 				}};
-				
-				
+
+
 				Material projType = ((ItemStack) args.get("projectile").getVal()).getType();
 				ItemStack specialProj = (ItemStack) args.get("projectile").getVal();
 				Location loc = (Location) args.get("loc").getVal();
 				String customName = (String) args.get("customName").getVal();
 				double speed = (double) args.get("speed").getVal();
 				double inaccuracy = (double) args.get("inaccuracy").getVal();
-				
-				
+
+
 				EntityType type = projectiles.get(projType);
 				Arrow arrow = target.getWorld().spawnArrow(loc, loc.getDirection(), (float) speed, (float) inaccuracy);
 				switch (specialProj.getType()) {
@@ -291,23 +294,23 @@ public class GameAction extends Action {
 						if (specialProj.getAmount() >= 2) {
 							Fireball proj = (Fireball) target.getWorld().spawnEntity(loc, EntityType.FIREBALL);
 							proj.setDirection(arrow.getVelocity());
-							
+
 							if (customName != null) proj.setCustomName(customName);
 							proj.setCustomNameVisible(true);
 						} else {
 							SmallFireball proj = (SmallFireball) target.getWorld().spawnEntity(loc, EntityType.SMALL_FIREBALL);
 							proj.setDirection(arrow.getVelocity());
-							
+
 							if (customName != null) proj.setCustomName(customName);
 							proj.setCustomNameVisible(true);
 						}
-						
+
 					}
 					case WITHER_SKELETON_SKULL -> {
 						WitherSkull proj = (WitherSkull) arrow.getWorld().spawnEntity(arrow.getLocation(), EntityType.WITHER_SKULL);
 						proj.setCharged(specialProj.getAmount() >= 2);
 						proj.setDirection(arrow.getVelocity());
-						
+
 						if (customName != null) proj.setCustomName(customName);
 						proj.setCustomNameVisible(true);
 					}
@@ -315,7 +318,7 @@ public class GameAction extends Action {
 						Arrow proj = (Arrow) arrow.getWorld().spawnEntity(arrow.getLocation(), EntityType.ARROW);
 						proj.setBasePotionData(((PotionMeta) specialProj.getItemMeta()).getBasePotionData());
 						proj.setVelocity(arrow.getVelocity());
-						
+
 						if (customName != null) proj.setCustomName(customName);
 						proj.setCustomNameVisible(true);
 					}
@@ -323,14 +326,14 @@ public class GameAction extends Action {
 						ThrownPotion proj = (ThrownPotion) target.getWorld().spawnEntity(loc, EntityType.SPLASH_POTION);
 						proj.setItem(specialProj);
 						proj.setVelocity(arrow.getVelocity());
-						
+
 						if (customName != null) proj.setCustomName(customName);
 						proj.setCustomNameVisible(true);
 					}
 					case EXPERIENCE_BOTTLE -> {
 						ThrownExpBottle proj = (ThrownExpBottle) target.getWorld().spawnEntity(loc, EntityType.THROWN_EXP_BOTTLE);
 						proj.setVelocity(arrow.getVelocity());
-						
+
 						if (customName != null) proj.setCustomName(customName);
 						proj.setCustomNameVisible(true);
 					}
@@ -338,13 +341,13 @@ public class GameAction extends Action {
 						if (projectiles.containsKey(projType)) {
 							Entity proj = target.getWorld().spawnEntity(loc, type);
 							proj.setVelocity(arrow.getVelocity());
-							
+
 							if (customName != null) proj.setCustomName(customName);
 							proj.setCustomNameVisible(true);
 						}
 					}
 				}
-				
+
 				arrow.remove();
 			}
 			case "Lightning" -> target.getWorld().strikeLightning((Location) args.get("loc").getVal());
@@ -352,33 +355,33 @@ public class GameAction extends Action {
 				Location loc = (Location) args.get("loc").getVal();
 				double rad = (double) args.get("radius").getVal();
 				double dur = (double) args.get("duration").getVal();
-				
+
 				AreaEffectCloud cloud = (AreaEffectCloud) target.getWorld().spawnEntity(loc, EntityType.AREA_EFFECT_CLOUD);
 				for (PotionEffect effect : DFValue.castPotion((DFValue[]) args.get("potion").getVal()))
 					cloud.addCustomEffect(effect, false);
-				
+
 				cloud.setRadius((float) rad);
 				cloud.setDuration((int) dur);
 			}
 			case "FallingBlock" -> {
 				Location loc = (Location) args.get("loc").getVal();
 				Material block = ((ItemStack) args.get("block").getVal()).getType();
-				
+
 				BlockData finalData = block.createBlockData();
 				if (args.get("blockData").getVal() != null) {
 					StringBuilder builder = new StringBuilder();
 					builder.append("[");
 					for (String dblockData : DFValue.castTxt((DFValue[]) args.get("blockData").getVal()))
 						builder.append(dblockData).append(",");
-					
+
 					builder.delete(builder.length() - 1, builder.length());
 					builder.append("]");
-					
+
 					BlockData data = block.createBlockData(String.valueOf(builder));
 					finalData = data.merge(finalData);
 				}
 				FallingBlock fb = target.getWorld().spawnFallingBlock(loc, finalData);
-				
+
 				if (tags.get("Reform on Impact").equalsIgnoreCase("false"))
 					fb.setMetadata("dontreform1176", new FixedMetadataValue(DFPlugin.plugin, "1")); //TODO: This tag does not work properly!
 				if (tags.get("Hurt Hit Entities").equalsIgnoreCase("true"))
@@ -399,14 +402,14 @@ public class GameAction extends Action {
 					entity.setCustomName(name);
 					entity.setCustomNameVisible(true);
 				}
-				
+
 				if (tags.get("Visibility").equals("Visible (No hitbox)")) entity.setMarker(true);
 				if (tags.get("Visibility").equals("Invisible")) entity.setVisible(false);
 				if (tags.get("Visibility").equals("Invisible (No hitbox)")) {
 					entity.setMarker(true);
 					entity.setVisible(false);
 				}
-				
+
 				DFUtilities.lastEntity = entity;
 			}
 			case "SetBlock" -> {
@@ -414,7 +417,7 @@ public class GameAction extends Action {
 				Material material = block == null ? Material.AIR : DFUtilities.interpretItem(block.getType());
 				Location[] locs = DFValue.castLoc((DFValue[]) args.get("locs").getVal());
 				String[] blockTags = DFValue.castTxt((DFValue[]) args.get("tags").getVal());
-				
+
 				for (Location loc : locs) {
 					loc.getBlock().setType(material);
 					if (args.get("tags").getVal() != null) {
@@ -423,7 +426,7 @@ public class GameAction extends Action {
 						builder.append("[");
 						for (String dblockData : blockTags)
 							builder.append(dblockData).append(",");
-						
+
 						builder.delete(builder.length() - 1, builder.length());
 						builder.append("]");
 						BlockData data = material.createBlockData(String.valueOf(builder));
@@ -442,7 +445,7 @@ public class GameAction extends Action {
 				builder.append("[");
 				for (String dblockData : blockTags)
 					builder.append(dblockData).append(",");
-				
+
 				if (blockTags.length != 0) builder.delete(builder.length() - 1, builder.length());
 				builder.append("]");
 				BlockData data = material.createBlockData(String.valueOf(builder));
@@ -450,17 +453,17 @@ public class GameAction extends Action {
 				Location loc2 = (Location) args.get("loc2").getVal();
 				World world = BukkitAdapter.adapt(loc1.getWorld());
 				CuboidRegion selection = new CuboidRegion(world, BlockVector3.at(loc1.getBlockX(), loc1.getBlockY(), loc1.getBlockZ()), BlockVector3.at(loc2.getBlockX(), loc2.getBlockY(), loc2.getBlockZ()));
-				
+
 				try (EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(world, -1)) {
 					BlockState block = BukkitAdapter.adapt(finalData);
-					
+
 					try {
 						editSession.setBlocks(selection, block);
 					} catch (MaxChangedBlocksException e) {
 						throw new RuntimeException(e);
 					}
 				}
-				
+
 			}
 			case "CloneRegion" -> {
 				try {
@@ -469,40 +472,40 @@ public class GameAction extends Action {
 					Location copyLoc = (Location) args.get("copyLoc").getVal();
 					Location pasteLoc = (Location) args.get("pasteLoc").getVal();
 					World world = BukkitAdapter.adapt(loc1.getWorld());
-					
+
 					CuboidRegion region = new CuboidRegion(world, BlockVector3.at(loc1.getBlockX(), loc1.getBlockY(), loc1.getBlockZ()), BlockVector3.at(loc2.getBlockX(), loc2.getBlockY(), loc2.getBlockZ()));
 					BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
-					
+
 					ForwardExtentCopy forwardExtentCopy = new ForwardExtentCopy(
-						world, region, clipboard, BlockVector3.at(copyLoc.getBlockX(), copyLoc.getBlockY(), copyLoc.getBlockZ())
+							world, region, clipboard, BlockVector3.at(copyLoc.getBlockX(), copyLoc.getBlockY(), copyLoc.getBlockZ())
 					);
-					
+
 					Operations.complete(forwardExtentCopy);
-					
+
 					if (tags.get("Ignore Air").equals("True")) {
 						try (EditSession editSession = WorldEdit.getInstance().newEditSession(world)) {
 							Operation operation = new ClipboardHolder(clipboard)
-								.createPaste(editSession)
-								.to(BlockVector3.at(pasteLoc.getBlockX(), pasteLoc.getBlockY(), pasteLoc.getBlockZ()))
-								.ignoreAirBlocks(true)
-								.build();
+									.createPaste(editSession)
+									.to(BlockVector3.at(pasteLoc.getBlockX(), pasteLoc.getBlockY(), pasteLoc.getBlockZ()))
+									.ignoreAirBlocks(true)
+									.build();
 							Operations.complete(operation);
 						}
 					} else {
-						
+
 						try (EditSession editSession = WorldEdit.getInstance().newEditSession(world)) {
 							Operation operation = new ClipboardHolder(clipboard)
-								.createPaste(editSession)
-								.to(BlockVector3.at(pasteLoc.getBlockX(), pasteLoc.getBlockY(), pasteLoc.getBlockZ()))
-								.build();
-							
+									.createPaste(editSession)
+									.to(BlockVector3.at(pasteLoc.getBlockX(), pasteLoc.getBlockY(), pasteLoc.getBlockZ()))
+									.build();
+
 							Operations.complete(operation);
 						}
 					}
 				} catch (WorldEditException e) {
 					e.printStackTrace();
 				}
-				
+
 			}
 			case "BreakBlock" -> {
 				Location loc = (Location) args.get("loc").getVal();
@@ -510,8 +513,39 @@ public class GameAction extends Action {
 				for (Entity ps : loc.getWorld().getNearbyEntities(loc, 64, 64, 64))
 					if (ps instanceof Player)
 						((CraftPlayer) target).getHandle().connection.send(new ClientboundLevelEventPacket(2001, new BlockPos(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()), Block.getId(((CraftBlockData) loc.getBlock().getBlockData()).getState()), false));
-				
+
 				loc.getBlock().setType(Material.AIR);
+			}
+			case "SetEventDamage" -> {
+				double num = (double) args.get("num").getVal();
+				//TODO find out how to edit events or something
+			}
+			case "SetEventHeal" -> {
+				double num = (double) args.get("num").getVal();
+				//TODO find out how to edit events or something
+			}
+			case "SetEventXP" -> {
+				double num = (double) args.get("num").getVal();
+				//TODO find out how to edit events or something
+			}
+			case "SetBlockData" -> {
+				Location loc = (Location) args.get("loc").getVal();
+				String[] blockTags = DFValue.castTxt((DFValue[]) args.get("tags").getVal());
+				Material material = loc.getBlock().getType();
+				if (args.get("tags").getVal() != null) {
+					BlockData finalData = material.createBlockData();
+					StringBuilder builder = new StringBuilder();
+					builder.append("[");
+					for (String dblockData : blockTags)
+						builder.append(dblockData).append(",");
+
+					builder.delete(builder.length() - 1, builder.length());
+					builder.append("]");
+					BlockData data = material.createBlockData(String.valueOf(builder));
+					finalData = data.merge(finalData);
+					loc.getBlock().setBlockData(finalData);
+				}
+				//TODO do the goofy copy
 			}
 		}
 	}

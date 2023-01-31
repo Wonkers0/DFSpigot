@@ -14,6 +14,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
+import org.bukkit.event.entity.*;
+import org.bukkit.event.player.PlayerFishEvent;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -113,7 +116,22 @@ public abstract class CodeExecutor {
 				case "CancelEvent":
 					assert event != null;
 					event.setCancelled(((Action) codeBlock).action.equals("CancelEvent"));
-				
+				case "SetEventDamage":
+					double damageNum = (double) DFUtilities.getArgs(((GameAction) codeBlock).paramManager.formatParameters(((GameAction) codeBlock).targetMap)).get("num").getVal();
+					if (event instanceof EntityDamageEvent)
+						((EntityDamageEvent) event).setDamage(damageNum);
+
+				case  "SetEventHeal":
+					double healNum = (double) DFUtilities.getArgs(((GameAction) codeBlock).paramManager.formatParameters(((GameAction) codeBlock).targetMap)).get("num").getVal();
+					if (event instanceof EntityRegainHealthEvent)
+						((EntityRegainHealthEvent) event).setAmount(healNum);
+				case "SetEventXp":
+					int XPnum = (int) DFUtilities.getArgs(((GameAction) codeBlock).paramManager.formatParameters(((GameAction) codeBlock).targetMap)).get("num").getVal();
+					if (event instanceof EntityDeathEvent)
+						((EntityDeathEvent) event).setDroppedExp(XPnum);
+					if (event instanceof PlayerFishEvent)
+						((PlayerFishEvent)event).setExpToDrop(XPnum);
+
 				default:
 					if (codeBlock instanceof SelectObject){
 						LivingEntity[] selectedEntities = ((SelectObject) codeBlock).getSelectedEntities(targetMap);
@@ -128,7 +146,6 @@ public abstract class CodeExecutor {
 			if(eventType == SelectionType.PLAYER) if(!((Player) targetMap.get("default")[0]).isOnline() && !isSelectionValid(targetMap)) return;
 		}
 	}
-	
 	private static boolean isSelectionValid(HashMap<String, LivingEntity[]> targetMap){
 		if(!targetMap.containsKey("selection")) return false;
 		if(!(targetMap.get("selection")[0] instanceof Player)) return true;
