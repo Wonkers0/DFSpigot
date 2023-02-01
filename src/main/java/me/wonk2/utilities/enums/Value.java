@@ -6,5 +6,7 @@ public enum Value {
 	PlayerCount,
 	Timestamp,
 	Name,
-	SelectionSize
+	SelectionSize,
+	CurrentHealth,
+	MaximumHealth
 }

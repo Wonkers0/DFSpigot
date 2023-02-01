@@ -21,6 +21,12 @@ public class DFValue implements Cloneable {
 		return result;
 	}
 	
+	public static DFValue castArray(Object[] arr, DFType type){
+		DFValue[] result = new DFValue[arr.length];
+		for(int i = 0; i < arr.length; i++) result[i] = new DFValue(arr[i], type);
+		return new DFValue(result, DFType.LIST);
+	}
+	
 	public static String[] castTxt(DFValue[] arr){
 		if(arr == null) return new String[0];
 		return DFUtilities.parseTxt(arr);
