@@ -435,6 +435,7 @@ function blockParams(codeBlock, isFunc) {
 }
 
 function gameValues(gVal) {
+  let target = gVal.target == null ? `"default"` : `"${gVal.target.toLowerCase()}"`
   return [`new GameValue(Value.${gVal.type.replaceAll(" ", "")}, ${target})`, "GAMEVAL"]
 }
 
