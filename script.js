@@ -435,49 +435,7 @@ function blockParams(codeBlock, isFunc) {
 }
 
 function gameValues(gVal) {
-  let target = gVal.target == null ? `"default"` : `"${gVal.target.toLowerCase()}"`
-  let selection = `DFUtilities.getTargets(${target})[0]`
-
-  let gVals = {
-    "Event Block Location": [`DFUtilities.getRelativeLoc(((Block) specifics.get("block")).getLocation())`, "LOC"],
-    "Target Block Location": [`DFUtilities.getTargetBlock(${selection}}})`, "LOC"],
-    "Target Block Side": [`${selection}.getFacing().getDirection()`, "VEC"],
-    "X-Coordinate": [`DFUtilities.getRelativeLoc(${selection}.getLocation()).getX()`, "NUM"],
-    "Y-Coordinate": [`DFUtilities.getRelativeLoc(${selection}.getLocation()).getY()`, "NUM"],
-    "Z-Coordinate": [`DFUtilities.getRelativeLoc(${selection}.getLocation()).getZ()`, "NUM"],
-    "Pitch": [`${selection}.getLocation().getPitch()`, "NUM"],
-    "Yaw": [`${selection}.getLocation().getYaw()`, "NUM"],
-    "Spawn Location": [`${selection}.getBedSpawnLocation()`, "LOC"],
-    "Velocity": [`${selection}.getVelocity()`, "VEC"],
-    "Direction": [`${selection}.getLocation().getDirection().normalize()`, "VEC"],
-    "Current Health": [`${selection}.getHealth()`, "NUM"],
-    "Maximum Health": [`${selection}.getAttribute(Attribute.GENERIC_MAX_HEALTH)`, "NUM"],
-    "Absorption Health": [`${selection}.getAbsorptionAmount()`, "NUM"],
-    "Food Level": [`${selection}.getFoodLevel()`, "NUM"],
-    "Food Saturation": [`${selection}.getSaturation`, "NUM"],
-    "Food Exhaustion": [`${selection}.getExhaustion()`, "NUM"],
-    "Attack Damage": [`${selection}.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)`, "NUM"],
-    "Attack Speed": [`${selection}.getAttribute(Attribute.GENERIC_ATTACK_SPEED)`, "NUM"],
-    "Armor Points": [`${selection}.getAttribute(Attribute.GENERIC_ARMOR)`, "NUM"],
-    "Armor Toughness": [`${selection}.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS)`, "NUM"],
-    "Invulnerability Ticks": [`${selection}.getNoDamageTicks()`, "NUM"],
-    "Experience Level": [`${selection}.getLevel()`, "NUM"],
-    "Experience Progress": [`${selection}.getExp() * 100`, "NUM"],
-    "Fire Ticks": [`${selection}.getFireTicks()`, "NUM"],
-    "Freeze Ticks": [`${selection}.getFreezeTicks()`, "NUM"],
-    "Remaining Air": [`${selection}.getRemainingAir()`, "NUM"],
-    "Fall Distance": [`${selection}.getFallDistance()`, "NUM"],
-    "Held Slot": [`${selection}.getInventory().getHeldItemSlot()`, "NUM"],
-    "Ping": [`${selection}.getPing()`, "NUM"],
-    "Item Usage Progress": [``, "NUM"], //TODO
-    "Steer Sideways Movement": [``, "NUM"], //TODO: This might require ProtocolLib!d
-    "Steer Forward Movement": [``, "NUM"], //TODO: This might require ProtocolLib!
-    "Event Item": [`specifics.get("item")`, "ITEM"]
-  }
-
-  if(!Object.keys(gVals).includes(gVal.type))
-    return [`new GameValue(Value.${gVal.type.replaceAll(" ", "")}, ${target})`, "GAMEVAL"]
-  else return gVals[gVal.type]
+  return [`new GameValue(Value.${gVal.type.replaceAll(" ", "")}, ${target})`, "GAMEVAL"]
 }
 
 String.prototype.replaceBetween = function(start, end, what) { //https://stackoverflow.com/questions/14880229/how-to-replace-a-substring-between-two-indices
