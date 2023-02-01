@@ -219,6 +219,7 @@ public class SetVariable extends Action {
 						case "Sine" -> inputMethod.equals("Radians") ? Math.cos(angle) : Math.cos(Math.toRadians(angle));
 						case "Inverse sine (arcsine)" -> inputMethod.equals("Radians") ? Math.acos(angle) : Math.toDegrees(Math.acos(angle));
 						case "Hyperbolic sine" -> inputMethod.equals("Radians") ? Math.cosh(angle) : Math.toDegrees(Math.cosh(angle));
+						default -> 0;
 					};
 					
 					DFVar.setVar(var, new DFValue(val, DFType.NUM), localStorage);
@@ -235,6 +236,7 @@ public class SetVariable extends Action {
 						case "Cosine" -> inputMethod.equals("Radians") ? Math.cos(angle) : Math.cos(Math.toRadians(angle));
 						case "Inverse cosine (arccosine)" -> inputMethod.equals("Radians") ? Math.acos(angle) : Math.toDegrees(Math.acos(angle));
 						case "Hyperbolic cosine" -> inputMethod.equals("Radians") ? Math.cosh(angle) : Math.toDegrees(Math.cosh(angle));
+						default -> 0;
 					};
 					
 					DFVar.setVar(var, new DFValue(val, DFType.NUM), localStorage);
@@ -251,6 +253,7 @@ public class SetVariable extends Action {
 						case "Tangent" -> inputMethod.equals("Radians") ? Math.cos(angle) : Math.cos(Math.toRadians(angle));
 						case "Inverse tangent (arctangent)" -> inputMethod.equals("Radians") ? Math.acos(angle) : Math.toDegrees(Math.acos(angle));
 						case "Hyperbolic tangent" -> inputMethod.equals("Radians") ? Math.cosh(angle) : Math.toDegrees(Math.cosh(angle));
+						default -> 0;
 					};
 					
 					DFVar.setVar(var, new DFValue(val, DFType.NUM), localStorage);
@@ -836,6 +839,7 @@ public class SetVariable extends Action {
 						case "Get Remaining" -> item.getType().getMaxDurability() - damageable.getDamage();
 						case "Get Remaining Percentage" -> (float) (item.getType().getMaxDurability() - damageable.getDamage()) / item.getType().getMaxDurability();
 						case "Get Maximum" -> item.getType().getMaxDurability();
+						default -> 0;
 					};
 					DFVar.setVar(var, new DFValue(result, DFType.NUM), localStorage);
 				}
@@ -853,6 +857,7 @@ public class SetVariable extends Action {
 						case "Set Damage Percentage" -> item.getType().getMaxDurability() - ((durability / 100) * item.getType().getMaxDurability());
 						case "Set Remaining" -> durability;
 						case "Set Remaining Percentage" -> (durability / 100) * item.getType().getMaxDurability();
+						default -> 0;
 					};
 					
 					damageable.setDamage((int) Math.floor(result));

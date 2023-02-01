@@ -112,7 +112,7 @@ public class ParamManager implements Cloneable {
 				if (!DFVar.varExists(var, localStorage)){
 					switch(paramType){
 						case TXT ->	currentArg = new DFValue("0", currentArg.slot, DFType.TXT);
-						case NUM -> currentArg = new DFValue(0, currentArg.slot, DFType.NUM); // Do not pass "0" as a string here because it will *NOT* be sanitized again!
+						case NUM -> currentArg = new DFValue("0", currentArg.slot, DFType.NUM);
 						case LOC -> currentArg = new DFValue(DFPlugin.origin, currentArg.slot, DFType.LOC); // Null location vars default to plot spawn
 					}
 				}
