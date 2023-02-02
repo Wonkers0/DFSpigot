@@ -29,6 +29,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_19_R1.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
@@ -552,6 +553,14 @@ public class GameAction extends Action {
 						//TODO remove particles?
 					}
 				}
+
+			}
+			case "SetBlockGrowth" -> {
+				Location loc = (Location) args.get("loc").getVal();
+				Double num = (Double) args.get("num").getVal();
+				Ageable age = (Ageable) loc.getBlock().getBlockData();
+				age.setAge(num.intValue());
+				loc.getBlock().setBlockData(age);
 
 			}
 		}
