@@ -28,6 +28,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_19_R1.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
@@ -538,6 +539,20 @@ public class GameAction extends Action {
 						}
 					}
 				}
+			}
+			case "BoneMeal" -> {
+				Location[] locs = DFValue.castLoc((DFValue[]) args.get("loc").getVal());
+				Double itr = (Double) args.get("num").getVal();
+				for (Location loc : locs)
+				{
+					for (int i = 0; i < itr; i++)
+					{
+						loc.getBlock().applyBoneMeal(BlockFace.DOWN);
+
+						//TODO remove particles?
+					}
+				}
+
 			}
 		}
 	}
