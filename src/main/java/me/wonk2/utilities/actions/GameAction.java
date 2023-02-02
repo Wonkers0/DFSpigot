@@ -513,6 +513,32 @@ public class GameAction extends Action {
 				
 				loc.getBlock().setType(Material.AIR);
 			}
+			case "SetBlockData" -> {
+				String[] blockTags = DFValue.castTxt((DFValue[]) args.get("tags").getVal());
+				Location[] locs = DFValue.castLoc((DFValue[]) args.get("loc").getVal());
+				for (Location loc : locs) {
+
+					Material material = loc.getBlock().getType();
+
+					if (args.get("tags").getVal() != null) {
+						if (tags.get("Overwrite Existing Data").equalsIgnoreCase("false")) {
+							BlockData finalData = material.createBlockData();
+							StringBuilder builder = new StringBuilder();
+							builder.append("[");
+							for (String dblockData : blockTags)
+								builder.append(dblockData).append(",");
+
+							builder.delete(builder.length() - 1, builder.length());
+							builder.append("]");
+							BlockData data = material.createBlockData(String.valueOf(builder));
+							finalData = data.merge(finalData);
+							loc.getBlock().setBlockData(finalData);
+						} else {
+							//TODO keep existing block data
+						}
+					}
+				}
+			}
 		}
 	}
 }
