@@ -3,6 +3,7 @@ package me.wonk2.utilities.values;
 import me.wonk2.DFPlugin;
 import me.wonk2.utilities.DFUtilities;
 import me.wonk2.utilities.enums.DFType;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -18,6 +19,12 @@ public class DFValue implements Cloneable {
 		DFValue[] result = new DFValue[arr.length];
 		for(int i = 0; i < arr.length; i++) result[i] = new DFValue(arr[i], type);
 		return result;
+	}
+	
+	public static DFValue castArray(Object[] arr, DFType type){
+		DFValue[] result = new DFValue[arr.length];
+		for(int i = 0; i < arr.length; i++) result[i] = new DFValue(arr[i], type);
+		return new DFValue(result, DFType.LIST);
 	}
 	
 	public static String[] castTxt(DFValue[] arr){
@@ -115,7 +122,7 @@ public class DFValue implements Cloneable {
 				result.add(new DFValue(item, type));
 			}
 			
-			return result.toArray(new DFValue[0]);
+			return result.toArray(DFValue[]::new);
 		}
 		else if(val instanceof Integer) return (double) (int) val;
 		
@@ -130,6 +137,8 @@ public class DFValue implements Cloneable {
 				Location l = (Location) val;
 				Location o = DFPlugin.origin;
 				return l == null ? null : new Location(l.getWorld(), l.getX() + o.getX(), l.getY(), l.getZ() + o.getZ(), l.getYaw(), l.getPitch());
+			case NUM:
+				return val == null ? null : Double.parseDouble(String.valueOf(val));
 			default:
 				return val;
 		}
@@ -146,10 +155,10 @@ public class DFValue implements Cloneable {
 	
 	public Integer getInt(){
 		if(type != DFType.NUM) throw new IllegalStateException("Attempt to cast non-number value to integer");
-		return (int) (double) val;
+		return (int) Math.floor(Double.parseDouble(String.valueOf(val)));
 	}
 	
 	public static DFValue nullVar(){
-		return new DFValue(0, DFType.NUM);
+		return new DFValue("0", DFType.NUM);
 	}
 }

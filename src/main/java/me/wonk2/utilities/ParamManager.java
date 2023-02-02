@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ParamManager {
+public class ParamManager implements Cloneable {
 	public static HashMap<String, Parameter[][]> argInfo;
 	
 	
@@ -105,7 +105,9 @@ public class ParamManager {
 			// This is because if you have hex colors in your txt values, they will be an instance of the "ChatColor" class upon spigotification. 🤔
 			
 			case VAR -> {
-				DFVar var = (DFVar) currentArg.getVal();
+				DFVar var = new DFVar(((DFVar) currentArg.getVal()));
+				currentArg.setVal(var);
+				
 				var.name = DFUtilities.textCodes(var.name, targetMap, localStorage, false);
 				if (!DFVar.varExists(var, localStorage)){
 					switch(paramType){
@@ -114,8 +116,11 @@ public class ParamManager {
 						case LOC -> currentArg = new DFValue(DFPlugin.origin, currentArg.slot, DFType.LOC); // Null location vars default to plot spawn
 					}
 				}
-				else if (paramType != DFType.VAR) // Do we need the var itself here, or its value? ⬅
-					currentArg = DFVar.getVar((DFVar) currentArg.getVal(), localStorage); // Get var value
+				else if (paramType != DFType.VAR) { // Do we need the var itself here, or its value? ⬅
+					int oldSlot = currentArg.slot;
+					currentArg = sanitizeValue(DFVar.getVar((DFVar) currentArg.getVal(), localStorage), paramType, targetMap, localStorage); // Get var value
+					currentArg.slot = oldSlot;
+				}
 			}
 		}
 		
@@ -160,5 +165,10 @@ public class ParamManager {
 		if(arg.type == DFType.VAR && paramType != DFType.VAR)
 			return DFVar.getVar((DFVar) arg.getVal(), localStorage).type;
 		else return arg.type;
+	}
+	
+	@Override
+	public ParamManager clone() {
+		return new ParamManager(input, tags, actionName, localStorage);
 	}
 }

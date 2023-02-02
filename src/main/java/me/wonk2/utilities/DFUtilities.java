@@ -33,6 +33,7 @@ import net.minecraft.nbt.TagParser;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextColor;
+import org.antlr.v4.runtime.misc.NotNull;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
@@ -160,20 +161,51 @@ public abstract class DFUtilities {
 		}
 	}
 	
+	public static char[] trimArray(@NotNull char[] arr, int start, int end){
+		if (end - start < 0) throw new IllegalArgumentException("Start index is bigger than end index you goof");
+		end++;
+		
+		char[] result = new char[end - start];
+		for(int i = start; i < end; i++) result[i - start] = arr[i];
+		
+		return result;
+	}
+	
 	public static String textCodes(String str, HashMap<String, LivingEntity[]> targetMap, HashMap<String, DFValue> localStorage, boolean debug){
 		if(debug) Bukkit.broadcastMessage("Evaluating text codes of " + str);
-		String[] targetCodes = Arrays.stream(removeDuplicates(regex("\"%([^\\s]+)\"gm", str))).toArray(String[]::new);
+		String[] targetCodes = Arrays.stream(removeDuplicates(regex("%([^\\s]+)", str))).toArray(String[]::new);
 		for(String code : targetCodes) str = str.replace(code, TextCode.getTargetName(targetMap, code));
 		
 		
-		
-		String[] contextCodes = Arrays.stream(removeDuplicates(regex("%([^\\s\\(]+)\\(.+?\\)", str))).toArray(String[]::new);
-		for(String code : contextCodes){
-			String prefix = regex("%[^\\(]+", code)[0];
-			String contents = regex("\\(.+", code)[0];
+		char[] chars = str.toCharArray();
+		ArrayList<String> contextCodes = new ArrayList<>();
+		boolean foundPercent = false;
+		int percentIndex = 0;
+		int brackets = 0;
+		for(int i = 0; i < str.length(); i++){
+			char c = chars[i];
 			
-			// (contents) -> Remove the first and last char to exclude brackets
-			contents = textCodes(contents.substring(1, contents.length() - 1), targetMap, localStorage, debug);
+			if(c == '%' && !foundPercent){
+				foundPercent = true;
+				percentIndex = i;
+			}
+			if(c == '(' && foundPercent) brackets++;
+			if(c == ')' && foundPercent){
+				brackets--;
+				if(brackets == 0) {
+					contextCodes.add(new String(trimArray(chars, percentIndex, i)));
+					foundPercent = false;
+				}
+			}
+		}
+		
+		for(String code : contextCodes){
+			if(debug) Bukkit.broadcastMessage("Analyzing code " + code);
+			String prefix = regex("%[^\\(]+", code)[0];
+			String contents = code.substring(prefix.length() + 1, code.length() - 1); // - 1 & + 1 help get rid of outer brackets
+			
+			if(debug) Bukkit.broadcastMessage(": " + contents);
+			contents = textCodes(contents, targetMap, localStorage, debug);
 			
 			if(debug) Bukkit.broadcastMessage("Replacing " + code + " from " + str + "...");
 			str = str.replace(code, TextCode.getCodeValue(targetMap, localStorage, prefix, contents));
