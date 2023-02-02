@@ -24,7 +24,6 @@ import me.wonk2.utilities.values.DFValue;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundLevelEventPacket;
 import net.minecraft.world.level.block.Block;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -43,6 +42,7 @@ import org.bukkit.util.Vector;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class GameAction extends Action {
 	LivingEntity target;
@@ -138,12 +138,12 @@ public class GameAction extends Action {
 				Material spawnEgg = ((ItemStack) args.get("mob").getVal()).getType();
 				Location loc = (Location) args.get("loc").getVal();
 				
-				LivingEntity entity = (LivingEntity) loc.getWorld().spawnEntity(loc, mobTypes.get(spawnEgg));
+				LivingEntity entity = (LivingEntity) Objects.requireNonNull(loc.getWorld()).spawnEntity(loc, mobTypes.get(spawnEgg));
 				
 				if (args.get("health").getVal() == null)
-					entity.setHealth(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+					entity.setHealth(Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
 				else {
-					entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue((Double) args.get("health").getVal());
+					Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue((Double) args.get("health").getVal());
 					entity.setHealth((Double) args.get("health").getVal());
 				}
 				
@@ -159,7 +159,7 @@ public class GameAction extends Action {
 				}
 				
 				ItemStack[] equipment = DFValue.castItem(new DFValue[]{primitiveInput.get(18), primitiveInput.get(19), primitiveInput.get(20), primitiveInput.get(21), primitiveInput.get(22), primitiveInput.get(23)});
-				entity.getEquipment().setArmorContents(new ItemStack[]{equipment[4], equipment[3], equipment[2], equipment[1]});
+				Objects.requireNonNull(entity.getEquipment()).setArmorContents(new ItemStack[]{equipment[4], equipment[3], equipment[2], equipment[1]});
 				entity.getEquipment().setItemInMainHand(equipment[0]);
 				entity.getEquipment().setItemInOffHand(equipment[5]);
 				
@@ -261,6 +261,7 @@ public class GameAction extends Action {
 				
 				Firework firework = (Firework) target.getWorld().spawnEntity(loc, EntityType.FIREWORK);
 				FireworkMeta meta = (FireworkMeta) fireworkType.getItemMeta();
+				assert meta != null;
 				firework.setFireworkMeta(meta);
 				if (tags.get("Instant").equalsIgnoreCase("true")) firework.detonate();
 				if (tags.get("Movement").equalsIgnoreCase("directional")) firework.setShotAtAngle(true);
@@ -315,7 +316,7 @@ public class GameAction extends Action {
 					}
 					case TIPPED_ARROW -> {
 						Arrow proj = (Arrow) arrow.getWorld().spawnEntity(arrow.getLocation(), EntityType.ARROW);
-						proj.setBasePotionData(((PotionMeta) specialProj.getItemMeta()).getBasePotionData());
+						proj.setBasePotionData(((PotionMeta) Objects.requireNonNull(specialProj.getItemMeta())).getBasePotionData());
 						proj.setVelocity(arrow.getVelocity());
 						
 						if (customName != null) proj.setCustomName(customName);
@@ -389,9 +390,9 @@ public class GameAction extends Action {
 			case "SpawnArmorStand" -> {
 				Location loc = (Location) args.get("loc").getVal();
 				String name = (String) args.get("customName").getVal();
-				ArmorStand entity = (ArmorStand) loc.getWorld().spawnEntity(loc, EntityType.ARMOR_STAND);
+				ArmorStand entity = (ArmorStand) Objects.requireNonNull(loc.getWorld()).spawnEntity(loc, EntityType.ARMOR_STAND);
 				ItemStack[] equipment = DFValue.castItem(new DFValue[]{primitiveInput.get(18), primitiveInput.get(19), primitiveInput.get(20), primitiveInput.get(21), primitiveInput.get(22), primitiveInput.get(23)});
-				entity.getEquipment().setArmorContents(new ItemStack[]{equipment[3], equipment[2], equipment[1], equipment[0]});
+				Objects.requireNonNull(entity.getEquipment()).setArmorContents(new ItemStack[]{equipment[3], equipment[2], equipment[1], equipment[0]});
 				entity.getEquipment().setItemInMainHand(equipment[4]);
 				entity.getEquipment().setItemInOffHand(equipment[5]);
 				entity.setGravity(false);
@@ -450,7 +451,7 @@ public class GameAction extends Action {
 				BlockData data = material.createBlockData(String.valueOf(builder));
 				finalData = data.merge(finalData);
 				Location loc2 = (Location) args.get("loc2").getVal();
-				World world = BukkitAdapter.adapt(loc1.getWorld());
+				World world = BukkitAdapter.adapt(Objects.requireNonNull(loc1.getWorld()));
 				CuboidRegion selection = new CuboidRegion(world, BlockVector3.at(loc1.getBlockX(), loc1.getBlockY(), loc1.getBlockZ()), BlockVector3.at(loc2.getBlockX(), loc2.getBlockY(), loc2.getBlockZ()));
 				
 				try (EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(world, -1)) {
@@ -470,7 +471,7 @@ public class GameAction extends Action {
 					Location loc2 = (Location) args.get("loc2").getVal();
 					Location copyLoc = (Location) args.get("copyLoc").getVal();
 					Location pasteLoc = (Location) args.get("pasteLoc").getVal();
-					World world = BukkitAdapter.adapt(loc1.getWorld());
+					World world = BukkitAdapter.adapt(Objects.requireNonNull(loc1.getWorld()));
 					
 					CuboidRegion region = new CuboidRegion(world, BlockVector3.at(loc1.getBlockX(), loc1.getBlockY(), loc1.getBlockZ()), BlockVector3.at(loc2.getBlockX(), loc2.getBlockY(), loc2.getBlockZ()));
 					BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
