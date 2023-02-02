@@ -2176,6 +2176,72 @@
       }
     ]
   ],
+  "SETVAR:SetSoundType": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "sound",
+        "type": "SND",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "soundName",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:SetSoundPitch": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "sound",
+        "type": "SND",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "pitch",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:SetSoundVolume": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "sound",
+        "type": "SND",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "volume",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
   "GAMEACTION:SpawnMob": [
     [
       {
