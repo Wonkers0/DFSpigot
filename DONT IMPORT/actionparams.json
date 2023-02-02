@@ -3985,7 +3985,7 @@
         "name": "num",
         "type": "NUM",
         "repeating": false,
-        "defaultValue": 1
+        "defaultValue": 0
       }
     ]
   ],
