@@ -7,6 +7,7 @@ import me.wonk2.utilities.actions.pointerclasses.Action;
 import me.wonk2.utilities.enums.DFType;
 import me.wonk2.utilities.enums.SelectionType;
 import me.wonk2.utilities.internals.Noise;
+import me.wonk2.utilities.values.DFSound;
 import me.wonk2.utilities.values.DFValue;
 import me.wonk2.utilities.values.DFVar;
 import org.apache.commons.lang.StringUtils;
@@ -312,7 +313,7 @@ public class SetVariable extends Action {
 					for (int i = 0; i < result.length; i++) result[i] = result[i].replaceAll("^ | $", "");
 					// ↑ Remove leading and trailing spaces, this is apparently a feature when splitting text in DF ↑
 					
-					DFVar.setVar(var, new DFValue(result, DFType.LIST), localStorage);
+					DFVar.setVar(var, DFValue.castArray(result, DFType.TXT), localStorage);
 				}
 
 				case "JoinText" -> {
@@ -409,29 +410,37 @@ public class SetVariable extends Action {
 				
 				case "CreateList" -> {
 					DFVar var = (DFVar) args.get("var").getVal();
-					DFVar.setVar(var, new DFValue(args.get("list").getVal(), DFType.LIST), localStorage);
+					DFValue[] values = (DFValue[]) args.get("list").getVal();
+					
+					DFVar.setVar(var, new DFValue(values == null ? new DFValue[0] : values, DFType.LIST), localStorage);
 				}
 				
 				case "AppendValue" -> {
 					DFVar var = (DFVar) args.get("var").getVal();
 					DFValue[] values = (DFValue[]) args.get("values").getVal();
-					ArrayList<DFValue> currentVals = (ArrayList<DFValue>) Arrays.asList((DFValue[]) DFVar.getVar(var, localStorage).getVal());
 					
+					DFValue[] temp = DFVar.varExists(var, localStorage) ? (DFValue[]) DFVar.getVar(var, localStorage).getVal() : new DFValue[0];
+					
+					ArrayList<DFValue> currentVals = new ArrayList<>(Arrays.asList(temp));
 					currentVals.addAll(Arrays.asList(values));
-					DFVar.setVar(var, new DFValue(currentVals.toArray(), DFType.LIST), localStorage);
+					
+					DFVar.setVar(var, new DFValue(currentVals.toArray(DFValue[]::new), DFType.LIST), localStorage);
 				}
 				
 				case "AppendList" -> {
 					DFVar var = (DFVar) args.get("var").getVal();
 					DFValue[] lists = (DFValue[]) args.get("lists").getVal();
-					ArrayList<DFValue> currentVals = (ArrayList<DFValue>) Arrays.asList((DFValue[]) DFVar.getVar(var, localStorage).getVal());
+					
+					DFValue[] temp = DFVar.varExists(var, localStorage) ? (DFValue[]) DFVar.getVar(var, localStorage).getVal() : new DFValue[0];
+					
+					ArrayList<DFValue> currentVals = (ArrayList<DFValue>) Arrays.asList(temp);
 					
 					for (DFValue listWrapper : lists) {
 						DFValue[] list = (DFValue[]) listWrapper.getVal();
 						currentVals.addAll(Arrays.asList(list));
 					}
 					
-					DFVar.setVar(var, new DFValue(currentVals.toArray(), DFType.LIST), localStorage);
+					DFVar.setVar(var, new DFValue(currentVals.toArray(DFValue[]::new), DFType.LIST), localStorage);
 				}
 				
 				case "GetListValue" -> {
@@ -458,9 +467,19 @@ public class SetVariable extends Action {
 				case "GetValueIndex" -> {
 					DFVar var = (DFVar) args.get("var").getVal();
 					DFValue[] list = (DFValue[]) args.get("list").getVal();
-					DFValue val = args.get("value");
+					Object val = args.get("value").getVal();
 					
-					DFVar.setVar(var, new DFValue(Arrays.asList(list).indexOf(val), DFType.NUM), localStorage);
+					int index = 0;
+					for(int i = 0; i < list.length; i++)
+						if(list[i].getVal().equals(val)){
+							index = i + 1;
+							break;
+						}
+					
+					//Bukkit.broadcastMessage(DFUtilities.parseTxt(new DFValue(list, DFType.LIST)));
+					//Bukkit.broadcastMessage(DFUtilities.parseTxt(args.get("value")));
+					
+					DFVar.setVar(var, new DFValue(index, DFType.NUM), localStorage);
 				}
 				
 				case "ListLength" -> {
@@ -1022,6 +1041,37 @@ public class SetVariable extends Action {
 					DFVar.setVar(var, new DFValue(item, DFType.ITEM), localStorage);
 				}
 				
+				case "SetSoundType" -> {
+					DFVar var = (DFVar) args.get("var").getVal();
+					DFSound sound = (DFSound) args.get("sound").getVal();
+					if(sound == null) sound = (DFSound) DFVar.getVar(var, localStorage).getVal();
+					String soundName = (String) args.get("soundName").getVal();
+					
+					sound.setSound(soundName);
+					DFVar.setVar(var, new DFValue(sound, DFType.SND), localStorage);
+				}
+				
+				case "SetSoundPitch" -> { // TODO: You should also be able to set pitch using a txt value for "Note"
+					DFVar var = (DFVar) args.get("var").getVal();
+					DFSound sound = (DFSound) args.get("sound").getVal();
+					if(sound == null) sound = (DFSound) DFVar.getVar(var, localStorage).getVal();
+					
+					double pitch = (double) args.get("pitch").getVal();
+					
+					sound.pitch = (float) pitch;
+					DFVar.setVar(var, new DFValue(sound, DFType.SND), localStorage);
+				}
+				
+				case "SetSoundVolume" -> {
+					DFVar var = (DFVar) args.get("var").getVal();
+					DFSound sound = (DFSound) args.get("sound").getVal();
+					if(sound == null) sound = (DFSound) DFVar.getVar(var, localStorage).getVal();
+					double volume = (double) args.get("volume").getVal();
+					
+					sound.volume = (float) volume;
+					DFVar.setVar(var, new DFValue(sound, DFType.SND), localStorage);
+				}
+				
 				case "Vector" -> {
 					DFVar var = (DFVar) args.get("var").getVal();
 					double x = (double) args.get("x").getVal();
@@ -1187,18 +1237,18 @@ public class SetVariable extends Action {
 			switch(matchReq) {
 				case "Entire name":
 					if (!ignoreCase)
-						matchedKeys = (String[]) Arrays.stream(storageKeys).filter(val -> val.equalsIgnoreCase(name)).toArray();
-					else matchedKeys = (String[]) Arrays.stream(storageKeys).filter(val -> val.equals(name)).toArray();
+						matchedKeys = Arrays.stream(storageKeys).filter(val -> val.equalsIgnoreCase(name)).toArray(String[]::new);
+					else matchedKeys = Arrays.stream(storageKeys).filter(val -> val.equals(name)).toArray(String[]::new);
 					break;
 				case "Full word(s) in name":
 					String regex = DFUtilities.escapeRegex(name) + "($| )";
 					Pattern pattern = !ignoreCase ? Pattern.compile(regex) : Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
 					
-					matchedKeys = (String[]) Arrays.stream(storageKeys).filter(val -> pattern.matcher(val).find()).toArray();
+					matchedKeys = Arrays.stream(storageKeys).filter(val -> pattern.matcher(val).find()).toArray(String[]::new);
 					break;
 				case "Any part of name":
-					if(!ignoreCase) matchedKeys = (String[]) Arrays.stream(storageKeys).filter(val -> val.contains(name)).toArray();
-					else matchedKeys = (String[]) Arrays.stream(storageKeys).filter(val -> val.toLowerCase().contains(name.toLowerCase())).toArray();
+					if(!ignoreCase) matchedKeys = Arrays.stream(storageKeys).filter(val -> val.contains(name)).toArray(String[]::new);
+					else matchedKeys = Arrays.stream(storageKeys).filter(val -> val.toLowerCase().contains(name.toLowerCase())).toArray(String[]::new);
 					break;
 			}
 		

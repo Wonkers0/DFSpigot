@@ -6,8 +6,8 @@ import java.util.HashMap;
 
 public class DFSound {
 	
-	private final String name;
-	public Sound sound;
+	private String name;
+	private Sound sound;
 	public Float pitch;
 	public Float volume;
 	
@@ -422,6 +422,7 @@ public class DFSound {
 		put("Comparator Click", "block.comparator.click");
 		put("Lever Click", "block.lever.click");
 		put("Stone Button Click Off", "block.stone_button.click_off");
+		put("Click", "block.note_block.hat");
 		put("Stone Button Click On", "block.stone_button.click_on");
 		put("Wooden Button Click Off", "block.wooden_button.click_off");
 		put("Wooden Button Click On", "block.wooden_button.click_on");
@@ -701,10 +702,22 @@ public class DFSound {
 	
 	public DFSound(String sound, Float pitch, Float volume){
 		this.name = sound;
-		this.sound = Sound.valueOf(soundMap.get(sound).replace('.', '_').toUpperCase());
+		this.sound = getSound(sound);
 		this.pitch = pitch;
 		this.volume = volume;
 	}
+	
+	public static Sound getSound(String name){
+		if(!soundMap.containsKey(name)) throw new IllegalArgumentException("Invalid sound: " + name);
+		return Sound.valueOf(soundMap.get(name).replace('.', '_').toUpperCase());
+	}
+	
+	public void setSound(String name){
+		sound = getSound(name);
+		this.name = name;
+	}
+	
+	public Sound getSound(){return sound;}
 	
 	public String getName(){ return name; }
 }

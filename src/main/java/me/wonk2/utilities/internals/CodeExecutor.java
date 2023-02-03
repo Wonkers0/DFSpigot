@@ -35,20 +35,18 @@ public abstract class CodeExecutor {
 				
 				boolean condition = cond.evaluateCondition();
 				if (cond.inverted) condition = !condition;
+				if(stoppedLoop) condition = false;
 				
 				if(codeBlock instanceof Repeat x){
-					if(encounteredLoops.contains(x)){
-						stoppedLoop = false;
-						skippedIteration = false;
-					}
-					else if(stoppedLoop || skippedIteration) condition = false;
-					
-					encounteredLoops.add(x);
+					if(encounteredLoops.contains(x)) skippedIteration = false;
+					else encounteredLoops.add(x);
 				}
 				
 				if (condition) codeBlock = getPointer(codeBlock);
 				else{
 					if(codeBlock instanceof Repeat x){
+						if(encounteredLoops.contains(x)) stoppedLoop = false;
+						
 						LoopData.loopVars.remove(x.id); // Clear loop data once it's done
 						encounteredLoops.remove(x);
 					}
@@ -61,7 +59,6 @@ public abstract class CodeExecutor {
 			}
 			if (codeBlock == null) return;
 			
-			
 			Object codeBlockPointer = getPointer(codeBlock);
 			if(stoppedLoop || skippedIteration){
 				codeBlock = codeBlockPointer; // We still need to advance to the next codeblock, otherwise we'd cause an infinite loop.
@@ -73,7 +70,6 @@ public abstract class CodeExecutor {
 				runCodeBlock(((CallFunction) codeBlock).getFunc(targetMap, localVars, specifics).get(0), targetMap, localVars, event, eventType, specifics);
 				return;
 			} else if (codeBlock instanceof StartProcess) {
-				
 				StartProcess p = (StartProcess) codeBlock;
 				LivingEntity[] selectedEntities = targetMap.get("selection");
 				

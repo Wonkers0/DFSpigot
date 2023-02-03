@@ -4,6 +4,7 @@ import me.wonk2.DFPlugin;
 import me.wonk2.utilities.DFUtilities;
 import me.wonk2.utilities.ParamManager;
 import me.wonk2.utilities.actions.pointerclasses.Action;
+import me.wonk2.utilities.enums.DFType;
 import me.wonk2.utilities.enums.SelectionType;
 import me.wonk2.utilities.internals.Hologram;
 import me.wonk2.utilities.internals.PlayerData;
@@ -88,8 +89,8 @@ public class PlayerAction extends Action {
 					
 					for(DFSound sound : soundArr){
 						if(args.get("playbackLoc").getVal() == null)
-							((Player) target).playSound(target.getLocation(), sound.sound, SoundCategory.MASTER, sound.volume, sound.pitch); //TODO: Sound category tag
-						else ((Player) target).playSound((Location) args.get("playbackLoc").getVal(), sound.sound, categories.get(tags.get("Sound Source")), sound.volume, sound.pitch);
+							((Player) target).playSound(target.getLocation(), sound.getSound(), SoundCategory.MASTER, sound.volume, sound.pitch); //TODO: Sound category tag
+						else ((Player) target).playSound((Location) args.get("playbackLoc").getVal(), sound.getSound(), categories.get(tags.get("Sound Source")), sound.volume, sound.pitch);
 					}
 					break;
 				}
@@ -1077,8 +1078,8 @@ public class PlayerAction extends Action {
 			int index = 0;
 			@Override
 			public void run(){
-				if(loc != null) player.playSound(loc, sounds[index].sound, sounds[index].volume, sounds[index].pitch);
-				else player.playSound(player, sounds[index].sound, sounds[index].volume, sounds[index].pitch);
+				if(loc != null) player.playSound(loc, sounds[index].getSound(), sounds[index].volume, sounds[index].pitch);
+				else player.playSound(player, sounds[index].getSound(), sounds[index].volume, sounds[index].pitch);
 				
 				index++;
 				if(index >= sounds.length) cancel();
@@ -1098,7 +1099,7 @@ public class PlayerAction extends Action {
 			return;
 		}
 		
-		for (DFSound sound : sounds) p.stopSound(sound.sound, category);
+		for (DFSound sound : sounds) p.stopSound(sound.getSound(), category);
 	}
 
 //    public static void createAdvManager(ItemStack[] icons, JSONMessage[] titles, AdvancementDisplay.AdvancementFrame[] frames, boolean save){

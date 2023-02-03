@@ -44,8 +44,9 @@ public class Repeat extends Conditional {
 			
 			case "ForEach": {
 				loopData.iterationCount++;
+				
 				if(loopData.forEach == null || tags.get("Allow List Changes").equals("True"))
-					loopData.forEach = (DFValue[]) args.get("list").getVal();
+					loopData.forEach = (DFValue[]) DFVar.getVar((DFVar) args.get("list").getVal(), localStorage).getVal();
 				
 				DFVar var = (DFVar) args.get("var").getVal();
 				

@@ -53,7 +53,7 @@ public abstract class Action implements Cloneable {
 	public Action clone() {
 		try {
 			Action clone = (Action) super.clone();
-			clone.paramManager = paramManager.clone();
+			clone.paramManager = clone.paramManager == null ? null : paramManager.clone();
 			clone.targetMap = targetMap == null ? null : new HashMap<>(targetMap);
 			clone.localStorage = localStorage == null ? null : new HashMap<>(localStorage);
 			return clone;
