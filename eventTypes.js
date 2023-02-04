@@ -143,7 +143,11 @@ export default {
   {
     "name": "entity.EntityDamageByEntityEvent",
     "check": "event.getDamager() instanceof Player && !(event.getEntity() instanceof Player)",
-    "specifics": {}
+    "specifics": {
+      "targets": {
+        "default": "event.getDamager() instanceof Arrow arrow ? (Player) arrow.getShooter() : (LivingEntity) event.getDamager()"
+      }
+    }
   },
   PlayerHeal:
   {
