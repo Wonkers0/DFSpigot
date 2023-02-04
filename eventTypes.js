@@ -142,7 +142,7 @@ export default {
   DamageEntity:
   {
     "name": "entity.EntityDamageByEntityEvent",
-    "check": "event.getDamager() instanceof Player && !(event.getEntity() instanceof Player)",
+    "check": "DFUtilities.getDamager(event.getDamager()) instanceof Player && !(event.getEntity() instanceof Player)",
     "specifics": {
       "targets": {
         "default": "DFUtilities.getDamager(event.getDamager())"
