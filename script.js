@@ -54,7 +54,7 @@ export function generate() {
     "org.bukkit.command.CommandSender",
     "org.bukkit.command.Command",
     "org.bukkit.command.CommandExecutor",
-    "org.bukkit.entity.LivingEntity",
+    "org.bukkit.entity.Entity",
     "org.bukkit.entity.Player",
     "org.bukkit.inventory.ItemStack", // Event Item, don't remove
     "org.bukkit.event.Listener",

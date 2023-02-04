@@ -92,7 +92,7 @@ export default function eventCode(root, rootEvent, specifics){
         `public void ${root.action} (${rootEvent} event){`,
         "int funcStatus;",
         "HashMap<String, DFValue> localVars = new HashMap<>();",
-        `HashMap<String, LivingEntity[]> targets = new HashMap<>(){{${Object.keys(specifics["targets"]).map(key => `\n{indent}  put("${key}", new LivingEntity[]{${specifics["targets"][key]}});`).join('')}\n{indent}}};`,
+        `HashMap<String, Entity[]> targets = new HashMap<>(){{${Object.keys(specifics["targets"]).map(key => `\n{indent}  put("${key}", new Entity[]{${specifics["targets"][key]}});`).join('')}\n{indent}}};`,
         "",
         `HashMap<String, Object> specifics = new HashMap<>(){{${Object.keys(specifics).filter(key => key != "targets").map(key => `\n{indent}  put("${key}", ${specifics[key]});`).join('')}\n{indent}}};`,
         ""
