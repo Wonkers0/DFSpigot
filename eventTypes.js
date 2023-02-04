@@ -145,7 +145,7 @@ export default {
     "check": "event.getDamager() instanceof Player && !(event.getEntity() instanceof Player)",
     "specifics": {
       "targets": {
-        "default": "event.getDamager() instanceof Arrow arrow ? (Player) arrow.getShooter() : (LivingEntity) event.getDamager()"
+        "default": "DFUtilities.getDamager(event.getDamager())"
       }
     }
   },
