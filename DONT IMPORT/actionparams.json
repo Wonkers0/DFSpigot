@@ -2873,6 +2873,22 @@
       }
     ]
   ],
+  "IFVAR:DictHasKey": [
+    [
+      {
+        "name": "dict",
+        "type": "DICT",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "key",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
   "IFVAR:ListContains": [
     [
       {
@@ -4859,6 +4875,40 @@
         "type": "NUM",
         "repeating": false,
         "defaultValue": 0
+      }
+    ]
+  ],
+  "PLAYERACTION:LaunchProj": [
+    [
+      {
+        "name": "projectile",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "origin",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "name",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "speed",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "inaccuracy",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 1
       }
     ]
   ],
