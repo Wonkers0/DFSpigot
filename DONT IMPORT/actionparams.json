@@ -4434,7 +4434,12 @@
   "ENTITYACTION:SetBeeNectar": [[]],
   "ENTITYACTION:ProjectileItem": [
     [
-      
+      {
+        "name": "item",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      }
     ]
   ],
   "ENTITYACTION:SetVisualFire": [[]],
