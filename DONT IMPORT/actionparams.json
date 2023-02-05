@@ -2479,6 +2479,22 @@
       }
     ]
   ],
+  "IFPLAYER:PIsNear": [
+    [
+      {
+        "name": "locs",
+        "type": "LOC",
+        "repeating": true,
+        "defaultValue": null
+      },
+      {
+        "name": "radius",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 5
+      }
+    ]
+  ],
   "IFPLAYER:InWorldBorder": [
     [
       {
