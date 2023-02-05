@@ -8,6 +8,7 @@ import me.wonk2.utilities.values.GameValue;
 import me.wonk2.utilities.values.Parameter;
 import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class ParamManager implements Cloneable {
 	}
 	
 	
-	public Object[] formatParameters(HashMap<String, LivingEntity[]> targetMap) {
+	public Object[] formatParameters(HashMap<String, Entity[]> targetMap) {
 		HashMap<String, DFValue> args = new HashMap<>();
 		
 		if(!argInfo.containsKey(actionName)) throw new NotImplementedException("\"" + actionName + "\" is not supported yet!");
@@ -91,7 +92,7 @@ public class ParamManager implements Cloneable {
 		return new Object[]{args, tags, input};
 	}
 	
-	private static DFValue sanitizeValue(DFValue currentArg, DFType paramType, HashMap<String, LivingEntity[]> targetMap, HashMap<String, DFValue> localStorage){
+	private static DFValue sanitizeValue(DFValue currentArg, DFType paramType, HashMap<String, Entity[]> targetMap, HashMap<String, DFValue> localStorage){
 		switch (currentArg.type) {
 			case GAMEVAL -> {    // If it's a game value retrieve its actual value
 				GameValue gameValue = (GameValue) currentArg.getVal();

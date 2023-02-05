@@ -3,6 +3,7 @@ package me.wonk2.utilities.actions.pointerclasses;
 import me.wonk2.utilities.ParamManager;
 import me.wonk2.utilities.values.DFValue;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
 import java.util.HashMap;
@@ -12,10 +13,10 @@ public abstract class Action implements Cloneable {
 	public String targetName;
 	public String action;
 	public ParamManager paramManager;
-	public HashMap<String, LivingEntity[]> targetMap;
+	public HashMap<String, Entity[]> targetMap;
 	public HashMap<String, DFValue> localStorage;
 	
-	public Action(String targetName, HashMap<String, LivingEntity[]> targetMap, ParamManager paramManager, String action, HashMap<String, DFValue> localStorage){
+	public Action(String targetName, HashMap<String, Entity[]> targetMap, ParamManager paramManager, String action, HashMap<String, DFValue> localStorage){
 		this.targetName = targetName;
 		this.targetMap = targetMap;
 		this.paramManager = paramManager;
@@ -23,7 +24,7 @@ public abstract class Action implements Cloneable {
 		this.localStorage = localStorage;
 	}
 	
-	public Action(String targetName, HashMap<String, LivingEntity[]> targetMap, ParamManager paramManager, String action){
+	public Action(String targetName, HashMap<String, Entity[]> targetMap, ParamManager paramManager, String action){
 		this.targetName = targetName;
 		this.targetMap = targetMap;
 		this.paramManager = paramManager;
@@ -53,7 +54,7 @@ public abstract class Action implements Cloneable {
 	public Action clone() {
 		try {
 			Action clone = (Action) super.clone();
-			clone.paramManager = paramManager.clone();
+			clone.paramManager = clone.paramManager == null ? null : paramManager.clone();
 			clone.targetMap = targetMap == null ? null : new HashMap<>(targetMap);
 			clone.localStorage = localStorage == null ? null : new HashMap<>(localStorage);
 			return clone;

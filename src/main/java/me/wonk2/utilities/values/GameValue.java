@@ -7,7 +7,9 @@ import me.wonk2.utilities.enums.SelectionType;
 import me.wonk2.utilities.enums.Value;
 import org.apache.commons.lang3.NotImplementedException;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -18,18 +20,21 @@ public class GameValue {
 	
 	public GameValue(Value val, String targetName){
 		this.val = val;
-		this.targetName = targetName;
+		this.targetName = targetName.equals("last-spawned entity") ? "lastentity" : targetName;
 	}
 	
-	public DFValue getVal(HashMap<String, LivingEntity[]> targetMap){
-		LivingEntity target = DFUtilities.getTargets(targetName, targetMap, SelectionType.EITHER)[0];
+	public DFValue getVal(HashMap<String, Entity[]> targetMap){
+		Entity target = DFUtilities.getTargets(targetName, targetMap, SelectionType.EITHER)[0];
 		return switch (val) {
 			case Location -> new DFValue(DFUtilities.getRelativeLoc(target.getLocation()), DFType.LOC);
-			case EyeLocation -> new DFValue(DFUtilities.getRelativeLoc(target.getEyeLocation()), DFType.LOC);
+			case EyeLocation -> new DFValue(DFUtilities.getRelativeLoc(((LivingEntity) target).getEyeLocation()), DFType.LOC);
 			case PlayerCount -> new DFValue(Bukkit.getOnlinePlayers().size(), DFType.NUM);
 			case Name -> new DFValue(target.getCustomName(), DFType.TXT);
+			case UUID -> new DFValue(target.getUniqueId().toString(), DFType.TXT);
 			case Timestamp -> new DFValue(new Date().getTime(), DFType.NUM);
 			case SelectionSize -> new DFValue(targetMap.get("selection") == null ? 0 : targetMap.get("selection").length, DFType.NUM);
+			case MainHandItem -> new DFValue(((LivingEntity) target).getEquipment().getItemInMainHand(), DFType.ITEM);
+			case HeldSlot -> new DFValue(((Player) target).getInventory().getHeldItemSlot() + 1, DFType.NUM);
 			default -> throw new NotImplementedException("This game value is not implemented yet: " + val);
 		};
 	}

@@ -5,6 +5,7 @@ import me.wonk2.utilities.enums.DFType;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.List;
 
 public abstract class TextCode {
 	
-	public static String getCodeValue(HashMap<String, LivingEntity[]> targetMap, HashMap<String, DFValue> localStorage, String code, String contents){
+	public static String getCodeValue(HashMap<String, Entity[]> targetMap, HashMap<String, DFValue> localStorage, String code, String contents){
 		if (!contents.equals(""))
 			switch(code){
 				case "%var" -> {
@@ -33,7 +34,8 @@ public abstract class TextCode {
 					int listIndex = Integer.parseInt(innerData[1]);
 					DFValue[] list = (DFValue[]) DFVar.getVar(new DFVar(listName, DFVar.getVarScope(listName, localStorage)), localStorage).getVal();
 					
-					return DFUtilities.parseTxt(list[listIndex]);
+					if(list.length < listIndex || listIndex < 0) return DFUtilities.parseTxt(DFValue.nullVar());
+					else return DFUtilities.parseTxt(list[listIndex - 1]);
 				}
 				case "%math" -> { // TODO: %math can also be used to concatenate strings on DF
 					char[] chars = contents.toCharArray();
@@ -49,6 +51,9 @@ public abstract class TextCode {
 					result = evaluateMathTerm(chars, termIndex, chars.length - 1, result);
 					
 					return DFUtilities.parseTxt(new DFValue(result, DFType.NUM));
+				}
+				case "%round" -> {
+					return DFUtilities.parseTxt(new DFValue(Math.floor(Double.parseDouble(contents)), DFType.NUM));
 				}
 			}
 		
@@ -70,7 +75,7 @@ public abstract class TextCode {
 		return currentSum;
 	}
 	
-	public static String getTargetName(HashMap<String, LivingEntity[]> targetMap, String code){
+	public static String getTargetName(HashMap<String, Entity[]> targetMap, String code){
 		ArrayList<String> targetCodes = new ArrayList<>(List.of(new String[]{"%default", "%victim", "%damager", "%killer", "%selected", "%shooter", "%projectile", "%uuid"}));
 		if(!targetCodes.contains(code)) return code;
 		

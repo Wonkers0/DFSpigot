@@ -1,5 +1,6 @@
 package me.wonk2.utilities.actions;
 
+import me.wonk2.DFPlugin;
 import me.wonk2.utilities.DFUtilities;
 import me.wonk2.utilities.ParamManager;
 import me.wonk2.utilities.actions.pointerclasses.Conditional;
@@ -10,7 +11,7 @@ import me.wonk2.utilities.values.DFVar;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -21,10 +22,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+@SuppressWarnings("unchecked")
 public class IfVariable extends Conditional {
-	LivingEntity[] targets;
+	Entity[] targets;
 	
-	public IfVariable(String targetName, HashMap<String, LivingEntity[]> targetMap, ParamManager paramManager, String action, boolean inverted, HashMap<String, DFValue> localStorage){
+	public IfVariable(String targetName, HashMap<String, Entity[]> targetMap, ParamManager paramManager, String action, boolean inverted, HashMap<String, DFValue> localStorage){
 		super(targetName, targetMap, paramManager, action, localStorage, inverted);
 	}
 	
@@ -35,8 +37,12 @@ public class IfVariable extends Conditional {
 		HashMap<String, String> tags = DFUtilities.getTags(inputArray);
 		this.targets = DFUtilities.getTargets(targetName, targetMap, SelectionType.EITHER);
 		
-		for(LivingEntity target : targets)
-			switch(action){
+		for(int i = 0; i < (targets.length == 0 ? 1 : targets.length); i++) if(checkForTarget(args, tags)) return true;
+		return false;
+	}
+	
+	protected boolean checkForTarget(HashMap<String, DFValue> args, HashMap<String, String> tags){
+		switch(action){
 				case "!=":
 				case "=": {
 					DFValue value = args.get("value");
@@ -84,8 +90,8 @@ public class IfVariable extends Conditional {
 					double radius = (double) args.get("radius").getVal();
 					
 					for(Location checkLoc : checkLocs)
-						if(DFUtilities.locIsNear(target.getWorld(), checkLoc, loc, radius, tags.get("Shape"))) return true;
-						
+						if(DFUtilities.locIsNear(DFPlugin.world, checkLoc, loc, radius, tags.get("Shape"))) return true;
+					
 					return false;
 				}
 				
@@ -123,7 +129,7 @@ public class IfVariable extends Conditional {
 					
 					for(String checkTxt : checkTxts)
 						if(text.equals(ignoreCase ? checkTxt.toLowerCase() : checkTxt)) return true;
-						
+					
 					return false;
 				}
 				
@@ -158,9 +164,9 @@ public class IfVariable extends Conditional {
 						put("List", DFType.LIST);
 						put("Potion effect", DFType.POT);
 						put("Sound", DFType.SND);
-						put("Particle", DFType.ANY); //TODO
-						put("Vector", DFType.ANY); //TODO
-						put("Dictionary", DFType.ANY); //TODO
+						put("Particle", DFType.PART);
+						put("Vector", DFType.VEC);
+						put("Dictionary", DFType.DICT);
 					}};
 					
 					return value.type == types.get(typeTag);
@@ -192,6 +198,13 @@ public class IfVariable extends Conditional {
 					return false;
 				}
 				
+				case "DictHasKey": {
+					HashMap<DFValue, DFValue> dict = (HashMap<DFValue, DFValue>) args.get("dict").getVal();
+					DFValue key = args.get("key");
+					
+					return key.type == DFType.TXT && dict.containsKey(key);
+				}
+				
 				case "ItemHasTag": {
 					ItemStack item = (ItemStack) args.get("item").getVal();
 					if(item == null) return false;
@@ -221,7 +234,7 @@ public class IfVariable extends Conditional {
 					
 					for(DFValue value : values)
 						if(list.contains(value)) return true;
-						
+					
 					return false;
 				}
 				
@@ -232,7 +245,7 @@ public class IfVariable extends Conditional {
 					
 					for(DFValue value : values)
 						if(list[index] == value) return true;
-						
+					
 					return false;
 				}
 			}

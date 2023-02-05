@@ -4,6 +4,7 @@ import me.wonk2.DFPlugin;
 import me.wonk2.utilities.DFUtilities;
 import me.wonk2.utilities.ParamManager;
 import me.wonk2.utilities.actions.pointerclasses.Action;
+import me.wonk2.utilities.enums.DFType;
 import me.wonk2.utilities.enums.SelectionType;
 import me.wonk2.utilities.internals.Hologram;
 import me.wonk2.utilities.internals.PlayerData;
@@ -29,10 +30,10 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -41,10 +42,7 @@ import org.bukkit.util.Vector;
 import java.util.*;
 
 public class PlayerAction extends Action {
-	LivingEntity target;
-	
-	
-	public PlayerAction(String targetName, HashMap<String, LivingEntity[]> targetMap, ParamManager paramManager, String action) {
+	public PlayerAction(String targetName, HashMap<String, Entity[]> targetMap, ParamManager paramManager, String action) {
 		super(targetName, targetMap, paramManager, action);
 		this.action = action;
 	}
@@ -69,7 +67,8 @@ public class PlayerAction extends Action {
 		}};
 		
 		
-		for(LivingEntity target : DFUtilities.getTargets(targetName, targetMap, SelectionType.PLAYER))
+		for(Entity entity : DFUtilities.getTargets(targetName, targetMap, SelectionType.PLAYER)) {
+			Player target = (Player) entity;
 			switch(action){
 				case "SendMessage": {
 					String[] txtArray = DFValue.castTxt((DFValue[]) args.get("msg").getVal());
@@ -88,8 +87,8 @@ public class PlayerAction extends Action {
 					
 					for(DFSound sound : soundArr){
 						if(args.get("playbackLoc").getVal() == null)
-							((Player) target).playSound(target.getLocation(), sound.sound, SoundCategory.MASTER, sound.volume, sound.pitch); //TODO: Sound category tag
-						else ((Player) target).playSound((Location) args.get("playbackLoc").getVal(), sound.sound, categories.get(tags.get("Sound Source")), sound.volume, sound.pitch);
+							((Player) target).playSound(target.getLocation(), sound.getSound(), SoundCategory.MASTER, sound.volume, sound.pitch); //TODO: Sound category tag
+						else ((Player) target).playSound((Location) args.get("playbackLoc").getVal(), sound.getSound(), categories.get(tags.get("Sound Source")), sound.volume, sound.pitch);
 					}
 					break;
 				}
@@ -617,40 +616,41 @@ public class PlayerAction extends Action {
 				}
 				
 				case "LaunchProj": {
-					ItemStack proj = (ItemStack) args.get("projectile").getVal();
+					ItemStack projectile = (ItemStack) args.get("projectile").getVal();
 					Location launchPoint = args.get("origin").getVal() == null ? target.getEyeLocation() : (Location) args.get("origin").getVal();
-					String projectileName = (String) args.get("name").getVal();
-					double speed = (double) args.get("speed").getVal();
+					String customName = (String) args.get("name").getVal();
+					Double speed = (Double) args.get("speed").getVal();
 					double inaccuracy = (double) args.get("inaccuracy").getVal();
-					//TODO
+					
+					DFUtilities.lastEntity = DFUtilities.launchProjectile(projectile, launchPoint, speed == null ? null : (float) (double) speed, (float) inaccuracy, customName);
 					break;
 				}
 				
 				case "SetPlayerTime": {
 					Integer time = args.get("time").getInt();
-					if(time == null) ((Player) target).resetPlayerTime();
-					else ((Player) target).setPlayerTime((long) time, false);
+					if(time == null) target.resetPlayerTime();
+					else target.setPlayerTime((long) time, false);
 					break;
 				}
 				
 				case "SetPlayerWeather": {
-					Player player = (Player) target;
+					Player player = target;
 					String weatherTag = tags.get("Weather");
-					if(weatherTag != "Reset") player.setPlayerWeather(WeatherType.valueOf(weatherTag.toUpperCase()));
+					if(!weatherTag.equals("Reset")) player.setPlayerWeather(WeatherType.valueOf(weatherTag.toUpperCase()));
 					else player.resetPlayerWeather();
 					break;
 				}
 				
 				
 				case "Kick": {
-					((Player) target).kickPlayer("");
+					target.kickPlayer("");
 					break;
 				}
 				
 				case "Particle": {
 					DFParticle[] particles = DFValue.castParticle((DFValue[]) args.get("particles").getVal());
 					Location loc = (Location) args.get("loc").getVal();
-					Player player = (Player) target;
+					Player player = target;
 					
 					for(DFParticle particle : particles)
 						particle.play(player, loc);
@@ -663,7 +663,7 @@ public class PlayerAction extends Action {
 					Location loc2 = (Location) args.get("loc2").getVal();
 					double spacing = (double) args.get("spacing").getVal();
 					
-					drawParticleLine((Player) target, particle, loc1, loc2, spacing);
+					drawParticleLine(target, particle, loc1, loc2, spacing);
 					break;
 				}
 				
@@ -674,7 +674,7 @@ public class PlayerAction extends Action {
 					double spacing = (double) args.get("spacing").getVal();
 					long ticks = (long) (double) args.get("ticks").getVal();
 					
-					drawParticleLine((Player) target, particle, loc1, loc2, spacing, ticks);
+					drawParticleLine(target, particle, loc1, loc2, spacing, ticks);
 					break;
 				}
 				
@@ -684,16 +684,10 @@ public class PlayerAction extends Action {
 					Location loc2 = (Location) args.get("loc2").getVal();
 					double spacing = (double) args.get("spacing").getVal();
 					
-					switch(tags.get("Fill Type")){
-						case "Wireframe":
-							drawCuboidWireframe((Player) target, particle, loc1, loc2, spacing);
-							break;
-						case "Hollow":
-							drawHollowCuboid((Player) target, particle, loc1, loc2, spacing);
-							break;
-						case "Solid":
-							drawSolidCuboid((Player) target, particle, loc1, loc2, spacing);
-							break;
+					switch (tags.get("Fill Type")) {
+						case "Wireframe" -> drawCuboidWireframe(target, particle, loc1, loc2, spacing);
+						case "Hollow" -> drawHollowCuboid(target, particle, loc1, loc2, spacing);
+						case "Solid" -> drawSolidCuboid(target, particle, loc1, loc2, spacing);
 					}
 					break;
 				}
@@ -705,16 +699,10 @@ public class PlayerAction extends Action {
 					double spacing = (double) args.get("spacing").getVal();
 					long ticks = (long) (double) args.get("ticks").getVal();
 					
-					switch(tags.get("Fill Type")){
-						case "Wireframe":
-							drawCuboidWireframe((Player) target, particle, loc1, loc2, spacing, ticks);
-							break;
-						case "Hollow":
-							drawHollowCuboid((Player) target, particle, loc1, loc2, spacing, ticks);
-							break;
-						case "Solid":
-							drawSolidCuboid((Player) target, particle, loc1, loc2, spacing, ticks);
-							break;
+					switch (tags.get("Fill Type")) {
+						case "Wireframe" -> drawCuboidWireframe(target, particle, loc1, loc2, spacing, ticks);
+						case "Hollow" -> drawHollowCuboid(target, particle, loc1, loc2, spacing, ticks);
+						case "Solid" -> drawSolidCuboid(target, particle, loc1, loc2, spacing, ticks);
 					}
 					break;
 				}
@@ -723,7 +711,7 @@ public class PlayerAction extends Action {
 					DFParticle particle = (DFParticle) args.get("particle").getVal();
 					Location loc = (Location) args.get("loc").getVal();
 					double diameter = (double) args.get("diameter").getVal();
-					drawParticleCircle((Player) target, particle, loc, diameter);
+					drawParticleCircle(target, particle, loc, diameter);
 					break;
 				}
 				
@@ -732,7 +720,7 @@ public class PlayerAction extends Action {
 					Location loc = (Location) args.get("loc").getVal();
 					double diameter = (double) args.get("diameter").getVal();
 					long ticks = (long) (double) args.get("ticks").getVal();
-					drawParticleCircle((Player) target, particle, loc, diameter, ticks);
+					drawParticleCircle(target, particle, loc, diameter, ticks);
 					break;
 				}
 				
@@ -750,7 +738,7 @@ public class PlayerAction extends Action {
 				}
 				
 				case "SetNameColor": {
-					((Player) target).setPlayerListName(String.join("", DFUtilities.regex("§[xXa-fA-Fk-oK-O0-9]", (String) args.get("color").getVal())) + target.getName());
+					target.setPlayerListName(String.join("", DFUtilities.regex("§[xXa-fA-Fk-oK-O0-9]", (String) args.get("color").getVal())) + target.getName());
 					break;
 				}
 				
@@ -758,18 +746,18 @@ public class PlayerAction extends Action {
 					Location centerLoc = (Location) args.get("center").getVal();
 					double radius = (double) args.get("radius").getVal();
 					int warningDistance = args.get("warnDistance").getInt();
-					Player player = (Player) target;
 					
 					WorldBorder border = Bukkit.getServer().createWorldBorder();
 					border.setCenter(centerLoc);
 					border.setSize(radius);
 					border.setWarningDistance(warningDistance);
 					
-					if(Bukkit.getOnlinePlayers().contains(player)) player.setWorldBorder(border);
-					else Bukkit.getScheduler().runTaskLater(DFPlugin.plugin, () -> player.setWorldBorder(border), 1L); // If player hasn't loaded in yet from join event
+					if(Bukkit.getOnlinePlayers().contains(target)) target.setWorldBorder(border);
+					else Bukkit.getScheduler().runTaskLater(DFPlugin.plugin, () -> target.setWorldBorder(border), 1L); // If player hasn't loaded in yet from join event
 					break;
 				}
 			}
+		}
 	}
 	
 	private static void drawParticleLine(Player player, DFParticle particle, Location loc1, Location loc2, double spacing){
@@ -1077,8 +1065,8 @@ public class PlayerAction extends Action {
 			int index = 0;
 			@Override
 			public void run(){
-				if(loc != null) player.playSound(loc, sounds[index].sound, sounds[index].volume, sounds[index].pitch);
-				else player.playSound(player, sounds[index].sound, sounds[index].volume, sounds[index].pitch);
+				if(loc != null) player.playSound(loc, sounds[index].getSound(), sounds[index].volume, sounds[index].pitch);
+				else player.playSound(player, sounds[index].getSound(), sounds[index].volume, sounds[index].pitch);
 				
 				index++;
 				if(index >= sounds.length) cancel();
@@ -1098,7 +1086,7 @@ public class PlayerAction extends Action {
 			return;
 		}
 		
-		for (DFSound sound : sounds) p.stopSound(sound.sound, category);
+		for (DFSound sound : sounds) p.stopSound(sound.getSound(), category);
 	}
 
 //    public static void createAdvManager(ItemStack[] icons, JSONMessage[] titles, AdvancementDisplay.AdvancementFrame[] frames, boolean save){

@@ -6,7 +6,10 @@ public enum Value {
 	PlayerCount,
 	Timestamp,
 	Name,
+	UUID,
 	SelectionSize,
 	CurrentHealth,
-	MaximumHealth
+	MaximumHealth,
+	MainHandItem,
+	HeldSlot
 }

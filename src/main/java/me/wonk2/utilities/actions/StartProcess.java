@@ -7,6 +7,7 @@ import me.wonk2.utilities.internals.CodeExecutor;
 import me.wonk2.utilities.internals.ObjectArrWrapper;
 import me.wonk2.utilities.values.DFValue;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -37,7 +38,7 @@ public class StartProcess extends Action {
 		ALIAS // Share
 	}
 	
-	public ObjectArrWrapper getProcess(HashMap<String, LivingEntity[]> targetMap, HashMap<String, DFValue> localVars, HashMap<String, Object> specifics){
+	public ObjectArrWrapper getProcess(HashMap<String, Entity[]> targetMap, HashMap<String, DFValue> localVars, HashMap<String, Object> specifics){
 		Object[] process = DFPlugin.functions.get(processName).clone();
 		
 		for(int i = 0; i < process.length; i++){
@@ -62,13 +63,13 @@ public class StartProcess extends Action {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public HashMap<String, LivingEntity[]> getTargets(HashMap<String, LivingEntity[]> targetMap){
-		targetMap = (HashMap<String, LivingEntity[]>) targetMap.clone();
+	public HashMap<String, Entity[]> getTargets(HashMap<String, Entity[]> targetMap){
+		targetMap = (HashMap<String, Entity[]>) targetMap.clone();
 		switch(targetMode){
 			case COPY_ALL:
 				return targetMap;
 			case COPY_SELECTION:
-				final LivingEntity[] temp = targetMap.get("selection");
+				final Entity[] temp = targetMap.get("selection");
 				return new HashMap<>(){{
 					put("selection", temp);
 				}};

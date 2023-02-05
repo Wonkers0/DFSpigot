@@ -10,13 +10,14 @@ import me.wonk2.utilities.values.DFValue;
 import me.wonk2.utilities.values.DFVar;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
 import java.util.HashMap;
 
 public class Repeat extends Conditional {
 	public double id;
-	public Repeat(HashMap<String, LivingEntity[]> targetMap, ParamManager paramManager, String action, boolean inverted, HashMap<String, DFValue> localStorage) {
+	public Repeat(HashMap<String, Entity[]> targetMap, ParamManager paramManager, String action, boolean inverted, HashMap<String, DFValue> localStorage) {
 		super(null, targetMap, paramManager, action, localStorage, inverted);
 		id = Math.random();
 	}
@@ -44,8 +45,9 @@ public class Repeat extends Conditional {
 			
 			case "ForEach": {
 				loopData.iterationCount++;
+				
 				if(loopData.forEach == null || tags.get("Allow List Changes").equals("True"))
-					loopData.forEach = (DFValue[]) args.get("list").getVal();
+					loopData.forEach = (DFValue[]) DFVar.getVar((DFVar) args.get("list").getVal(), localStorage).getVal();
 				
 				DFVar var = (DFVar) args.get("var").getVal();
 				
