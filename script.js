@@ -57,6 +57,7 @@ export function generate() {
     "org.bukkit.entity.Entity",
     "org.bukkit.entity.Player",
     "org.bukkit.inventory.ItemStack", // Event Item, don't remove
+    "org.bukkit.inventory.EquipmentSlot", // Left Click & Right Click events
     "org.bukkit.event.Listener",
     "org.bukkit.event.EventHandler",
     "org.bukkit.event.block.Action",
