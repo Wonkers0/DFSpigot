@@ -9,6 +9,7 @@ import me.wonk2.utilities.internals.CodeExecutor;
 import me.wonk2.utilities.internals.ObjectArrWrapper;
 import me.wonk2.utilities.values.DFValue;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
 import java.lang.reflect.Field;
@@ -24,7 +25,7 @@ public class CallFunction extends Action{
 		this.funcName = func;
 	}
 	
-	public ObjectArrWrapper getFunc(HashMap<String, LivingEntity[]> targetMap, HashMap<String, DFValue> localVars, HashMap<String, Object> specifics){
+	public ObjectArrWrapper getFunc(HashMap<String, Entity[]> targetMap, HashMap<String, DFValue> localVars, HashMap<String, Object> specifics){
 		if(!DFPlugin.functions.containsKey(funcName)) return new ObjectArrWrapper(new Object[0]);
 		
 		Object[] function = DFPlugin.functions.get(funcName).clone();

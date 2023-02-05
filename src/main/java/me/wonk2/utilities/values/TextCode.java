@@ -5,6 +5,7 @@ import me.wonk2.utilities.enums.DFType;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.List;
 
 public abstract class TextCode {
 	
-	public static String getCodeValue(HashMap<String, LivingEntity[]> targetMap, HashMap<String, DFValue> localStorage, String code, String contents){
+	public static String getCodeValue(HashMap<String, Entity[]> targetMap, HashMap<String, DFValue> localStorage, String code, String contents){
 		if (!contents.equals(""))
 			switch(code){
 				case "%var" -> {
@@ -74,7 +75,7 @@ public abstract class TextCode {
 		return currentSum;
 	}
 	
-	public static String getTargetName(HashMap<String, LivingEntity[]> targetMap, String code){
+	public static String getTargetName(HashMap<String, Entity[]> targetMap, String code){
 		ArrayList<String> targetCodes = new ArrayList<>(List.of(new String[]{"%default", "%victim", "%damager", "%killer", "%selected", "%shooter", "%projectile", "%uuid"}));
 		if(!targetCodes.contains(code)) return code;
 		

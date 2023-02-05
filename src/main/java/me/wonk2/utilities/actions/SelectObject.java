@@ -18,7 +18,7 @@ import java.util.*;
 public class SelectObject extends Action {
 	// Used to tell which class conditional actions belong to; See "updateArgInfo()" in DFListeners.java
 	public static HashMap<String, String> condInfo;
-	List<LivingEntity> existingSelection;
+	List<Entity> existingSelection;
 	HashMap<String, Object> specifics;
 	String subAction;
 	boolean inverted;
@@ -30,7 +30,7 @@ public class SelectObject extends Action {
 		this.specifics = specifics;
 	}
 	
-	public LivingEntity[] getSelectedEntities(HashMap<String, LivingEntity[]> targetMap) {
+	public Entity[] getSelectedEntities(HashMap<String, Entity[]> targetMap) {
 		Object[] inputArray = paramManager.formatParameters(targetMap);
 		HashMap<String, DFValue> args = DFUtilities.getArgs(inputArray);
 		HashMap<String, String> tags = DFUtilities.getTags(inputArray);
@@ -40,17 +40,17 @@ public class SelectObject extends Action {
 		
 		switch (action) {
 			case "AllEntities" -> {
-				return getAllLivingEntities().toArray(LivingEntity[]::new);
+				return getAllEntities().toArray(Entity[]::new);
 			}
 			case "AllPlayers" -> {
-				return Bukkit.getOnlinePlayers().toArray(LivingEntity[]::new);
+				return Bukkit.getOnlinePlayers().toArray(Entity[]::new);
 			}
 			case "EventTarget" -> {
 				return targetMap.get(tags.get("Event Target").toLowerCase());
 			}
 			case "RandomPlayer" -> {
 				int size = args.get("size").getInt();
-				LivingEntity[] selectedPlayers = new LivingEntity[size];
+				Entity[] selectedPlayers = new Entity[size];
 				ArrayList<Player> players = getOnlinePlayers();
 				
 				for (int i = 0; i < size; i++) {
@@ -63,7 +63,7 @@ public class SelectObject extends Action {
 				return selectedPlayers;
 			}
 			case "LastEntity" -> {
-				return new LivingEntity[]{DFUtilities.lastEntity};
+				return new Entity[]{DFUtilities.lastEntity};
 			}
 			case "PlayerName" -> {
 				String[] names = DFValue.castTxt((DFValue[]) args.get("names").getVal());
@@ -75,27 +75,27 @@ public class SelectObject extends Action {
 			}
 			case "EntityName" -> {
 				String[] names = DFValue.castTxt((DFValue[]) args.get("names").getVal());
-				ArrayList<LivingEntity> result = new ArrayList<>();
+				ArrayList<Entity> result = new ArrayList<>();
 				
-				for (LivingEntity e : getAllLivingEntities())
+				for (Entity e : getAllEntities())
 					for (String name : names)
-						if (e.getName().equals(name))
+						if (e.getName().equals(name) || e.getUniqueId().toString().equals(name))
 							result.add(e);
 				
-				return result.toArray(LivingEntity[]::new);
+				return result.toArray(Entity[]::new);
 			}
 			case "Invert" -> {
 				if (existingSelection.size() == 0) return targetMap.get("default");
-				ArrayList<? extends LivingEntity> newSelection = existingSelection.get(0) instanceof Player ? getOnlinePlayers() : getAllLivingEntities();
+				ArrayList<? extends Entity> newSelection = existingSelection.get(0) instanceof Player ? getOnlinePlayers() : getAllLivingEntities();
 				
 				newSelection.removeIf(e -> existingSelection.contains(e));
-				return newSelection.toArray(LivingEntity[]::new);
+				return newSelection.toArray(Entity[]::new);
 			}
 			case "PlayersCond" -> {
-				return filterSelection(Bukkit.getOnlinePlayers().toArray(LivingEntity[]::new));
+				return filterSelection(Bukkit.getOnlinePlayers().toArray(Entity[]::new));
 			}
 			case "FilterCondition" -> {
-				return filterSelection(existingSelection.toArray(LivingEntity[]::new));
+				return filterSelection(existingSelection.toArray(Entity[]::new));
 			}
 			case "Reset" -> {
 				return null;
@@ -128,9 +128,9 @@ public class SelectObject extends Action {
 		return new ArrayList<>(Arrays.asList(Bukkit.getOnlinePlayers().toArray(Player[]::new)));
 	}
 	
-	public Conditional getFilterCondition(LivingEntity p){
+	public Conditional getFilterCondition(Entity p){
 		String condClass = condInfo.get(subAction);
-		targetMap.put("selection", new LivingEntity[]{p});
+		targetMap.put("selection", new Entity[]{p});
 		
 		return switch (condClass) {
 			case "IFPLAYER" -> new IfPlayer("selection", targetMap, paramManager, subAction, inverted);
@@ -141,15 +141,15 @@ public class SelectObject extends Action {
 		};
 	}
 	
-	public LivingEntity[] filterSelection(@NotNull LivingEntity[] selection){
+	public Entity[] filterSelection(@NotNull Entity[] selection){
 		if(subAction == null) return selection;
 		
-		ArrayList<LivingEntity> selectedPlayers = new ArrayList<>();
+		ArrayList<Entity> selectedPlayers = new ArrayList<>();
 		this.paramManager.actionName = condInfo.get(subAction) + ":" + subAction;
 		
-		for(LivingEntity e : selection)
+		for(Entity e : selection)
 			if(getFilterCondition(e).evaluateCondition()) selectedPlayers.add(e);
 		
-		return selectedPlayers.toArray(LivingEntity[]::new);
+		return selectedPlayers.toArray(Entity[]::new);
 	}
 }

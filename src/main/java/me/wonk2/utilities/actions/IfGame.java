@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -25,7 +26,7 @@ import java.util.stream.Collectors;
 public class IfGame extends Conditional {
 	public HashMap<String, Object> specifics;
 	
-	public IfGame(String targetName, HashMap<String, LivingEntity[]> targetMap, ParamManager paramManager, String action, boolean inverted, HashMap<String, Object> specifics) {
+	public IfGame(String targetName, HashMap<String, Entity[]> targetMap, ParamManager paramManager, String action, boolean inverted, HashMap<String, Object> specifics) {
 		super(targetName, targetMap, paramManager, action, inverted);
 		this.specifics = specifics;
 	}

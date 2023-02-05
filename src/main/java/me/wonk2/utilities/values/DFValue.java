@@ -3,7 +3,6 @@ package me.wonk2.utilities.values;
 import me.wonk2.DFPlugin;
 import me.wonk2.utilities.DFUtilities;
 import me.wonk2.utilities.enums.DFType;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -11,7 +10,6 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 
 public class DFValue implements Cloneable {
 	
@@ -160,5 +158,17 @@ public class DFValue implements Cloneable {
 	
 	public static DFValue nullVar(){
 		return new DFValue("0", DFType.NUM);
+	}
+	
+	@Override
+	public int hashCode(){
+		return type.ordinal() * val.hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object o){
+		if(!(o instanceof DFValue value)) return false;
+		
+		return value.type == type && value.val.equals(val);
 	}
 }

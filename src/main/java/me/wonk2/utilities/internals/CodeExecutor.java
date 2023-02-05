@@ -11,6 +11,7 @@ import me.wonk2.utilities.actions.pointerclasses.brackets.RepeatingBracket;
 import me.wonk2.utilities.enums.SelectionType;
 import me.wonk2.utilities.values.DFValue;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -25,7 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public abstract class CodeExecutor {
-	private static void runCodeBlock(Object codeBlock, HashMap<String, LivingEntity[]> targetMap, HashMap<String, DFValue> localVars, @Nullable Event event, SelectionType eventType, HashMap<String, Object> specifics){
+	private static void runCodeBlock(Object codeBlock, HashMap<String, Entity[]> targetMap, HashMap<String, DFValue> localVars, @Nullable Event event, SelectionType eventType, HashMap<String, Object> specifics){
 		boolean stoppedLoop = false, skippedIteration = false;
 		ArrayList<Repeat> encounteredLoops = new ArrayList<>();
 		
@@ -71,16 +72,16 @@ public abstract class CodeExecutor {
 				return;
 			} else if (codeBlock instanceof StartProcess) {
 				StartProcess p = (StartProcess) codeBlock;
-				LivingEntity[] selectedEntities = targetMap.get("selection");
+				Entity[] selectedEntities = targetMap.get("selection");
 				
 				Bukkit.getScheduler().runTask(DFPlugin.plugin, () -> {
 					HashMap<String, DFValue> vars = p.getVars(localVars);
-					HashMap<String, LivingEntity[]> targets = p.getTargets(targetMap);
+					HashMap<String, Entity[]> targets = p.getTargets(targetMap);
 					
 					if (p.targetMode == StartProcess.TargetMode.FOR_EACH) {
-						for (LivingEntity e : selectedEntities) {
+						for (Entity e : selectedEntities) {
 							targets = new HashMap<>() {{
-								put("default", new LivingEntity[]{e});
+								put("default", new Entity[]{e});
 							}};
 							
 							SelectionType processType = selectedEntities[0] instanceof Player ? SelectionType.PLAYER : SelectionType.ENTITY;
@@ -123,7 +124,7 @@ public abstract class CodeExecutor {
 				
 				default:
 					if (codeBlock instanceof SelectObject){
-						LivingEntity[] selectedEntities = ((SelectObject) codeBlock).getSelectedEntities(targetMap);
+						Entity[] selectedEntities = ((SelectObject) codeBlock).getSelectedEntities(targetMap);
 						
 						if(selectedEntities == null) targetMap.remove("selection");
 						else targetMap.put("selection", selectedEntities);
@@ -141,12 +142,12 @@ public abstract class CodeExecutor {
 		}
 	}
 	
-	private static boolean isSelectionValid(HashMap<String, LivingEntity[]> targetMap){
+	private static boolean isSelectionValid(HashMap<String, Entity[]> targetMap){
 		if(!targetMap.containsKey("selection")) return false;
 		if(!(targetMap.get("selection")[0] instanceof Player)) return true;
 		
-		LivingEntity[] selection = targetMap.get("selection");
-		for(LivingEntity e : selection)
+		Entity[] selection = targetMap.get("selection");
+		for(Entity e : selection)
 			if(((Player) e).isOnline()) return true;
 		return false;
 	}
@@ -157,7 +158,7 @@ public abstract class CodeExecutor {
 			((Action) codeBlock).pointer;
 	}
 		
-	public static void executeThread(Object[] threadContents, HashMap<String, LivingEntity[]> targetMap, HashMap<String, DFValue> localVars, @Nullable Event event, SelectionType eventType, HashMap<String, Object> specifics){
+	public static void executeThread(Object[] threadContents, HashMap<String, Entity[]> targetMap, HashMap<String, DFValue> localVars, @Nullable Event event, SelectionType eventType, HashMap<String, Object> specifics){
 		//stringifyThread(assignPointers(new ObjectArrWrapper(threadContents))); // for debugging
 		
 		List<Class<?>> delayedEvents = List.of(new Class[]{PlayerRespawnEvent.class});

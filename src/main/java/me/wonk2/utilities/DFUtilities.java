@@ -37,13 +37,12 @@ import org.antlr.v4.runtime.misc.NotNull;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.RayTraceResult;
@@ -62,9 +61,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 // Class to store general-use methods and implement event handlers to assist other action implementations
+@SuppressWarnings("unchecked")
 public abstract class DFUtilities {
 	public static FileManager playerConfig;
-	public static LivingEntity lastEntity = null;
+	public static Entity lastEntity = null;
 	
 	public static void init(){
 		playerConfig = new FileManager(DFPlugin.plugin, "playerData.yml");
@@ -99,6 +99,10 @@ public abstract class DFUtilities {
 		return inv.getType() != InventoryType.PLAYER
 			&& inv.getType() != InventoryType.CRAFTING
 			&& inv.getLocation() == null;
+	}
+	
+	public static LivingEntity getDamager(Entity damager){
+		return damager instanceof Arrow arrow ? (Player) arrow.getShooter() : (LivingEntity) damager;
 	}
 	
 	public static boolean locationEquals(Location loc, Location loc2, boolean ignoreRotation) {
@@ -155,10 +159,125 @@ public abstract class DFUtilities {
 				Vector vec = (Vector) val.getVal();
 				return "<" + df.format(vec.getX()) + ", " + df.format(vec.getY()) + ", " + df.format(vec.getZ()) + ">";
 			}
+			case DICT -> {
+				ArrayList<String> contents = new ArrayList<>();
+				HashMap<DFValue, DFValue> dict = (HashMap<DFValue, DFValue>) val.getVal();
+				
+				for(DFValue key : dict.keySet()) contents.add(key.getVal().toString() + ": " + parseTxt(dict.get(key)));
+				return "{" + String.join(", ", contents) + "}";
+			}
 			default -> {
 				return String.valueOf(val.getVal());
 			}
 		}
+	}
+	
+	public static Projectile launchProjectile(ItemStack projectile, Location loc, Float speed, float inaccuracy, String customName){
+		HashMap<Material, EntityType> projectiles = new HashMap<>() {{
+			put(Material.SNOWBALL, EntityType.SNOWBALL);
+			put(Material.EGG, EntityType.EGG);
+			put(Material.ENDER_PEARL, EntityType.ENDER_PEARL);
+			put(Material.TRIDENT, EntityType.TRIDENT);
+			put(Material.ARROW, EntityType.ARROW);
+			put(Material.SPECTRAL_ARROW, EntityType.SPECTRAL_ARROW);
+			put(Material.MILK_BUCKET, EntityType.LLAMA_SPIT);
+			put(Material.DRAGON_BREATH, EntityType.DRAGON_FIREBALL);
+		}};
+		
+		HashMap<Material, Float> defaultSpeedValues = new HashMap<>() {{
+			put(Material.SNOWBALL, 7f); // TODO
+			put(Material.EGG, 7f); // TODO
+			put(Material.ENDER_PEARL, 7f); // TODO
+			put(Material.TRIDENT, 7f); // TODO
+			put(Material.ARROW, 7f); // TODO
+			put(Material.SPECTRAL_ARROW, 7f); // TODO
+			put(Material.MILK_BUCKET, 7f); // TODO
+			put(Material.DRAGON_BREATH, 7f); // TODO
+			put(Material.FIRE_CHARGE, 7f); // TODO
+			put(Material.WITHER_SKELETON_SKULL, 7f); // TODO
+			put(Material.TIPPED_ARROW, 7f); // TODO
+			put(Material.SPLASH_POTION, 7f); // TODO
+			put(Material.LINGERING_POTION, 7f); // TODO
+			put(Material.EXPERIENCE_BOTTLE, 7f); // done xd
+		}};
+		
+		Material projType = projectile.getType();
+		
+		if(speed == null) speed = defaultSpeedValues.get(projType);
+		speed /= 10;
+		inaccuracy /= 10;
+		
+		EntityType type = projectiles.get(projType);
+		Arrow arrow = DFPlugin.world.spawnArrow(loc, loc.getDirection(), speed, inaccuracy);
+		Projectile proj = null;
+		switch (projType) {
+			case FIRE_CHARGE -> {
+				if (projectile.getAmount() >= 2) {
+					Fireball fireball = (Fireball) DFPlugin.world.spawnEntity(loc, EntityType.FIREBALL);
+					fireball.setDirection(arrow.getVelocity());
+					
+					if (customName != null) fireball.setCustomName(customName);
+					fireball.setCustomNameVisible(true);
+					proj = fireball;
+				} else {
+					SmallFireball smallFireball = (SmallFireball) DFPlugin.world.spawnEntity(loc, EntityType.SMALL_FIREBALL);
+					smallFireball.setDirection(arrow.getVelocity());
+					
+					if (customName != null) smallFireball.setCustomName(customName);
+					smallFireball.setCustomNameVisible(true);
+					proj = smallFireball;
+				}
+				
+			}
+			case WITHER_SKELETON_SKULL -> {
+				WitherSkull witherSkull = (WitherSkull) arrow.getWorld().spawnEntity(arrow.getLocation(), EntityType.WITHER_SKULL);
+				witherSkull.setCharged(projectile.getAmount() >= 2);
+				witherSkull.setDirection(arrow.getVelocity());
+				
+				if (customName != null) witherSkull.setCustomName(customName);
+				witherSkull.setCustomNameVisible(true);
+				proj = witherSkull;
+			}
+			
+			case TIPPED_ARROW -> {
+				Arrow tippedArrow = (Arrow) arrow.getWorld().spawnEntity(arrow.getLocation(), EntityType.ARROW);
+				tippedArrow.setBasePotionData(((PotionMeta) projectile.getItemMeta()).getBasePotionData());
+				tippedArrow.setVelocity(arrow.getVelocity());
+				
+				if (customName != null) tippedArrow.setCustomName(customName);
+				tippedArrow.setCustomNameVisible(true);
+				proj = tippedArrow;
+			}
+			case SPLASH_POTION, LINGERING_POTION -> {
+				ThrownPotion thrownPotion = (ThrownPotion) DFPlugin.world.spawnEntity(loc, EntityType.SPLASH_POTION);
+				thrownPotion.setItem(projectile);
+				thrownPotion.setVelocity(arrow.getVelocity());
+				
+				if (customName != null) thrownPotion.setCustomName(customName);
+				thrownPotion.setCustomNameVisible(true);
+				proj = thrownPotion;
+			}
+			case EXPERIENCE_BOTTLE -> {
+				ThrownExpBottle thrownExpBottle = (ThrownExpBottle) DFPlugin.world.spawnEntity(loc, EntityType.THROWN_EXP_BOTTLE);
+				thrownExpBottle.setVelocity(arrow.getVelocity());
+				
+				if (customName != null) thrownExpBottle.setCustomName(customName);
+				thrownExpBottle.setCustomNameVisible(true);
+				proj = thrownExpBottle;
+			}
+			default -> {
+				if (projectiles.containsKey(projType)) {
+					proj = (Projectile) DFPlugin.world.spawnEntity(loc, type);
+					proj.setVelocity(arrow.getVelocity());
+					
+					if (customName != null) proj.setCustomName(customName);
+					proj.setCustomNameVisible(true);
+				}
+			}
+		}
+		
+		arrow.remove();
+		return proj;
 	}
 	
 	public static char[] trimArray(@NotNull char[] arr, int start, int end){
@@ -171,7 +290,7 @@ public abstract class DFUtilities {
 		return result;
 	}
 	
-	public static String textCodes(String str, HashMap<String, LivingEntity[]> targetMap, HashMap<String, DFValue> localStorage, boolean debug){
+	public static String textCodes(String str, HashMap<String, Entity[]> targetMap, HashMap<String, DFValue> localStorage, boolean debug){
 		if(debug) Bukkit.broadcastMessage("Evaluating text codes of " + str);
 		String[] targetCodes = Arrays.stream(removeDuplicates(regex("%([^\\s]+)", str))).toArray(String[]::new);
 		for(String code : targetCodes) str = str.replace(code, TextCode.getTargetName(targetMap, code));
@@ -273,10 +392,10 @@ public abstract class DFUtilities {
 		return (HashMap<Integer, DFValue>) inputArray[2];
 	}
 	
-	public static LivingEntity[] getTargets(String targetName, HashMap<String, LivingEntity[]> targetMap, SelectionType selectionType){
+	public static Entity[] getTargets(String targetName, HashMap<String, Entity[]> targetMap, SelectionType selectionType){
 		switch(targetName){
 			case "lastentity":
-				return new LivingEntity[]{DFUtilities.lastEntity};
+				return new Entity[]{DFUtilities.lastEntity};
 			case "allplayers":
 				Player[] players = Bukkit.getOnlinePlayers().toArray(Player[]::new);
 				return Arrays.copyOf(players, players.length, LivingEntity[].class);
@@ -288,7 +407,7 @@ public abstract class DFUtilities {
 				};
 				
 				
-				if(DFUtilities.lastEntity != null) targetMap.put("lastentity", new LivingEntity[]{DFUtilities.lastEntity}); // Otherwise "lastentity" will always be considered invalid even when present
+				if(DFUtilities.lastEntity != null) targetMap.put("lastentity", new Entity[]{DFUtilities.lastEntity}); // Otherwise "lastentity" will always be considered invalid even when present
 				if(targetName.equals("selection"))
 					for (String target : targetSet){
 						if (isTargetValid(target, targetMap, selectionType)) {
@@ -302,7 +421,7 @@ public abstract class DFUtilities {
 		}
 	}
 	
-	public static boolean isTargetValid(String targetName, HashMap<String, LivingEntity[]> targetMap, SelectionType selectionType){
+	public static boolean isTargetValid(String targetName, HashMap<String, Entity[]> targetMap, SelectionType selectionType){
 		if(!targetMap.containsKey(targetName)) return false; // We want null selections (selections that don't exist, not empty selections) to default to the "default" target
 		if(selectionType == SelectionType.EITHER) return true; // Can't be invalid
 		if(targetMap.get(targetName).length == 0) return true; // Empty selections can't be invalid, because they don't have mobs/entities nor players

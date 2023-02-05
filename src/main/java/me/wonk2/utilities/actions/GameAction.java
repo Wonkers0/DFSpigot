@@ -43,9 +43,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 public class GameAction extends Action {
-	LivingEntity target;
 	Object[] inputArray;
-	public GameAction(String targetName, HashMap<String, LivingEntity[]> targetMap, ParamManager paramManager, String action) {
+	public GameAction(String targetName, HashMap<String, Entity[]> targetMap, ParamManager paramManager, String action) {
 		super(targetName, targetMap, paramManager, action);
 	}
 	
@@ -55,7 +54,6 @@ public class GameAction extends Action {
 		inputArray = paramManager.formatParameters(targetMap);
 		HashMap<String, DFValue> args = DFUtilities.getArgs(inputArray);
 		HashMap<String, String> tags = DFUtilities.getTags(inputArray);
-		target = DFUtilities.getTargets(targetName, targetMap, SelectionType.EITHER)[0];
 		
 		//TODO: Because of how the target system is set up, certain game actions may not work in entity events.
 		HashMap<Integer, DFValue> primitiveInput = DFUtilities.getPrimitiveInput(inputArray);
@@ -232,7 +230,7 @@ public class GameAction extends Action {
 				Location loc = (Location) args.get("loc").getVal();
 				float power = (float) DFUtilities.clampNum((double) args.get("power").getVal(), 0, 4);
 				
-				DFPlugin.world.createExplosion(loc, power);
+				DFPlugin.world.createExplosion(loc, power, false, false);
 			}
 			case "SpawnTNT" -> {
 				Location loc = (Location) args.get("loc").getVal();
@@ -264,88 +262,13 @@ public class GameAction extends Action {
 				if (tags.get("Movement").equalsIgnoreCase("directional")) firework.setShotAtAngle(true);
 			}
 			case "LaunchProj" -> {
-				HashMap<Material, EntityType> projectiles = new HashMap<>() {{
-					put(Material.SNOWBALL, EntityType.SNOWBALL);
-					put(Material.EGG, EntityType.EGG);
-					put(Material.ENDER_PEARL, EntityType.ENDER_PEARL);
-					put(Material.TRIDENT, EntityType.TRIDENT);
-					put(Material.ARROW, EntityType.ARROW);
-					put(Material.SPECTRAL_ARROW, EntityType.SPECTRAL_ARROW);
-					put(Material.MILK_BUCKET, EntityType.LLAMA_SPIT);
-					put(Material.DRAGON_BREATH, EntityType.DRAGON_FIREBALL);
-				}};
-				
-				
-				Material projType = ((ItemStack) args.get("projectile").getVal()).getType();
-				ItemStack specialProj = (ItemStack) args.get("projectile").getVal();
+				ItemStack projectile = (ItemStack) args.get("projectile").getVal();
 				Location loc = (Location) args.get("loc").getVal();
 				String customName = (String) args.get("customName").getVal();
-				double speed = (double) args.get("speed").getVal();
+				Double speed = (Double) args.get("speed").getVal();
 				double inaccuracy = (double) args.get("inaccuracy").getVal();
 				
-				
-				EntityType type = projectiles.get(projType);
-				Arrow arrow = DFPlugin.world.spawnArrow(loc, loc.getDirection(), (float) speed, (float) inaccuracy);
-				switch (specialProj.getType()) {
-					case FIRE_CHARGE -> {
-						if (specialProj.getAmount() >= 2) {
-							Fireball proj = (Fireball) DFPlugin.world.spawnEntity(loc, EntityType.FIREBALL);
-							proj.setDirection(arrow.getVelocity());
-							
-							if (customName != null) proj.setCustomName(customName);
-							proj.setCustomNameVisible(true);
-						} else {
-							SmallFireball proj = (SmallFireball) DFPlugin.world.spawnEntity(loc, EntityType.SMALL_FIREBALL);
-							proj.setDirection(arrow.getVelocity());
-							
-							if (customName != null) proj.setCustomName(customName);
-							proj.setCustomNameVisible(true);
-						}
-						
-					}
-					case WITHER_SKELETON_SKULL -> {
-						WitherSkull proj = (WitherSkull) arrow.getWorld().spawnEntity(arrow.getLocation(), EntityType.WITHER_SKULL);
-						proj.setCharged(specialProj.getAmount() >= 2);
-						proj.setDirection(arrow.getVelocity());
-						
-						if (customName != null) proj.setCustomName(customName);
-						proj.setCustomNameVisible(true);
-					}
-					case TIPPED_ARROW -> {
-						Arrow proj = (Arrow) arrow.getWorld().spawnEntity(arrow.getLocation(), EntityType.ARROW);
-						proj.setBasePotionData(((PotionMeta) specialProj.getItemMeta()).getBasePotionData());
-						proj.setVelocity(arrow.getVelocity());
-						
-						if (customName != null) proj.setCustomName(customName);
-						proj.setCustomNameVisible(true);
-					}
-					case SPLASH_POTION, LINGERING_POTION -> {
-						ThrownPotion proj = (ThrownPotion) DFPlugin.world.spawnEntity(loc, EntityType.SPLASH_POTION);
-						proj.setItem(specialProj);
-						proj.setVelocity(arrow.getVelocity());
-						
-						if (customName != null) proj.setCustomName(customName);
-						proj.setCustomNameVisible(true);
-					}
-					case EXPERIENCE_BOTTLE -> {
-						ThrownExpBottle proj = (ThrownExpBottle) DFPlugin.world.spawnEntity(loc, EntityType.THROWN_EXP_BOTTLE);
-						proj.setVelocity(arrow.getVelocity());
-						
-						if (customName != null) proj.setCustomName(customName);
-						proj.setCustomNameVisible(true);
-					}
-					default -> {
-						if (projectiles.containsKey(projType)) {
-							Entity proj = DFPlugin.world.spawnEntity(loc, type);
-							proj.setVelocity(arrow.getVelocity());
-							
-							if (customName != null) proj.setCustomName(customName);
-							proj.setCustomNameVisible(true);
-						}
-					}
-				}
-				
-				arrow.remove();
+				DFUtilities.lastEntity = DFUtilities.launchProjectile(projectile, loc, speed == null ? null : (float) (double) speed, (float) inaccuracy, customName);
 			}
 			case "Lightning" -> DFPlugin.world.strikeLightning((Location) args.get("loc").getVal());
 			case "SpawnPotionCloud" -> {
@@ -509,7 +432,7 @@ public class GameAction extends Action {
 				assert loc.getWorld() != null;
 				for (Entity ps : loc.getWorld().getNearbyEntities(loc, 64, 64, 64))
 					if (ps instanceof Player)
-						((CraftPlayer) target).getHandle().connection.send(new ClientboundLevelEventPacket(2001, new BlockPos(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()), Block.getId(((CraftBlockData) loc.getBlock().getBlockData()).getState()), false));
+						((CraftPlayer) ps).getHandle().connection.send(new ClientboundLevelEventPacket(2001, new BlockPos(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()), Block.getId(((CraftBlockData) loc.getBlock().getBlockData()).getState()), false));
 				
 				loc.getBlock().setType(Material.AIR);
 			}
