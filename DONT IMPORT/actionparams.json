@@ -4030,10 +4030,38 @@
         "defaultValue": null
       },
       {
-        "name": "item",
+     "name": "items",
         "type": "ITEM",
-        "repeating": false,
-        "defaultValue": null
+        "repeating": true,
+        "defaultValue": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
       }
     ]
   ],
