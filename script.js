@@ -332,7 +332,7 @@ function potionEffects() {
     "Health Boost": "HEALTH_BOOST",
     "Hero of the Village": "HERO_OF_THE_VILLAGE",
     "Instant Health": "HEAL",
-    "Invisibility": "INVISIBLITY",
+    "Invisibility": "INVISIBILITY",
     "Jump Boost": "JUMP",
     "Luck": "LUCK",
     "Night Vision": "NIGHT_VISION",

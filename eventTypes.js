@@ -169,9 +169,13 @@ export default {
   },
   Death:
   {
-    "name": "player.PlayerDeathEvent",
+    "name": "entity.PlayerDeathEvent",
     "check": null,
-    "specifics": {}
+    "specifics": {
+      "targets": {
+        "default": "event.getEntity()"
+      }
+    }
   },
   PlaceBlock:
   {
