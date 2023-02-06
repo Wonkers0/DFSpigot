@@ -24,10 +24,12 @@ import me.wonk2.utilities.values.DFValue;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundLevelEventPacket;
 import net.minecraft.world.level.block.Block;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Container;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_19_R1.block.data.CraftBlockData;
@@ -47,7 +49,7 @@ import java.util.Objects;
 public class GameAction extends Action {
 	LivingEntity target;
 	Object[] inputArray;
-	public GameAction(String targetName, HashMap<String, LivingEntity[]> targetMap, ParamManager paramManager, String action) {
+	public GameAction(String targetName, HashMap<String, Entity[]> targetMap, ParamManager paramManager, String action) {
 		super(targetName, targetMap, paramManager, action);
 	}
 	
@@ -57,7 +59,7 @@ public class GameAction extends Action {
 		inputArray = paramManager.formatParameters(targetMap);
 		HashMap<String, DFValue> args = DFUtilities.getArgs(inputArray);
 		HashMap<String, String> tags = DFUtilities.getTags(inputArray);
-		target = DFUtilities.getTargets(targetName, targetMap, SelectionType.EITHER)[0];
+		target = (LivingEntity) DFUtilities.getTargets(targetName, targetMap, SelectionType.EITHER)[0];
 		
 		//TODO: Because of how the target system is set up, certain game actions may not work in entity events.
 		HashMap<Integer, DFValue> primitiveInput = DFUtilities.getPrimitiveInput(inputArray);
@@ -562,6 +564,22 @@ public class GameAction extends Action {
 				Ageable age = (Ageable) loc.getBlock().getBlockData();
 				age.setAge(num.intValue());
 				loc.getBlock().setBlockData(age);
+
+			}
+			case "FillContainer" -> {
+				Location loc = (Location) args.get("loc").getVal();
+				org.bukkit.block.BlockState blockState = loc.getBlock().getState();
+				Container block = (Container) blockState;
+				DFValue[] items = (DFValue[]) args.get("items").getVal();
+				int itemIndex = 0;
+				for (int i = 0; i < 27; i++) {
+					if (items[itemIndex].slot != i + 1) block.getInventory().clear(i);
+					else {
+						Bukkit.broadcastMessage(i + "");
+						block.getInventory().setItem(i, (ItemStack) items[itemIndex].getVal());
+						if (itemIndex != items.length - 1) itemIndex++;
+					}
+				}
 
 			}
 		}
