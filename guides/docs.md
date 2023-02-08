@@ -138,7 +138,9 @@ These are the hashmaps for global and saved variables:
    */
 ```
 
-Saved variables are actually saved in a file, and when the plugin is initialized they are deserialized into a hashmap. Local variables are in a hashmap of their own, often referred to as `localStorage` in the code. There is one hashmap per event, and you'll often need to pass this `localStorage` hashmap to other code if you want to do things involving variables.
+Saved variables are actually saved in a file, and when the plugin is initialized they are deserialized into a hashmap. Local variables are in a hashmap of their own, often referred to as `localStorage` in the code. There is one hashmap per code thread, and you'll often need to pass this `localStorage` hashmap to other code if you want to do things involving variables.
 
 ## ParamManager - *Crafting a good developer experience for writing action logic*
-TODO
+When we write the code for actions such as "SendMessage", "SetBossBar", or whatever you want to add, we're not referring to values by their slot number, otherwise values that can be repeatedly inputted would throw everything off!
+
+The ParamManager.java class is simply responsible for taking an array of `DFValue`s and giving each one (or group thereof) a name.
