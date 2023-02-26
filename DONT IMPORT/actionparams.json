@@ -3199,7 +3199,7 @@
       },
       {
         "name": "list",
-        "type": "VAR",
+        "type": "LIST",
         "repeating": false,
         "defaultValue": null
       }
