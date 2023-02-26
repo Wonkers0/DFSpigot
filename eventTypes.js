@@ -130,7 +130,10 @@ export default {
     "check": "event.getInventory() == event.getWhoClicked().getOpenInventory().getBottomInventory()",
     "specifics": 
     {
-      "item":"event.getCurrentItem()"
+      "item":"event.getCurrentItem()",
+      "targets": {
+        "default": "event.getWhoClicked()"
+      }
     }
   },
   Respawn: 
@@ -301,7 +304,11 @@ export default {
   {
     "name": "entity.EntityDamageByEntityEvent",
     "check": "event.getEntity() instanceof Player && !(event.getDamager() instanceof Player)",
-    "specifics": {}
+    "specifics": {
+      "targets": {
+        "default": "event.getDamager()"
+      }
+    }
   },
   StopSprint:
   {
