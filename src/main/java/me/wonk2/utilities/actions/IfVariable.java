@@ -185,11 +185,15 @@ public class IfVariable extends Conditional {
 								if(item.isSimilar(checkItem)) return true;
 								break;
 							case "Ignore durability and stack size": {
+								if(checkItem == null || item == null) return item == checkItem;
+								
 								((Damageable) checkItem).setDamage(((Damageable) item).getDamage());
 								if(item.isSimilar(checkItem)) return true;
 								break;
 							}
 							case "Material only": {
+								if(checkItem == null || item == null) return item == checkItem;
+								
 								if(item.getType() == checkItem.getType()) return true;
 								break;
 							}

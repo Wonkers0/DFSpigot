@@ -23,6 +23,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
@@ -93,6 +94,16 @@ public class DFListeners implements Listener, CommandExecutor {
 	public static void Respawn(PlayerRespawnEvent event){
 		PlayerData playerData = PlayerData.getPlayerData(event.getPlayer().getUniqueId());
 		if(playerData.respawnLoc != null) event.setRespawnLocation(playerData.respawnLoc);
+	}
+	
+	@EventHandler
+	public static void BlockBreak(BlockBreakEvent event){
+		event.setCancelled(true);
+	}
+	
+	@EventHandler
+	public static void BlockPlace(BlockPlaceEvent event){
+		event.setCancelled(true);
 	}
 	
 	@EventHandler
@@ -170,6 +181,7 @@ public class DFListeners implements Listener, CommandExecutor {
 			
 			HashMap<String, String> condInfo = new HashMap<>();
 			ArrayList<String> validConditionals = new ArrayList<>(List.of(new String[]{"IFPLAYER", "IFENTITY", "IFGAME", "IFVAR"}));
+			
 			for(String action : ParamManager.argInfo.keySet()){
 				String[] actionInfo = action.split(":");
 				if(validConditionals.contains(actionInfo[0])) condInfo.put(actionInfo[1], actionInfo[0]);

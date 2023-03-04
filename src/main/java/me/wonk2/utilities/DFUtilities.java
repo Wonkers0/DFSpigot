@@ -422,7 +422,7 @@ public abstract class DFUtilities {
 	}
 	
 	public static boolean isTargetValid(String targetName, HashMap<String, Entity[]> targetMap, SelectionType selectionType){
-		if(!targetMap.containsKey(targetName)) return false; // We want null selections (selections that don't exist, not empty selections) to default to the "default" target
+		if(!targetMap.containsKey(targetName) || targetMap.get(targetName) == null) return false; // We want null selections (selections that don't exist, not empty selections) to default to the "default" target
 		if(selectionType == SelectionType.EITHER) return true; // Can't be invalid
 		if(targetMap.get(targetName).length == 0) return true; // Empty selections can't be invalid, because they don't have mobs/entities nor players
 		
@@ -514,9 +514,9 @@ public abstract class DFUtilities {
 	public static Entity getEntity(String uuidOrName){
 		try{return Bukkit.getEntity(UUID.fromString(uuidOrName));}
 		catch(IllegalArgumentException exception){
-			for(Chunk chunk : Bukkit.getWorlds().get(0).getLoadedChunks())
+			for(Chunk chunk : DFPlugin.world.getLoadedChunks())
 				for(Entity entity : chunk.getEntities())
-					if(entity.getName() == uuidOrName) return entity;
+					if(entity.getName().equals(uuidOrName)) return entity;
 		}
 		return null;
 	}

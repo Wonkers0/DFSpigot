@@ -143,7 +143,7 @@ public abstract class CodeExecutor {
 	}
 	
 	private static boolean isSelectionValid(HashMap<String, Entity[]> targetMap){
-		if(!targetMap.containsKey("selection")) return false;
+		if(!targetMap.containsKey("selection") || targetMap.get("selection") == null) return false;
 		if(!(targetMap.get("selection")[0] instanceof Player)) return true;
 		
 		Entity[] selection = targetMap.get("selection");

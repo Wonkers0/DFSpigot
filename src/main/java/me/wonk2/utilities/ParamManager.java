@@ -136,7 +136,6 @@ public class ParamManager implements Cloneable {
 		DFValue[] args = input.values().toArray(DFValue[]::new);
 		
 		for(Parameter[] template : templates){
-			int globalI = 0;
 			int paramIndex = 0;
 			DFType argType = null;
 			Parameter param = template[0];
@@ -146,17 +145,16 @@ public class ParamManager implements Cloneable {
 				argType = getArgType(args[i], param.type, localStorage);
 				
 				if(param.repeating){
-					while(argType == param.type && i < input.size()){
+					while(argType == param.type && i < args.length){
 						argType = getArgType(args[i], param.type, localStorage);
 						i++;
 					}
 				}
 				else if(argType != param.type) break;
 				paramIndex++;
-				globalI = i;
 			}
 			
-			if(argType == param.type && globalI == args.length - 1) return template;
+			if(argType == param.type && param == template[template.length - 1]) return template;
 		}
 		
 		return templates[0];

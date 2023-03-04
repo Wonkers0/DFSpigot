@@ -351,12 +351,12 @@ public class PlayerAction extends Action {
 				}
 				
 				case "SetFoodLevel": {
-					((Player) target).setFoodLevel(args.get("amount").getInt());
+					target.setFoodLevel(args.get("amount").getInt());
 					break;
 				}
 				
 				case "SetSaturation": {
-					((Player) target).setSaturation((float) (double) args.get("amount").getVal());
+					target.setSaturation((float) (double) args.get("amount").getVal());
 					break;
 				}
 				
