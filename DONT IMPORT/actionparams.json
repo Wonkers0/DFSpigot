@@ -5279,5 +5279,27 @@
         ]
       }
     ]
+  ],
+  "GAMEACTION:SetItemInSlot":[
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "item",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "slot",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+   ]
   ]
 }
