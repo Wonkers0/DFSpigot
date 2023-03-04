@@ -40,6 +40,7 @@ import net.minecraft.network.chat.TextColor;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
 import org.bukkit.entity.*;
 import org.bukkit.event.inventory.InventoryType;
@@ -206,6 +207,10 @@ public abstract class DFUtilities {
 		return inv.getType() != InventoryType.PLAYER
 			&& inv.getType() != InventoryType.CRAFTING
 			&& inv.getLocation() == null;
+	}
+	
+	public static Vector blockFaceToVector(BlockFace blockFace){
+		return new Vector(blockFace.getModX(), blockFace.getModY(), blockFace.getModZ());
 	}
 	
 	public static LivingEntity getDamager(Entity damager){
