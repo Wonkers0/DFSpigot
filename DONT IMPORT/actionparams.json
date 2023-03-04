@@ -5226,6 +5226,7 @@
     ]
   ],
   "GAMEACTION:GenerateTree":[
+    [
     {
        "name": "loc",
        "type": "LOC",
@@ -5233,4 +5234,5 @@
        "defaultValue": null
     }
    ]
+  ]
 }
