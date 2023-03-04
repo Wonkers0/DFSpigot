@@ -12,6 +12,7 @@ import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.session.ClipboardHolder;
+import com.sk89q.worldedit.util.TreeGenerator;
 import com.sk89q.worldedit.world.World;
 import com.sk89q.worldedit.world.block.BlockState;
 import me.wonk2.DFPlugin;
@@ -27,7 +28,11 @@ import net.minecraft.world.level.block.Block;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.TreeType;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.Container;
+import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_19_R1.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
@@ -41,8 +46,10 @@ import org.bukkit.util.Vector;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class GameAction extends Action {
+	LivingEntity target;
 	Object[] inputArray;
 	public GameAction(String targetName, HashMap<String, Entity[]> targetMap, ParamManager paramManager, String action) {
 		super(targetName, targetMap, paramManager, action);
@@ -54,6 +61,7 @@ public class GameAction extends Action {
 		inputArray = paramManager.formatParameters(targetMap);
 		HashMap<String, DFValue> args = DFUtilities.getArgs(inputArray);
 		HashMap<String, String> tags = DFUtilities.getTags(inputArray);
+		target = (LivingEntity) DFUtilities.getTargets(targetName, targetMap, SelectionType.EITHER)[0];
 		
 		//TODO: Because of how the target system is set up, certain game actions may not work in entity events.
 		HashMap<Integer, DFValue> primitiveInput = DFUtilities.getPrimitiveInput(inputArray);
@@ -134,12 +142,12 @@ public class GameAction extends Action {
 				Material spawnEgg = ((ItemStack) args.get("mob").getVal()).getType();
 				Location loc = (Location) args.get("loc").getVal();
 				
-				LivingEntity entity = (LivingEntity) DFPlugin.world.spawnEntity(loc, mobTypes.get(spawnEgg));
+				LivingEntity entity = (LivingEntity) Objects.requireNonNull(loc.getWorld()).spawnEntity(loc, mobTypes.get(spawnEgg));
 				
 				if (args.get("health").getVal() == null)
-					entity.setHealth(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+					entity.setHealth(Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
 				else {
-					entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue((Double) args.get("health").getVal());
+					Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue((Double) args.get("health").getVal());
 					entity.setHealth((Double) args.get("health").getVal());
 				}
 				
@@ -155,7 +163,7 @@ public class GameAction extends Action {
 				}
 				
 				ItemStack[] equipment = DFValue.castItem(new DFValue[]{primitiveInput.get(18), primitiveInput.get(19), primitiveInput.get(20), primitiveInput.get(21), primitiveInput.get(22), primitiveInput.get(23)});
-				entity.getEquipment().setArmorContents(new ItemStack[]{equipment[4], equipment[3], equipment[2], equipment[1]});
+				Objects.requireNonNull(entity.getEquipment()).setArmorContents(new ItemStack[]{equipment[4], equipment[3], equipment[2], equipment[1]});
 				entity.getEquipment().setItemInMainHand(equipment[0]);
 				entity.getEquipment().setItemInOffHand(equipment[5]);
 				
@@ -167,7 +175,7 @@ public class GameAction extends Action {
 				String customName = (String) args.get("customName").getVal();
 				
 				for (ItemStack item : items) {
-					Entity itemEntity = DFPlugin.world.dropItem(loc, item);
+					Entity itemEntity = target.getWorld().dropItem(loc, item);
 					if (customName != null) itemEntity.setCustomName(customName);
 					if (tags.get("Apply Item Motion").equals("False")) itemEntity.setVelocity(new Vector());
 					itemEntity.setCustomNameVisible(true);
@@ -201,7 +209,7 @@ public class GameAction extends Action {
 					put(Material.TNT_MINECART, EntityType.MINECART_TNT);
 				}};
 				
-				Vehicle vehicle = (Vehicle) DFPlugin.world.spawnEntity(loc, vehicleTypes.get(vehicleType));
+				Vehicle vehicle = (Vehicle) target.getWorld().spawnEntity(loc, vehicleTypes.get(vehicleType));
 				switch (vehicleType) {
 					case OAK_BOAT, OAK_CHEST_BOAT -> ((Boat) vehicle).setBoatType(Boat.Type.OAK);
 					case SPRUCE_BOAT, SPRUCE_CHEST_BOAT -> ((Boat) vehicle).setBoatType(Boat.Type.SPRUCE);
@@ -221,7 +229,7 @@ public class GameAction extends Action {
 				String customName = (String) args.get("customName").getVal();
 				
 				for (int i = 0; i < amount; i++) {
-					ExperienceOrb orb = (ExperienceOrb) DFPlugin.world.spawnEntity(loc, EntityType.EXPERIENCE_ORB);
+					ExperienceOrb orb = (ExperienceOrb) target.getWorld().spawnEntity(loc, EntityType.EXPERIENCE_ORB);
 					if (customName != null) orb.setCustomName(customName);
 					orb.setCustomNameVisible(true);
 				}
@@ -230,7 +238,7 @@ public class GameAction extends Action {
 				Location loc = (Location) args.get("loc").getVal();
 				float power = (float) DFUtilities.clampNum((double) args.get("power").getVal(), 0, 4);
 				
-				DFPlugin.world.createExplosion(loc, power, false, false);
+				target.getWorld().createExplosion(loc, power);
 			}
 			case "SpawnTNT" -> {
 				Location loc = (Location) args.get("loc").getVal();
@@ -238,7 +246,7 @@ public class GameAction extends Action {
 				int fuse = args.get("fuse").getInt();
 				String customName = (String) args.get("customName").getVal();
 				
-				TNTPrimed tnt = (TNTPrimed) DFPlugin.world.spawnEntity(loc, EntityType.PRIMED_TNT);
+				TNTPrimed tnt = (TNTPrimed) target.getWorld().spawnEntity(loc, EntityType.PRIMED_TNT);
 				
 				EntityData.getEntityData(tnt.getUniqueId()).tntPower = power;
 				tnt.setFuseTicks(fuse);
@@ -248,35 +256,111 @@ public class GameAction extends Action {
 				Location loc = (Location) args.get("loc").getVal();
 				String customName = (String) args.get("customName").getVal();
 				
-				EvokerFangs evokerFangs = (EvokerFangs) DFPlugin.world.spawnEntity(loc, EntityType.EVOKER_FANGS);
+				EvokerFangs evokerFangs = (EvokerFangs) target.getWorld().spawnEntity(loc, EntityType.EVOKER_FANGS);
 				if (customName != null) evokerFangs.setCustomName(customName);
 			}
 			case "Firework" -> {
 				ItemStack fireworkType = (ItemStack) args.get("firework").getVal();
 				Location loc = (Location) args.get("loc").getVal();
 				
-				Firework firework = (Firework) DFPlugin.world.spawnEntity(loc, EntityType.FIREWORK);
+				Firework firework = (Firework) target.getWorld().spawnEntity(loc, EntityType.FIREWORK);
 				FireworkMeta meta = (FireworkMeta) fireworkType.getItemMeta();
+				assert meta != null;
 				firework.setFireworkMeta(meta);
 				if (tags.get("Instant").equalsIgnoreCase("true")) firework.detonate();
 				if (tags.get("Movement").equalsIgnoreCase("directional")) firework.setShotAtAngle(true);
 			}
 			case "LaunchProj" -> {
-				ItemStack projectile = (ItemStack) args.get("projectile").getVal();
+				HashMap<Material, EntityType> projectiles = new HashMap<>() {{
+					put(Material.SNOWBALL, EntityType.SNOWBALL);
+					put(Material.EGG, EntityType.EGG);
+					put(Material.ENDER_PEARL, EntityType.ENDER_PEARL);
+					put(Material.TRIDENT, EntityType.TRIDENT);
+					put(Material.ARROW, EntityType.ARROW);
+					put(Material.SPECTRAL_ARROW, EntityType.SPECTRAL_ARROW);
+					put(Material.MILK_BUCKET, EntityType.LLAMA_SPIT);
+					put(Material.DRAGON_BREATH, EntityType.DRAGON_FIREBALL);
+				}};
+				
+				
+				Material projType = ((ItemStack) args.get("projectile").getVal()).getType();
+				ItemStack specialProj = (ItemStack) args.get("projectile").getVal();
 				Location loc = (Location) args.get("loc").getVal();
 				String customName = (String) args.get("customName").getVal();
-				Double speed = (Double) args.get("speed").getVal();
+				double speed = (double) args.get("speed").getVal();
 				double inaccuracy = (double) args.get("inaccuracy").getVal();
 				
-				DFUtilities.lastEntity = DFUtilities.launchProjectile(projectile, loc, speed == null ? null : (float) (double) speed, (float) inaccuracy, customName);
+				
+				EntityType type = projectiles.get(projType);
+				Arrow arrow = target.getWorld().spawnArrow(loc, loc.getDirection(), (float) speed, (float) inaccuracy);
+				switch (specialProj.getType()) {
+					case FIRE_CHARGE -> {
+						if (specialProj.getAmount() >= 2) {
+							Fireball proj = (Fireball) target.getWorld().spawnEntity(loc, EntityType.FIREBALL);
+							proj.setDirection(arrow.getVelocity());
+							
+							if (customName != null) proj.setCustomName(customName);
+							proj.setCustomNameVisible(true);
+						} else {
+							SmallFireball proj = (SmallFireball) target.getWorld().spawnEntity(loc, EntityType.SMALL_FIREBALL);
+							proj.setDirection(arrow.getVelocity());
+							
+							if (customName != null) proj.setCustomName(customName);
+							proj.setCustomNameVisible(true);
+						}
+						
+					}
+					case WITHER_SKELETON_SKULL -> {
+						WitherSkull proj = (WitherSkull) arrow.getWorld().spawnEntity(arrow.getLocation(), EntityType.WITHER_SKULL);
+						proj.setCharged(specialProj.getAmount() >= 2);
+						proj.setDirection(arrow.getVelocity());
+						
+						if (customName != null) proj.setCustomName(customName);
+						proj.setCustomNameVisible(true);
+					}
+					case TIPPED_ARROW -> {
+						Arrow proj = (Arrow) arrow.getWorld().spawnEntity(arrow.getLocation(), EntityType.ARROW);
+						proj.setBasePotionData(((PotionMeta) Objects.requireNonNull(specialProj.getItemMeta())).getBasePotionData());
+						proj.setVelocity(arrow.getVelocity());
+						
+						if (customName != null) proj.setCustomName(customName);
+						proj.setCustomNameVisible(true);
+					}
+					case SPLASH_POTION, LINGERING_POTION -> {
+						ThrownPotion proj = (ThrownPotion) target.getWorld().spawnEntity(loc, EntityType.SPLASH_POTION);
+						proj.setItem(specialProj);
+						proj.setVelocity(arrow.getVelocity());
+						
+						if (customName != null) proj.setCustomName(customName);
+						proj.setCustomNameVisible(true);
+					}
+					case EXPERIENCE_BOTTLE -> {
+						ThrownExpBottle proj = (ThrownExpBottle) target.getWorld().spawnEntity(loc, EntityType.THROWN_EXP_BOTTLE);
+						proj.setVelocity(arrow.getVelocity());
+						
+						if (customName != null) proj.setCustomName(customName);
+						proj.setCustomNameVisible(true);
+					}
+					default -> {
+						if (projectiles.containsKey(projType)) {
+							Entity proj = target.getWorld().spawnEntity(loc, type);
+							proj.setVelocity(arrow.getVelocity());
+							
+							if (customName != null) proj.setCustomName(customName);
+							proj.setCustomNameVisible(true);
+						}
+					}
+				}
+				
+				arrow.remove();
 			}
-			case "Lightning" -> DFPlugin.world.strikeLightning((Location) args.get("loc").getVal());
+			case "Lightning" -> target.getWorld().strikeLightning((Location) args.get("loc").getVal());
 			case "SpawnPotionCloud" -> {
 				Location loc = (Location) args.get("loc").getVal();
 				double rad = (double) args.get("radius").getVal();
 				double dur = (double) args.get("duration").getVal();
 				
-				AreaEffectCloud cloud = (AreaEffectCloud) DFPlugin.world.spawnEntity(loc, EntityType.AREA_EFFECT_CLOUD);
+				AreaEffectCloud cloud = (AreaEffectCloud) target.getWorld().spawnEntity(loc, EntityType.AREA_EFFECT_CLOUD);
 				for (PotionEffect effect : DFValue.castPotion((DFValue[]) args.get("potion").getVal()))
 					cloud.addCustomEffect(effect, false);
 				
@@ -300,7 +384,7 @@ public class GameAction extends Action {
 					BlockData data = block.createBlockData(String.valueOf(builder));
 					finalData = data.merge(finalData);
 				}
-				FallingBlock fb = DFPlugin.world.spawnFallingBlock(loc, finalData);
+				FallingBlock fb = target.getWorld().spawnFallingBlock(loc, finalData);
 				
 				if (tags.get("Reform on Impact").equalsIgnoreCase("false"))
 					fb.setMetadata("dontreform1176", new FixedMetadataValue(DFPlugin.plugin, "1")); //TODO: This tag does not work properly!
@@ -310,9 +394,9 @@ public class GameAction extends Action {
 			case "SpawnArmorStand" -> {
 				Location loc = (Location) args.get("loc").getVal();
 				String name = (String) args.get("customName").getVal();
-				ArmorStand entity = (ArmorStand) loc.getWorld().spawnEntity(loc, EntityType.ARMOR_STAND);
+				ArmorStand entity = (ArmorStand) Objects.requireNonNull(loc.getWorld()).spawnEntity(loc, EntityType.ARMOR_STAND);
 				ItemStack[] equipment = DFValue.castItem(new DFValue[]{primitiveInput.get(18), primitiveInput.get(19), primitiveInput.get(20), primitiveInput.get(21), primitiveInput.get(22), primitiveInput.get(23)});
-				entity.getEquipment().setArmorContents(new ItemStack[]{equipment[3], equipment[2], equipment[1], equipment[0]});
+				Objects.requireNonNull(entity.getEquipment()).setArmorContents(new ItemStack[]{equipment[3], equipment[2], equipment[1], equipment[0]});
 				entity.getEquipment().setItemInMainHand(equipment[4]);
 				entity.getEquipment().setItemInOffHand(equipment[5]);
 				entity.setGravity(false);
@@ -371,7 +455,7 @@ public class GameAction extends Action {
 				BlockData data = material.createBlockData(String.valueOf(builder));
 				finalData = data.merge(finalData);
 				Location loc2 = (Location) args.get("loc2").getVal();
-				World world = BukkitAdapter.adapt(loc1.getWorld());
+				World world = BukkitAdapter.adapt(Objects.requireNonNull(loc1.getWorld()));
 				CuboidRegion selection = new CuboidRegion(world, BlockVector3.at(loc1.getBlockX(), loc1.getBlockY(), loc1.getBlockZ()), BlockVector3.at(loc2.getBlockX(), loc2.getBlockY(), loc2.getBlockZ()));
 				
 				try (EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(world, -1)) {
@@ -391,7 +475,7 @@ public class GameAction extends Action {
 					Location loc2 = (Location) args.get("loc2").getVal();
 					Location copyLoc = (Location) args.get("copyLoc").getVal();
 					Location pasteLoc = (Location) args.get("pasteLoc").getVal();
-					World world = BukkitAdapter.adapt(loc1.getWorld());
+					World world = BukkitAdapter.adapt(Objects.requireNonNull(loc1.getWorld()));
 					
 					CuboidRegion region = new CuboidRegion(world, BlockVector3.at(loc1.getBlockX(), loc1.getBlockY(), loc1.getBlockZ()), BlockVector3.at(loc2.getBlockX(), loc2.getBlockY(), loc2.getBlockZ()));
 					BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
@@ -432,9 +516,114 @@ public class GameAction extends Action {
 				assert loc.getWorld() != null;
 				for (Entity ps : loc.getWorld().getNearbyEntities(loc, 64, 64, 64))
 					if (ps instanceof Player)
-						((CraftPlayer) ps).getHandle().connection.send(new ClientboundLevelEventPacket(2001, new BlockPos(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()), Block.getId(((CraftBlockData) loc.getBlock().getBlockData()).getState()), false));
+						((CraftPlayer) target).getHandle().connection.send(new ClientboundLevelEventPacket(2001, new BlockPos(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()), Block.getId(((CraftBlockData) loc.getBlock().getBlockData()).getState()), false));
 				
 				loc.getBlock().setType(Material.AIR);
+			}
+			case "SetBlockData" -> {
+				String[] blockTags = DFValue.castTxt((DFValue[]) args.get("tags").getVal());
+				Location[] locs = DFValue.castLoc((DFValue[]) args.get("loc").getVal());
+				for (Location loc : locs) {
+
+					Material material = loc.getBlock().getType();
+
+					if (args.get("tags").getVal() != null) {
+						if (tags.get("Overwrite Existing Data").equalsIgnoreCase("false")) {
+							BlockData finalData = material.createBlockData();
+							StringBuilder builder = new StringBuilder();
+							builder.append("[");
+							for (String dblockData : blockTags)
+								builder.append(dblockData).append(",");
+
+							builder.delete(builder.length() - 1, builder.length());
+							builder.append("]");
+							BlockData data = material.createBlockData(String.valueOf(builder));
+							finalData = data.merge(finalData);
+							loc.getBlock().setBlockData(finalData);
+						} else {
+							//TODO keep existing block data
+						}
+					}
+				}
+			}
+			case "BoneMeal" -> {
+				Location[] locs = DFValue.castLoc((DFValue[]) args.get("loc").getVal());
+				Double itr = (Double) args.get("num").getVal();
+				for (Location loc : locs)
+				{
+					for (int i = 0; i < itr; i++)
+					{
+						loc.getBlock().applyBoneMeal(BlockFace.DOWN);
+
+						//TODO remove particles?
+					}
+				}
+
+			}
+			case "SetBlockGrowth" -> {
+				Location loc = (Location) args.get("loc").getVal();
+				Double num = (Double) args.get("num").getVal();
+				Ageable age = (Ageable) loc.getBlock().getBlockData();
+				age.setAge(num.intValue());
+				loc.getBlock().setBlockData(age);
+
+			}
+			case "FillContainer" -> {
+				Location loc = (Location) args.get("loc").getVal();
+				org.bukkit.block.BlockState blockState = loc.getBlock().getState();
+				Container block = (Container) blockState;
+				DFValue[] items = (DFValue[]) args.get("items").getVal();
+				int itemIndex = 0;
+
+				for (int i = 0; i < 27; i++) {
+					ItemStack item = (ItemStack) items[i].getVal();
+
+					if(item.getType() != Material.AIR){
+						block.getInventory().setItem(i, (ItemStack) items[itemIndex].getVal());
+						itemIndex++;
+					}
+
+				}
+
+			}
+			//TODO Tick block
+			case "GenerateTree" -> {
+				Location loc = (Location) args.get("loc").getVal();
+				StringBuilder builder = new StringBuilder();
+				builder.append(tags.get("Tree Type").toString());
+
+				World world = BukkitAdapter.adapt(loc.getWorld());
+				try (EditSession editSession = WorldEdit.getInstance().newEditSession(world)) {
+					world.generateTree(TreeGenerator.TreeType.MEGA_REDWOOD,editSession,BlockVector3.at(loc.getX(),loc.getY(), loc.getZ()));
+				} catch (MaxChangedBlocksException e) {
+					throw new RuntimeException(e);
+				}
+				//TODO this doesnt work
+
+			}
+			case "SetContainer" -> {
+				Location loc = (Location) args.get("loc").getVal();
+				org.bukkit.block.BlockState blockState = loc.getBlock().getState();
+				Container block = (Container) blockState;
+				DFValue[] items = (DFValue[]) args.get("items").getVal();
+				int itemIndex = 0;
+				for (int i = 0; i < 27; i++) {
+					if (items[itemIndex].slot != i + 1) block.getInventory().clear(i);
+					else {
+						Bukkit.broadcastMessage(i + "");
+						block.getInventory().setItem(i, (ItemStack) items[itemIndex].getVal());
+						if (itemIndex != items.length - 1) itemIndex++;
+					}
+				}
+			}
+			case "SetItemInSlot" ->{
+				Location loc = (Location) args.get("loc").getVal();
+				ItemStack item = (ItemStack) args.get("item").getVal();
+				double slot = (double) args.get("slot").getVal();
+				org.bukkit.block.BlockState blockState = loc.getBlock().getState();
+				Container block = (Container) blockState;
+				block.getInventory().setItem((int) slot,item);
+
 			}
 		}
 	}
