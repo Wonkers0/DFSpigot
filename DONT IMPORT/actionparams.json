@@ -5301,5 +5301,61 @@
         "defaultValue": null
       }
    ]
+  ],
+  "GAMEACTION:ReplaceItems":[
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+     "name": "items",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "name": "item",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "num",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+   ]
   ]
 }
