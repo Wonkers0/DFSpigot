@@ -381,7 +381,8 @@ function blockClasses() {
     "call_func": "CallFunction",
     "select_obj": "SelectObject",
     "start_process": "StartProcess",
-    "else": "Else"
+    "else": "Else",
+    "if_entity": "IfEntity"
   }
 }
 
@@ -431,7 +432,8 @@ function blockParams(codeBlock, isFunc) {
     "call_func": `"${codeBlock.data}"`,
     "start_process": `"${codeBlock.data}", StartProcess.TargetMode.${TargetModes[tags["Target Mode"]]}, StartProcess.VarStorage.${VarStorage[tags["Local Variables"]]}`,
     "select_obj": `${args}, "${action}", "${subAction}", ${inverted}, ${localVars}, ${isFunc ? "null" : "specifics"}`,
-    "else": ``
+    "else": ``,
+    "if_entity": `${target}, ${targets}, ${args}, "${action}", ${inverted}`
   }[codeBlock.block]
 }
 
