@@ -244,7 +244,7 @@ function getCodeArgs(codeBlock, isFunc) {
   tagMap = tagKeys.length == 0 ? `new HashMap<>(){}` : `new HashMap<>(){{${tagMap}\n{indent}  }}`
   let actionName = `${codeBlock.block.replaceAll("_", "").toUpperCase()}:${codeBlock.action.replaceAll(/( $)|^ /gi, "")}`;
 
-  return `new ParamManager(\n{indent}  ${argMap}, \n{indent}  ${tagMap}, "${actionName}", ${isFunc ? "null" : "localVars"})`
+  return `new ParamManager(\n{indent}  ${argMap}, \n{indent}  ${tagMap}, "${actionName}", ${isFunc ? "null" : "localVars"}, ${isFunc ? "null" : "specifics"})`
 }
 
 function newImport(newLibraries) {
