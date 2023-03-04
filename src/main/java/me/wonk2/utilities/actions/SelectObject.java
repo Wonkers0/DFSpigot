@@ -17,7 +17,6 @@ import java.util.*;
 
 public class SelectObject extends Action {
 	// Used to tell which class conditional actions belong to; See "updateArgInfo()" in DFListeners.java
-	public static HashMap<String, String> condInfo;
 	List<Entity> existingSelection;
 	HashMap<String, Object> specifics;
 	String subAction;
@@ -128,27 +127,13 @@ public class SelectObject extends Action {
 		return new ArrayList<>(Arrays.asList(Bukkit.getOnlinePlayers().toArray(Player[]::new)));
 	}
 	
-	public Conditional getFilterCondition(Entity p){
-		String condClass = condInfo.get(subAction);
-		targetMap.put("selection", new Entity[]{p});
-		
-		return switch (condClass) {
-			case "IFPLAYER" -> new IfPlayer("selection", targetMap, paramManager, subAction, inverted);
-			case "IFVAR" -> new IfVariable("selection", targetMap, paramManager, subAction, inverted, localStorage);
-			case "IFGAME" -> new IfGame("selection", targetMap, paramManager, subAction, inverted, specifics);
-			default ->
-				throw new IllegalStateException("Error whilst trying to select objects: This type of conditional is not supported yet: " + condClass);
-		};
-	}
-	
 	public Entity[] filterSelection(@NotNull Entity[] selection){
 		if(subAction == null) return selection;
 		
 		ArrayList<Entity> selectedPlayers = new ArrayList<>();
-		this.paramManager.actionName = condInfo.get(subAction) + ":" + subAction;
 		
 		for(Entity e : selection)
-			if(getFilterCondition(e).evaluateCondition()) selectedPlayers.add(e);
+			if(DFUtilities.getConditional(subAction, inverted, paramManager, localStorage, specifics, targetMap, e).evaluateCondition()) selectedPlayers.add(e);
 		
 		return selectedPlayers.toArray(Entity[]::new);
 	}

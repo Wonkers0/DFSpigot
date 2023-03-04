@@ -21,6 +21,10 @@ import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import me.wonk2.DFPlugin;
+import me.wonk2.utilities.actions.IfGame;
+import me.wonk2.utilities.actions.IfPlayer;
+import me.wonk2.utilities.actions.IfVariable;
+import me.wonk2.utilities.actions.pointerclasses.Conditional;
 import me.wonk2.utilities.enums.SelectionType;
 import me.wonk2.utilities.internals.FileManager;
 import me.wonk2.utilities.internals.PlayerData;
@@ -63,6 +67,7 @@ import java.util.regex.Pattern;
 // Class to store general-use methods and implement event handlers to assist other action implementations
 @SuppressWarnings("unchecked")
 public abstract class DFUtilities {
+	public static HashMap<String, String> condInfo;
 	public static FileManager playerConfig;
 	public static Entity lastEntity = null;
 	
@@ -599,6 +604,31 @@ public abstract class DFUtilities {
 	public static boolean cloudAffectedPlayer(List<LivingEntity> entities){
 		for(LivingEntity entity : entities) if(entity instanceof Player) return true;
 		return false;
+	}
+	
+	/**
+	 * @param subAction - The action on the while loop or select object (e.g. PIsNear)
+	 * @param inverted - Whether or not the conditional is inverted using the NOT arrow
+	 * @param paramManager - Param manager of the while loop or select object
+	 * @param localStorage - Local storage of the thread that the while loop / select object is running on
+	 * @param specifics - Specifics of the thread that the while loop / select object is running on
+	 * @param targetMap - Target map of the the thread that the while loop / select object is running on
+	 * @param p - Target to apply the conditional on
+	 * @return A Conditional Object (IfPlayer/IfVariable/IfGame)
+	 * @author Wonk0
+	 */
+	public static Conditional getConditional(String subAction, boolean inverted, ParamManager paramManager, HashMap<String, DFValue> localStorage, HashMap<String, Object> specifics, HashMap<String, Entity[]> targetMap, Entity p){
+		paramManager.actionName = condInfo.get(subAction) + ":" + subAction;
+		String condClass = condInfo.get(subAction);
+		targetMap.put("selection", new Entity[]{p});
+		
+		return switch (condClass) {
+			case "IFPLAYER" -> new IfPlayer("selection", targetMap, paramManager, subAction, inverted);
+			case "IFVAR" -> new IfVariable("selection", targetMap, paramManager, subAction, inverted, localStorage);
+			case "IFGAME" -> new IfGame("selection", targetMap, paramManager, subAction, inverted, specifics);
+			default ->
+				throw new IllegalStateException("Error whilst trying to select objects: This type of conditional is not supported yet: " + condClass);
+		};
 	}
 	
 	/**

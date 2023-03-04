@@ -22,8 +22,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.*;
 import java.util.*;
 import java.util.logging.Logger;
-import org.bukkit.event.player.PlayerSwapHandItemsEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 public class DFPlugin extends JavaPlugin implements Listener, CommandExecutor{
   public static HashMap<String, TreeMap<Integer, BossBar>> bossbarHandler = new HashMap<>();
@@ -34,7 +33,7 @@ public class DFPlugin extends JavaPlugin implements Listener, CommandExecutor{
   public static HashMap<String, Object[]> functions = new HashMap<>();
   
   @EventHandler
-  public void SwapHands (PlayerSwapHandItemsEvent event){
+  public void Join (PlayerJoinEvent event){
     int funcStatus;
     HashMap<String, DFValue> localVars = new HashMap<>();
     HashMap<String, Entity[]> targets = new HashMap<>(){{
@@ -47,78 +46,46 @@ public class DFPlugin extends JavaPlugin implements Listener, CommandExecutor{
     
     CodeExecutor.executeThread(
       new Object[]{
-        new GameAction(
+        new IfPlayer(
+          "selection", targets, new ParamManager(
+          new HashMap<>(){{
+            put(0, new DFValue("Wonk0", 0, DFType.TXT));
+          }},
+          new HashMap<>(){}, "IFPLAYER:NameEquals", localVars), "NameEquals", false
+        ),
+        new SelectObject(
+          new ParamManager(
+            new HashMap<>(){},
+            new HashMap<>(){}, "SELECTOBJ:AllPlayers", localVars), "AllPlayers", "null", false, localVars, specifics
+        ),
+        new Repeat(
+          targets, new ParamManager(
+          new HashMap<>(){{
+            put(0, new DFValue(new Location(world, 9.5d, 79.5d, 6.5d, 0f, 0f), 0, DFType.LOC));
+          }},
+          new HashMap<>(){{
+            put("Shape", "Sphere");
+          }}, "REPEAT:While", localVars), "While", "PIsNear", false, localVars, specifics
+        ),
+        new Control(
           "selection", targets, new ParamManager(
           new HashMap<>(){},
-          new HashMap<>(){}, "GAMEACTION:CancelEvent", localVars), "CancelEvent"
-        ),
-        new SetVariable(
-          "selection", targets, new ParamManager(
           new HashMap<>(){{
-            put(0, new DFValue(new DFVar("t", Scope.LOCAL), 0, DFType.VAR));
-            put(1, new DFValue("99", 1, DFType.NUM));
-          }},
-          new HashMap<>(){}, "SETVAR:=", localVars), "=", localVars
-        ),
-        new SetVariable(
-          "selection", targets, new ParamManager(
-          new HashMap<>(){{
-            put(0, new DFValue(new DFVar("t", Scope.LOCAL), 0, DFType.VAR));
-            put(1, new DFValue("1", 1, DFType.NUM));
-            put(2, new DFValue("5", 2, DFType.NUM));
-          }},
-          new HashMap<>(){}, "SETVAR:ClampNumber", localVars), "ClampNumber", localVars
+            put("Time Unit", "Ticks");
+          }}, "CONTROL:Wait", localVars), "Wait"
         ),
         new PlayerAction(
-          "selection", targets, new ParamManager(
+          "allplayers", targets, new ParamManager(
           new HashMap<>(){{
-            put(0, new DFValue(new DFVar("t", Scope.LOCAL), 0, DFType.VAR));
+            put(0, new DFValue("balls", 0, DFType.TXT));
           }},
           new HashMap<>(){{
-            put("Text Value Merging", "Add spaces");
-            put("Alignment Mode", "Regular");
-          }}, "PLAYERACTION:SendMessage", localVars), "SendMessage"
+            put("Text Value Merging", "No spaces");
+          }}, "PLAYERACTION:ActionBar", localVars), "ActionBar"
         ),
+        new RepeatingBracket(),
+        new ClosingBracket(),
       }, targets, localVars, event, SelectionType.PLAYER, specifics);
-  }
-  
-  @EventHandler
-  public void LeftClick (PlayerInteractEvent event){
-    int funcStatus;
-    HashMap<String, DFValue> localVars = new HashMap<>();
-    HashMap<String, Entity[]> targets = new HashMap<>(){{
-      put("default", new Entity[]{event.getPlayer()});
-    }};
-    
-    HashMap<String, Object> specifics = new HashMap<>(){{
-      put("block", DFUtilities.getEventLoc(event.getPlayer(), event.getClickedBlock()));
-      put("item", event.getItem());
-    }};
-    
-    if((event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR) && event.getHand() == EquipmentSlot.HAND)
-      CodeExecutor.executeThread(
-        new Object[]{
-          new SetVariable(
-            "selection", targets, new ParamManager(
-            new HashMap<>(){{
-              put(0, new DFValue(new DFVar("t", Scope.LOCAL), 0, DFType.VAR));
-              put(1, new DFValue("99", 1, DFType.NUM));
-              put(2, new DFValue("1", 2, DFType.NUM));
-              put(3, new DFValue("5", 3, DFType.NUM));
-            }},
-            new HashMap<>(){}, "SETVAR:ClampNumber", localVars), "ClampNumber", localVars
-          ),
-          new PlayerAction(
-            "selection", targets, new ParamManager(
-            new HashMap<>(){{
-              put(0, new DFValue(new DFVar("t", Scope.LOCAL), 0, DFType.VAR));
-            }},
-            new HashMap<>(){{
-              put("Text Value Merging", "Add spaces");
-              put("Alignment Mode", "Regular");
-            }}, "PLAYERACTION:SendMessage", localVars), "SendMessage"
-          ),
-        }, targets, localVars, event, SelectionType.PLAYER, specifics);
   }
   
   @Override

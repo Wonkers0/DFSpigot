@@ -17,8 +17,12 @@ import java.util.HashMap;
 
 public class Repeat extends Conditional {
 	public double id;
-	public Repeat(HashMap<String, Entity[]> targetMap, ParamManager paramManager, String action, boolean inverted, HashMap<String, DFValue> localStorage) {
+	private String subaction;
+	public HashMap<String, Object> specifics;
+	public Repeat(HashMap<String, Entity[]> targetMap, ParamManager paramManager, String action, String subaction, boolean inverted, HashMap<String, DFValue> localStorage, HashMap<String, Object> specifics) {
 		super(null, targetMap, paramManager, action, localStorage, inverted);
+		this.subaction = subaction;
+		this.specifics = specifics;
 		id = Math.random();
 	}
 	
@@ -32,9 +36,11 @@ public class Repeat extends Conditional {
 		if(Bukkit.getOnlinePlayers().toArray().length == 0) return false; // This might not be needed, but testing is needed before removal
 		
 		switch(action){
-			case "Forever": return true;
+			case "Forever" -> {
+				return true;
+			}
 			
-			case "Multiple": {
+			case "Multiple" -> {
 				loopData.iterationCount++;
 				
 				if(args.containsKey("var"))
@@ -43,7 +49,7 @@ public class Repeat extends Conditional {
 				return loopData.iterationCount <= args.get("iterations").getInt();
 			}
 			
-			case "ForEach": {
+			case "ForEach" -> {
 				loopData.iterationCount++;
 				
 				if(loopData.forEach == null || tags.get("Allow List Changes").equals("True"))
@@ -57,7 +63,7 @@ public class Repeat extends Conditional {
 				return loopData.iterationCount <= loopData.forEach.length;
 			}
 			
-			case "Grid": {
+			case "Grid" -> {
 				DFVar var = (DFVar) args.get("var").getVal();
 				Location loc1 = (Location) args.get("loc1").getVal();
 				Location loc2 = (Location) args.get("loc2").getVal();
@@ -78,6 +84,10 @@ public class Repeat extends Conditional {
 				
 				DFVar.setVar(var, new DFValue(DFUtilities.getRelativeLoc(loopData.gridLoc), DFType.LOC), localStorage);
 				return true;
+			}
+			
+			case "While" -> {
+				return DFUtilities.getConditional(subaction, inverted, paramManager, localStorage, specifics, targetMap, targetMap.get("default")[0]).evaluateCondition();
 			}
 		}
 		

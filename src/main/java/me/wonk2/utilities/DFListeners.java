@@ -186,7 +186,7 @@ public class DFListeners implements Listener, CommandExecutor {
 				String[] actionInfo = action.split(":");
 				if(validConditionals.contains(actionInfo[0])) condInfo.put(actionInfo[1], actionInfo[0]);
 			}
-			SelectObject.condInfo = condInfo;
+			DFUtilities.condInfo = condInfo;
 		}
 		catch (IOException e) {throw new RuntimeException(e);}
 	}

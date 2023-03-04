@@ -38,8 +38,12 @@ public class CallFunction extends Action{
 				action.targetMap = targetMap;
 				action.localStorage = localVars;
 				if(action.paramManager != null) action.paramManager.localStorage = localVars; // Call Function & Start Process don't have param managers
-				if(codeBlock instanceof IfGame x) x.specifics = specifics;
-				if(action instanceof Repeat r) r.id = Math.random();
+				if(codeBlock instanceof IfGame g) g.specifics = specifics;
+				if(codeBlock instanceof SelectObject s) s.specifics = specifics;
+				if(action instanceof Repeat r){
+					r.specifics = specifics;
+					r.id = Math.random();
+				}
 				
 				
 				function[i] = action;
