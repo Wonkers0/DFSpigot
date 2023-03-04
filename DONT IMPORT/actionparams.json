@@ -3165,6 +3165,7 @@
   ],
   "IFGAME:EventCancelled": [[]],
   "REPEAT:Forever": [[]],
+  "REPEAT:While": [[]],
   "REPEAT:Multiple": [
     [
       {
