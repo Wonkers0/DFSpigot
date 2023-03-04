@@ -40,13 +40,14 @@ public class SetVariable extends Action {
 	
 	@Override
 	public void invokeAction(){
-		Object[] inputArray = paramManager.formatParameters(targetMap);
-		HashMap<String, DFValue> args = DFUtilities.getArgs(inputArray);
-		HashMap<String, String> tags = DFUtilities.getTags(inputArray);
-		HashMap<Integer, DFValue> primitiveInput = DFUtilities.getPrimitiveInput(inputArray);
-		
-		
-		for(Entity ignored : DFUtilities.getTargets(targetName, targetMap, SelectionType.EITHER))
+		Entity[] selection = targetMap.get("selection");
+		for(Entity ignored : DFUtilities.getTargets(targetName, targetMap, SelectionType.EITHER)) {
+			if(targetName.equals("selection") && selection != null) targetMap.put("selection", new Entity[]{ignored});
+			
+			Object[] inputArray = paramManager.formatParameters(targetMap);
+			HashMap<String, DFValue> args = DFUtilities.getArgs(inputArray);
+			HashMap<String, String> tags = DFUtilities.getTags(inputArray);
+			HashMap<Integer, DFValue> primitiveInput = DFUtilities.getPrimitiveInput(inputArray);
 			switch (action) {
 				case "=" -> DFVar.setVar((DFVar) args.get("var").getVal(), args.get("value"), localStorage);
 				
@@ -165,7 +166,7 @@ public class SetVariable extends Action {
 					double numToClamp;
 					DFVar var = (DFVar) args.get("var").getVal();
 					numToClamp = args.get("clampNum") != null ? (double) args.get("clampNum").getVal() : (double) DFVar.getVar(var, localStorage).getVal();
-					
+
 					DFValue val = new DFValue(DFUtilities.clampNum(numToClamp, (double) args.get("min").getVal(), (double) args.get("max").getVal()), DFType.NUM);
 					DFVar.setVar(var, val, localStorage);
 				}
@@ -715,7 +716,8 @@ public class SetVariable extends Action {
 					Location targetLoc = (Location) args.get("target").getVal();
 					
 					Vector dir = loc.clone().subtract(targetLoc).toVector();
-					if(tags.get("Face Direction").equals("Away from location")) dir.multiply(-1);
+					
+					if(tags.get("Face Direction").equals("Toward location")) dir.multiply(-1);
 					DFVar.setVar(var, new DFValue(loc.setDirection(dir), DFType.LOC), localStorage);
 				}
 				
@@ -1263,6 +1265,9 @@ public class SetVariable extends Action {
 				
 				case "SortDict" -> {/*TODO*/}
 			}
+		}
+		
+		targetMap.put("selection", selection);
 	}
 	
 	private static Location setCoord(Location loc, double coord, String coordinateTag, boolean world){

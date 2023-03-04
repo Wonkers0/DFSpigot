@@ -11,5 +11,6 @@ public enum Value {
 	CurrentHealth,
 	MaximumHealth,
 	MainHandItem,
-	HeldSlot
+	HeldSlot,
+	HotbarItems
 }

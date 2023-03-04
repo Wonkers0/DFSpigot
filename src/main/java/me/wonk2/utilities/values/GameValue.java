@@ -11,6 +11,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -35,7 +36,16 @@ public class GameValue {
 			case SelectionSize -> new DFValue(targetMap.get("selection") == null ? 0 : targetMap.get("selection").length, DFType.NUM);
 			case MainHandItem -> new DFValue(((LivingEntity) target).getEquipment().getItemInMainHand(), DFType.ITEM);
 			case HeldSlot -> new DFValue(((Player) target).getInventory().getHeldItemSlot() + 1, DFType.NUM);
+			case HotbarItems ->  getHotbar((Player) target);
 			default -> throw new NotImplementedException("This game value is not implemented yet: " + val);
 		};
 	}
+	
+	public DFValue getHotbar(Player p) {
+		ArrayList<DFValue> result = new ArrayList<>();
+		for(int i = 0; i < 9; i++) result.add(new DFValue(p.getInventory().getItem(i), DFType.ITEM));
+		return new DFValue(result.toArray(DFValue[]::new), DFType.LIST);
+	}
 }
+
+

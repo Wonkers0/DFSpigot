@@ -2,6 +2,8 @@ package me.wonk2.utilities.values;
 
 import me.wonk2.utilities.DFUtilities;
 import me.wonk2.utilities.enums.DFType;
+import me.wonk2.utilities.enums.SelectionType;
+import me.wonk2.utilities.internals.CodeExecutor;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.Bukkit;
@@ -80,8 +82,17 @@ public abstract class TextCode {
 		if(!targetCodes.contains(code)) return code;
 		
 		code = code.equals("%selected") ? "%selection" : code;
+		Entity[] selection = targetMap.getOrDefault("selection", null);
+		boolean hasSelection = selection != null && selection.length != 0 && selection[0] != null;
+		
+		Entity[] defaultTarget = targetMap.getOrDefault("default", null);
+		boolean hasDefault = defaultTarget != null && defaultTarget.length != 0 && defaultTarget[0] != null;
+		
 		String filteredCode = code.replace("%", "");
-		if(code.equals("%uuid")) return targetMap.containsKey("selection") ? targetMap.get("selection")[0].getUniqueId().toString() : code;
+		
+		// forgive me for the code below
+		if(code.equals("%uuid")) return hasSelection ? selection[0].getUniqueId().toString() : (hasDefault ? defaultTarget[0].getUniqueId().toString() : code);
+		else if(code.equals("%selection")) return hasSelection ? selection[0].getName() : (hasDefault ? defaultTarget[0].getName() : code);
 		else return targetMap.containsKey(filteredCode) ? targetMap.get(filteredCode)[0].getName() : code;
 	}
 }

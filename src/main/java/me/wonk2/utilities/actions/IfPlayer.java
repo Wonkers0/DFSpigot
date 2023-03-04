@@ -80,7 +80,7 @@ public class IfPlayer extends Conditional {
 				}
 			}
 			
-			case "IsNear": {
+			case "IsNear", "PIsNear": {
 				Location[] locs = DFValue.castLoc((DFValue[]) args.get("locs").getVal());
 				Location tL = target.getLocation();
 				double radius = (double) args.get("radius").getVal();
