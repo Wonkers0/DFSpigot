@@ -574,13 +574,15 @@ public class GameAction extends Action {
 				Container block = (Container) blockState;
 				DFValue[] items = (DFValue[]) args.get("items").getVal();
 				int itemIndex = 0;
+
 				for (int i = 0; i < 27; i++) {
-					if (items[itemIndex].slot != i + 1) block.getInventory().clear(i);
-					else {
-						Bukkit.broadcastMessage(i + "");
+					ItemStack item = (ItemStack) items[i].getVal();
+
+					if(item.getType() != Material.AIR){
 						block.getInventory().setItem(i, (ItemStack) items[itemIndex].getVal());
-						if (itemIndex != items.length - 1) itemIndex++;
+						itemIndex++;
 					}
+
 				}
 
 			}
@@ -598,6 +600,21 @@ public class GameAction extends Action {
 				}
 				//TODO this doesnt work
 
+			}
+			case "SetContainer" -> {
+				Location loc = (Location) args.get("loc").getVal();
+				org.bukkit.block.BlockState blockState = loc.getBlock().getState();
+				Container block = (Container) blockState;
+				DFValue[] items = (DFValue[]) args.get("items").getVal();
+				int itemIndex = 0;
+				for (int i = 0; i < 27; i++) {
+					if (items[itemIndex].slot != i + 1) block.getInventory().clear(i);
+					else {
+						Bukkit.broadcastMessage(i + "");
+						block.getInventory().setItem(i, (ItemStack) items[itemIndex].getVal());
+						if (itemIndex != items.length - 1) itemIndex++;
+					}
+				}
 			}
 		}
 	}
