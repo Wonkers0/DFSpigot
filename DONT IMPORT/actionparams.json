@@ -5224,5 +5224,13 @@
         "defaultValue": null
       }
     ]
-  ]
+  ],
+  "GAMEACTION:GenerateTree":[
+    {
+       "name": "loc",
+       "type": "LOC",
+       "repeating": false,
+       "defaultValue": null
+    }
+   ]
 }
