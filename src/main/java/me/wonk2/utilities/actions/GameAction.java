@@ -12,6 +12,7 @@ import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.session.ClipboardHolder;
+import com.sk89q.worldedit.util.TreeGenerator;
 import com.sk89q.worldedit.world.World;
 import com.sk89q.worldedit.world.block.BlockState;
 import me.wonk2.DFPlugin;
@@ -27,6 +28,7 @@ import net.minecraft.world.level.block.Block;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.TreeType;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Container;
@@ -580,6 +582,21 @@ public class GameAction extends Action {
 						if (itemIndex != items.length - 1) itemIndex++;
 					}
 				}
+
+			}
+			//TODO Tick block
+			case "GenerateTree" -> {
+				Location loc = (Location) args.get("loc").getVal();
+				StringBuilder builder = new StringBuilder();
+				builder.append(tags.get("Tree Type").toString());
+
+				World world = BukkitAdapter.adapt(loc.getWorld());
+				try (EditSession editSession = WorldEdit.getInstance().newEditSession(world)) {
+					world.generateTree(TreeGenerator.TreeType.MEGA_REDWOOD,editSession,BlockVector3.at(loc.getX(),loc.getY(), loc.getZ()));
+				} catch (MaxChangedBlocksException e) {
+					throw new RuntimeException(e);
+				}
+				//TODO this doesnt work
 
 			}
 		}
