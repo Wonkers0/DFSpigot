@@ -616,6 +616,15 @@ public class GameAction extends Action {
 					}
 				}
 			}
+			case "SetItemInSlot" ->{
+				Location loc = (Location) args.get("loc").getVal();
+				ItemStack item = (ItemStack) args.get("item").getVal();
+				double slot = (double) args.get("slot").getVal();
+				org.bukkit.block.BlockState blockState = loc.getBlock().getState();
+				Container block = (Container) blockState;
+				block.getInventory().setItem((int) slot,item);
+
+			}
 		}
 	}
 }
