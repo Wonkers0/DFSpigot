@@ -5227,12 +5227,12 @@
   ],
   "GAMEACTION:GenerateTree":[
     [
-    {
-       "name": "loc",
-       "type": "LOC",
-       "repeating": false,
-       "defaultValue": null
-    }
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      }
    ]
   ]
 }
