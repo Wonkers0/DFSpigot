@@ -5235,5 +5235,49 @@
         "defaultValue": null
       }
    ]
+  ],
+  "GAMEACTION:SetContents": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+     "name": "items",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      }
+    ]
   ]
 }
