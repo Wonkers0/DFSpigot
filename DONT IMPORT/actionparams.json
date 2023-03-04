@@ -5357,5 +5357,66 @@
         "defaultValue": null
       }
    ]
-  ]
+  ],
+  "IFENTITY:IsType": [
+    [
+      {
+        "name": "typeItems",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "IFENTITY:NameEquals": [
+    [
+      {
+        "name": "names",
+        "type": "TXT",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "IFENTITY:StandingOn": [
+    [
+      {
+        "name": "blocks",
+        "type": "ITEM",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ],
+    [
+      {
+        "name": "locs",
+        "type": "LOC",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "IFENTITY:IsGrounded": [[]],
+  "IFENTITY:IsNear": [
+    [
+      {
+        "name": "locs",
+        "type": "LOC",
+        "repeating": true,
+        "defaultValue": null
+      },
+      {
+        "name": "radius",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 5
+      }
+    ]
+  ],
+  "IFENTITY:IsMob": [[]],
+  "IFENTITY:IsProj": [[]],
+  "IFENTITY:IsVehicle": [[]],
+  "IFENTITY:IsItem": [[]],
+  "IFENTITY:Exists": [[]],
+  "IFENTITY:IsSheared": [[]]
 }
