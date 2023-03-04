@@ -439,7 +439,7 @@ function blockParams(codeBlock, isFunc) {
 
 function gameValues(gVal) {
   let target = gVal.target == null ? `"default"` : `"${gVal.target.toLowerCase()}"`
-  return [`new GameValue(Value.${gVal.type.replaceAll(" ", "")}, ${target})`, "GAMEVAL"]
+  return [`new GameValue(Value.${gVal.type.replaceAll(/-| /gm, "")}, ${target})`, "GAMEVAL"] // Remove spaces and dashes from Game Value name
 }
 
 String.prototype.replaceBetween = function(start, end, what) { //https://stackoverflow.com/questions/14880229/how-to-replace-a-substring-between-two-indices
