@@ -5392,5 +5392,311 @@
   "IFENTITY:IsVehicle": [[]],
   "IFENTITY:IsItem": [[]],
   "IFENTITY:Exists": [[]],
-  "IFENTITY:IsSheared": [[]]
+  "IFENTITY:IsSheared": [[]],
+  "SETVAR:GetParticleType": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "particle",
+        "type": "PART",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:SetParticleType": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "particle",
+        "type": "PART",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "type",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:GetParticleAmount": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "particle",
+        "type": "PART",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:SetParticleAmount": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "particle",
+        "type": "PART",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "amount",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:GetParticleSprd": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "particle",
+        "type": "PART",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:SetParticleSprd": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "particle",
+        "type": "PART",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "horizontal",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "vertical",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:GetParticleSize": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "particle",
+        "type": "PART",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:SetParticleSize": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "particle",
+        "type": "PART",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "size",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "variation",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:GetParticleMat": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "particle",
+        "type": "PART",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:SetParticleMat": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "particle",
+        "type": "PART",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "material",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:GetParticleColor": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "particle",
+        "type": "PART",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:SetParticleColor": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "particle",
+        "type": "PART",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "color",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "variation",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:GetParticleMotion": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "particle",
+        "type": "PART",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:SetParticleMotion": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "particle",
+        "type": "PART",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "motion",
+        "type": "VEC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "variation",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "SETVAR:GetBlockType": [
+    [
+      {
+        "name": "var",
+        "type": "VAR",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ]
 }
