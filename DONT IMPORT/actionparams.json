@@ -5708,8 +5708,8 @@
         "defaultValue": null
       },
       {
-        "name": "txts",
-        "type": "ANY",
+        "name": "txt",
+        "type": "TXT",
         "repeating": true,
         "defaultValue": null
       }
