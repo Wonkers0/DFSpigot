@@ -5698,5 +5698,21 @@
         "defaultValue": null
       }
     ]
+  ],
+  "GAMEACTION:SpawnTextDisplay": [
+    [
+      {
+        "name": "loc",
+        "type": "LOC",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "msg",
+        "type": "ANY",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
   ]
 }
