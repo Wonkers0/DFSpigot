@@ -5708,7 +5708,7 @@
         "defaultValue": null
       },
       {
-        "name": "msg",
+        "name": "txts",
         "type": "ANY",
         "repeating": true,
         "defaultValue": null
