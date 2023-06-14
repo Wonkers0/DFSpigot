@@ -5731,7 +5731,7 @@
       }
     ]
   ],
-  "GAMEACTION:SpawnBlockDisplay": [
+  "GAMEACTION:SpawnBlockDisp": [
     [
       {
         "name": "loc",
