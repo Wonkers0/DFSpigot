@@ -1,21 +1,26 @@
 package me.wonk2.utilities.internals;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.commands.data.EntityDataAccessor;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import me.wonk2.utilities.DFUtilities;
 
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -65,8 +70,8 @@ public class Hologram {
 	public void spawn(Player p) {
 		ServerGamePacketListenerImpl connection = ((CraftPlayer) p).getHandle().connection;
 		connection.send(new ClientboundAddEntityPacket(entity));
-		connection.send(new ClientboundSetEntityDataPacket(entity.getId(), entity.getEntityData(), false));
-	}
+		//connection.send(new ClientboundSetEntityDataPacket(entity.getId(), entity.getEntityData(), false));
+	} //TODO hey wonk the hologram packet not working when updated to 1.19.4 (they added bytes n stuff) - chicken
 	
 	/**
 	 * hides the hologram from a player

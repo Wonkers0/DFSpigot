@@ -22,7 +22,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.*;
 import java.util.*;
 import java.util.logging.Logger;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 public class DFPlugin extends JavaPlugin implements Listener, CommandExecutor{
   public static HashMap<String, TreeMap<Integer, BossBar>> bossbarHandler = new HashMap<>();
@@ -31,73 +31,44 @@ public class DFPlugin extends JavaPlugin implements Listener, CommandExecutor{
   public static Logger logger;
   public static World world = Bukkit.getWorld("world");
   public static HashMap<String, Object[]> functions = new HashMap<>();
-  
+
   @EventHandler
-  public void Join (PlayerJoinEvent event){
+  public void LeftClick (PlayerInteractEvent event){
     int funcStatus;
     HashMap<String, DFValue> localVars = new HashMap<>();
     HashMap<String, Entity[]> targets = new HashMap<>(){{
       put("default", new Entity[]{event.getPlayer()});
     }};
-    
+
     HashMap<String, Object> specifics = new HashMap<>(){{
-      put("item", new ItemStack(Material.AIR));
+      put("block", DFUtilities.getEventLoc(event.getPlayer(), event.getClickedBlock()));
+      put("item", event.getItem());
     }};
-    
-    CodeExecutor.executeThread(
-      new Object[]{
-        new IfPlayer(
-          "selection", targets, new ParamManager(
-          new HashMap<>(){{
-            put(0, new DFValue("Wonk0", 0, DFType.TXT));
-          }},
-          new HashMap<>(){}, "IFPLAYER:NameEquals", localVars), "NameEquals", false
-        ),
-        new SelectObject(
-          new ParamManager(
-            new HashMap<>(){},
-            new HashMap<>(){}, "SELECTOBJ:AllPlayers", localVars), "AllPlayers", "null", false, localVars, specifics
-        ),
-        new Repeat(
-          targets, new ParamManager(
-          new HashMap<>(){{
-            put(0, new DFValue(new Location(world, 9.5d, 79.5d, 6.5d, 0f, 0f), 0, DFType.LOC));
-          }},
-          new HashMap<>(){{
-            put("Shape", "Sphere");
-          }}, "REPEAT:While", localVars), "While", "PIsNear", false, localVars, specifics
-        ),
-        new Control(
-          "selection", targets, new ParamManager(
-          new HashMap<>(){},
-          new HashMap<>(){{
-            put("Time Unit", "Ticks");
-          }}, "CONTROL:Wait", localVars), "Wait"
-        ),
-        new PlayerAction(
-          "allplayers", targets, new ParamManager(
-          new HashMap<>(){{
-            put(0, new DFValue("balls", 0, DFType.TXT));
-          }},
-          new HashMap<>(){{
-            put("Text Value Merging", "No spaces");
-          }}, "PLAYERACTION:ActionBar", localVars), "ActionBar"
-        ),
-        new RepeatingBracket(),
-        new ClosingBracket(),
+
+    if((event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR) && event.getHand() == EquipmentSlot.HAND)
+      CodeExecutor.executeThread(
+        new Object[]{
+          new GameAction(
+            "selection", targets, new ParamManager(
+              new HashMap<>(){{
+                put(0, new DFValue(new GameValue(Value.Location, "default"), 0, DFType.GAMEVAL));
+                put(1, new DFValue(DFUtilities.parseItemNBT("{Count:1b,DF_NBT:3337,id:\"minecraft:prismarine\",tag:{CustomModelData:0,HideFlags:-1,display:{Lore:['{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"gray\",\"text\":\"Used to repeat the code inside it.\"}],\"text\":\"\"}','{\"text\":\"\"}','{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"white\",\"text\":\"Example:\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"aqua\",\"text\":\"» \"},{\"italic\":false,\"color\":\"gray\",\"text\":\"Repeat code forever\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"aqua\",\"text\":\"» \"},{\"italic\":false,\"color\":\"gray\",\"text\":\"Repeat code a certain number\"}],\"text\":\"\"}','{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"gray\",\"text\":\"of times\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"aqua\",\"text\":\"» \"},{\"italic\":false,\"color\":\"gray\",\"text\":\"Repeat code until a certain\"}],\"text\":\"\"}','{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"gray\",\"text\":\"condition is met\"}],\"text\":\"\"}'],Name:'{\"italic\":false,\"color\":\"green\",\"text\":\"Repeat\"}'}}}"), 1, DFType.ITEM));
+              }},
+              new HashMap<>(){}, "GAMEACTION:SpawnItemDisplay", localVars), "SpawnItemDisplay"
+          ),
       }, targets, localVars, event, SelectionType.PLAYER, specifics);
   }
-  
+
   @Override
   public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
     return true;
   }
-  
+
   @Override
   public void onEnable(){
     plugin = this;
     logger = Bukkit.getLogger();
-    
+
     DFUtilities.init();
     getServer().getPluginManager().registerEvents(this, this);
     getServer().getPluginManager().registerEvents(new DFListeners(), this);

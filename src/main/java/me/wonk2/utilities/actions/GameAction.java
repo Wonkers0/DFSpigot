@@ -21,6 +21,7 @@ import me.wonk2.utilities.ParamManager;
 import me.wonk2.utilities.actions.pointerclasses.Action;
 import me.wonk2.utilities.enums.SelectionType;
 import me.wonk2.utilities.internals.EntityData;
+import me.wonk2.utilities.internals.TextAligning;
 import me.wonk2.utilities.values.DFValue;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundLevelEventPacket;
@@ -32,8 +33,9 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Container;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.craftbukkit.v1_19_R1.block.data.CraftBlockData;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
+
+import org.bukkit.craftbukkit.v1_19_R3.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
@@ -447,6 +449,28 @@ public class GameAction extends Action {
 				org.bukkit.block.BlockState blockState = loc.getBlock().getState();
 				Container block = (Container) blockState;
 				block.getInventory().setItem((int) slot,item);
+
+			}
+			case "SpawnTextDisplay" -> {
+				Location loc = (Location) args.get("loc").getVal();
+				String[] txtArray = DFValue.castTxt((DFValue[]) args.get("txt").getVal());
+
+				String msg = tags.get("Text Value Merging").equals("Add spaces") ?
+						String.join(" ", txtArray) :
+						String.join("", txtArray);
+
+
+				TextDisplay textDisplay = (TextDisplay) loc.getWorld().spawnEntity(loc,EntityType.TEXT_DISPLAY);
+				textDisplay.setText(msg);
+				textDisplay.setVisibleByDefault(true);
+				textDisplay.setBillboard(Display.Billboard.CENTER);
+				break;
+			}
+			case "SpawnItemDisplay" -> {
+				Location loc = (Location) args.get("loc").getVal();
+				ItemStack item = (ItemStack) args.get("item").getVal();
+				ItemDisplay itemDisplay = (ItemDisplay) loc.getWorld().spawnEntity(loc,EntityType.ITEM_DISPLAY);
+				itemDisplay.setItemStack(item);
 
 			}
 		}
