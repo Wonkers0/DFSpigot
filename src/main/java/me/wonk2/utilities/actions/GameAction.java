@@ -26,6 +26,7 @@ import me.wonk2.utilities.values.DFValue;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundLevelEventPacket;
 import net.minecraft.world.level.block.Block;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -354,7 +355,7 @@ public class GameAction extends Action {
 					Material material = loc.getBlock().getType();
 
 					if (args.get("tags").getVal() != null) {
-						if (tags.get("Overwrite Existing Data").equalsIgnoreCase("false")) {
+						if (tags.get("Overwrite Existing Data").equalsIgnoreCase("true")) {
 							BlockData finalData = material.createBlockData();
 							StringBuilder builder = new StringBuilder();
 							builder.append("[");
@@ -367,7 +368,8 @@ public class GameAction extends Action {
 							finalData = data.merge(finalData);
 							loc.getBlock().setBlockData(finalData);
 						} else {
-							//TODO keep existing block data
+							//TODO OVERWRITE EXISTING DATA FALSE
+
 						}
 					}
 				}
@@ -471,6 +473,31 @@ public class GameAction extends Action {
 				ItemStack item = (ItemStack) args.get("item").getVal();
 				ItemDisplay itemDisplay = (ItemDisplay) loc.getWorld().spawnEntity(loc,EntityType.ITEM_DISPLAY);
 				itemDisplay.setItemStack(item);
+			}
+			case "SpawnBlockDisp" -> {
+				Location loc = (Location) args.get("loc").getVal();
+				ItemStack item = (ItemStack) args.get("item").getVal();
+				BlockDisplay blockDisplay = (BlockDisplay) loc.getWorld().spawnEntity(loc,EntityType.BLOCK_DISPLAY);
+				String[] blockTags = DFValue.castTxt((DFValue[]) args.get("tags").getVal());
+					Material material = item.getType();
+				BlockData finalData = material.createBlockData();
+
+					if (args.get("tags").getVal() != null) {
+							StringBuilder builder = new StringBuilder();
+							builder.append("[");
+							for (String dblockData : blockTags)
+								builder.append(dblockData).append(",");
+
+							builder.delete(builder.length() - 1, builder.length());
+							builder.append("]");
+							BlockData data = material.createBlockData(String.valueOf(builder));
+							finalData = data.merge(finalData);
+
+
+					}
+
+				blockDisplay.setBlock(finalData);
+
 
 			}
 		}
