@@ -5799,5 +5799,47 @@
         "defaultValue": null
       }
     ]
+  ],
+  "ENTITYACTION:DispInterpolation": [
+    [
+      {
+        "name": "delay",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 0
+      },
+      {
+        "name": "duration",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 0
+      }
+    ]
+  ],
+  "ENTITYACTION:DisplayCullingSize": [
+    [
+      {
+        "name": "width",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 0
+      },
+      {
+        "name": "height",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 0
+      }
+    ]
+  ],
+  "ENTITYACTION:TDisplayText": [
+    [
+      {
+        "name": "texts",
+        "type": "TXT",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
   ]
 }
