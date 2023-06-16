@@ -5871,5 +5871,67 @@
     [
       
     ]
+  ],
+  "ENTITYACTION:TDisplaySeeThru": [
+    [
+      
+    ]
+  ],
+  "ENTITYACTION:TDispBackground": [
+    [
+      {
+        "name": "color",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "opacity",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:DisplayGlowColor": [
+    [
+      {
+        "name": "color",
+        "type": "TXT",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:IDisplayItem": [
+    [
+      {
+        "name": "item",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:IDisplayModelType": [
+    [
+      
+    ]
+  ],
+  "ENTITYACTION:BDisplayBlock": [
+    [
+      {
+        "name": "item",
+        "type": "ITEM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "tags",
+        "type": "TXT",
+        "repeating": true,
+        "defaultValue": null
+      }
+    ]
   ]
 }
