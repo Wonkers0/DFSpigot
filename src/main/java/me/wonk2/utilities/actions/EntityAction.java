@@ -14,6 +14,7 @@ import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.projectile.EyeOfEnder;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_19_R3.entity.*;
 import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
 import org.bukkit.entity.*;
@@ -21,6 +22,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
@@ -31,7 +33,6 @@ import java.util.Objects;
 
 public class EntityAction extends Action {
 	LivingEntity target;
-	
 	public EntityAction(String targetName, HashMap<String, Entity[]> targetMap, ParamManager paramManager, String action, HashMap<String, DFValue> localStorage) {
 		super(targetName, targetMap, paramManager, action, localStorage);
 	}
@@ -41,9 +42,11 @@ public class EntityAction extends Action {
 		Object[] inputArray = paramManager.formatParameters(targetMap);
 		HashMap<String, DFValue> args = DFUtilities.getArgs(inputArray);
 		HashMap<String, String> tags = DFUtilities.getTags(inputArray);
-		
+
 		for(Entity entity : DFUtilities.getTargets(targetName, targetMap, SelectionType.ENTITY)) {
 			LivingEntity target = entity instanceof LivingEntity livingEntity ? livingEntity : null;
+
+			Display display1 = entity instanceof Display displayEntity ? displayEntity : null;
 			switch (action) {
 				case "Damage" -> target.damage((double) args.get("amount").getVal());
 				
@@ -629,8 +632,165 @@ public class EntityAction extends Action {
 				}
 				
 				case "SetItem" -> ((Item) target).setItemStack((ItemStack) args.get("item").getVal());
+				case "DisplayViewRange" -> {
+					Display display = (Display) display1;
+					display.setViewRange((float)args.get("amount").getVal());
+				}
+				case "DisplayBillboard" -> {
+					Display display = (Display) entity;
+					switch (tags.get("Billboard Type")) {
+						case "Fixed" -> display.setBillboard(Display.Billboard.FIXED);
+						case "Vertical" -> display.setBillboard(Display.Billboard.VERTICAL);
+						case "Horizontal" -> display.setBillboard(Display.Billboard.HORIZONTAL);
+						case "Center" -> display.setBillboard(Display.Billboard.CENTER);
+					}
+				}
+				case "DisplayShadow" ->
+				{
+					Display display = (Display) display1;
+					display.setShadowRadius((float)args.get("radius").getVal());
+					display.setShadowStrength((float)args.get("opacity").getVal());
+				}
+				case "DisplayBrightness" -> {
+					Display display = (Display) display1;
+					if (args.get("BlockLightLevel") != null)
+					{
+						display.setBrightness(new Display.Brightness(args.get("brightness").getInt(),args.get("skybrightness").getInt()));
+					} else {
+						display.setBrightness(new Display.Brightness(target.getLocation().getBlock().getLightFromBlocks(),target.getLocation().getBlock().getLightFromSky()));
+					}
+				}
+				case "DispInterpolation" -> {
+					Display display = (Display) display1;
+					display.setInterpolationDelay(args.get("delay").getInt());
+					display.setInterpolationDuration(args.get("duration").getInt());
+				}
+				case "DisplayCullingSize" -> {
+					Display display = (Display) display1;
+					display.setDisplayWidth(args.get("width").getInt()); //TODO NOT 100% SURE IT IS CULLING (CUZ I DONT KNOW WHAT THAT IS)
+					display.setDisplayHeight(args.get("height").getInt());
+				}
+				case "TDisplayText" -> {
+					TextDisplay display = (TextDisplay) display1;
+					if (args.get("texts") != null){
+						String[] txtArray = DFValue.castTxt((DFValue[]) args.get("texts").getVal());
+
+						String msg = tags.get("Text Value Merging").equals("Add spaces") ?
+								String.join(" ", txtArray) :
+								String.join("", txtArray);
+
+						display.setText(msg);
+					}
+				}
+				case "TDisplayLineWidth" -> {
+					TextDisplay display = (TextDisplay) display1;
+					display.setLineWidth(args.get("width").getInt());
+				}
+				case "TDisplayOpacity" -> {
+					TextDisplay display = (TextDisplay) display1;
+					display.setTextOpacity(args.get("opacity").getInt().byteValue());
+				}
+				case "TDisplayAlign" -> {
+					TextDisplay display = (TextDisplay) display1;
+					switch (tags.get("Text Alignment")) {
+						case "Center" -> display.setAlignment(TextDisplay.TextAlignment.CENTER);
+						case "Left" -> display.setAlignment(TextDisplay.TextAlignment.LEFT);
+						case "Right" -> display.setAlignment(TextDisplay.TextAlignment.RIGHT);
+					}
+				}
+				case "TDisplayShadow" -> {
+					TextDisplay display = (TextDisplay) display1;
+					if (tags.get("Text Shadow").equals("Enable"))
+					{
+						display.setShadowed(true);
+					} else {
+						display.setShadowed(false);
+					}
+				}
+				case "TDisplaySeeThru" -> {
+					TextDisplay display = (TextDisplay) display1;
+					if (tags.get("See-through").equals("Enable"))
+					{
+						display.setSeeThrough(true);
+					} else {
+						display.setSeeThrough(false);
+					}
+				}
+				case "TDispBackground" -> {
+					TextDisplay display = (TextDisplay) display1;
+					if (args.get("opacity") != null)
+					{
+						String colorStr = (String) args.get("color").getVal();
+						Color color = Color.fromRGB(
+								Integer.valueOf(colorStr.substring(1, 3), 16),
+								Integer.valueOf(colorStr.substring(3, 5), 16),
+								Integer.valueOf(colorStr.substring(5, 7), 16));
+						display.setText("a");
+						display.setBackgroundColor(color);
+						display.setTextOpacity(args.get("opacity").getInt().byteValue());
+					} else {
+						display.setDefaultBackground(true);
+					}
+				}
+				case "DisplayGlowColor" -> {
+					Display display = (Display) display1;
+					String colorStr = (String) args.get("color").getVal();
+					Color color = Color.fromRGB(
+							Integer.valueOf(colorStr.substring(1, 3), 16),
+							Integer.valueOf(colorStr.substring(3, 5), 16),
+							Integer.valueOf(colorStr.substring(5, 7), 16));
+					display.setGlowing(true);
+					display.setGlowColorOverride(color);
+				}
+
+				case "IDisplayItem" -> {
+					ItemDisplay display = (ItemDisplay) display1;
+					if (args.get("item") != null)
+					{
+						display.setItemStack((ItemStack) args.get("item").getVal());
+					}
+				}
+				case "IDisplayModelType" -> {
+					ItemDisplay display = (ItemDisplay) display1;
+					switch (tags.get("Model Type")) {
+						case "None" -> display.setMetadata("display", new FixedMetadataValue((Plugin) this, "none"));
+						case "First Person Left Hand" -> display.setMetadata("display", new FixedMetadataValue((Plugin) this, "firstperson_lefthand"));
+						case "First Person Right Hand" -> display.setMetadata("display", new FixedMetadataValue((Plugin) this, "firstperson_righthand"));
+						case "Third Person Left Hand" -> display.setMetadata("display", new FixedMetadataValue((Plugin) this, "thirdperson_lefthand"));
+						case "Third Person Right Hand" -> display.setMetadata("display", new FixedMetadataValue((Plugin) this, "thirdperson_righthand"));
+						case "Head" -> display.setMetadata("display", new FixedMetadataValue((Plugin) this, "head"));
+						case "GUI" -> display.setMetadata("display", new FixedMetadataValue((Plugin) this, "gui"));
+						case "Ground" -> display.setMetadata("display", new FixedMetadataValue((Plugin) this, "ground"));
+						case "Fixed" -> display.setMetadata("display", new FixedMetadataValue((Plugin) this, "fixed"));
+					}
+				}
+				case "BDisplayBlock" -> {
+					ItemStack item = (ItemStack) args.get("item").getVal();
+					BlockDisplay blockDisplay = (BlockDisplay) display1;
+					String[] blockTags = DFValue.castTxt((DFValue[]) args.get("tags").getVal());
+					Material material = item.getType();
+					BlockData finalData = material.createBlockData();
+
+					if (args.get("tags").getVal() != null) {
+						StringBuilder builder = new StringBuilder();
+						builder.append("[");
+						for (String dblockData : blockTags)
+							builder.append(dblockData).append(",");
+
+						builder.delete(builder.length() - 1, builder.length());
+						builder.append("]");
+						BlockData data = material.createBlockData(String.valueOf(builder));
+						finalData = data.merge(finalData);
+
+
+					}
+
+					blockDisplay.setBlock(finalData);
+				}
+
 			}
 		}
+
 	}
 	
 	
@@ -639,5 +799,6 @@ public class EntityAction extends Action {
 		else if(entity instanceof Strider) ((Strider) entity).setSaddle(saddle != null);
 		else if(entity instanceof Pig) ((Pig) entity).setSaddle(saddle != null);
 	}
+
 }
 

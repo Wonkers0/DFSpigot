@@ -105,7 +105,11 @@ public class GameAction extends Action {
 					if (customName != null) itemEntity.setCustomName(customName);
 					if (tags.get("Apply Item Motion").equals("False")) itemEntity.setVelocity(new Vector());
 					itemEntity.setCustomNameVisible(true);
+					DFUtilities.lastEntity = itemEntity;
+
 				}
+
+
 			}
 			case "SpawnVehicle" -> {
 				Material vehicleType = ((ItemStack) args.get("vehicle").getVal()).getType();
@@ -125,6 +129,8 @@ public class GameAction extends Action {
 				
 				if (customName != null) vehicle.setCustomName(customName);
 				vehicle.setCustomNameVisible(true);
+				DFUtilities.lastEntity = vehicle;
+
 			}
 			case "SpawnExpOrb" -> {
 				Location loc = (Location) args.get("loc").getVal();
@@ -135,6 +141,8 @@ public class GameAction extends Action {
 					ExperienceOrb orb = (ExperienceOrb) DFPlugin.world.spawnEntity(loc, EntityType.EXPERIENCE_ORB);
 					if (customName != null) orb.setCustomName(customName);
 					orb.setCustomNameVisible(true);
+					DFUtilities.lastEntity = orb;
+
 				}
 			}
 			case "Explosion" -> {
@@ -142,6 +150,7 @@ public class GameAction extends Action {
 				float power = (float) DFUtilities.clampNum((double) args.get("power").getVal(), 0, 4);
 				
 				DFPlugin.world.createExplosion(loc, power, false, false);
+
 			}
 			case "SpawnTNT" -> {
 				Location loc = (Location) args.get("loc").getVal();
@@ -154,6 +163,8 @@ public class GameAction extends Action {
 				EntityData.getEntityData(tnt.getUniqueId()).tntPower = power;
 				tnt.setFuseTicks(fuse);
 				if (customName != null) tnt.setCustomName(customName);
+				DFUtilities.lastEntity = tnt;
+
 			}
 			case "SpawnFangs" -> {
 				Location loc = (Location) args.get("loc").getVal();
@@ -161,6 +172,8 @@ public class GameAction extends Action {
 				
 				EvokerFangs evokerFangs = (EvokerFangs) DFPlugin.world.spawnEntity(loc, EntityType.EVOKER_FANGS);
 				if (customName != null) evokerFangs.setCustomName(customName);
+				DFUtilities.lastEntity = evokerFangs;
+
 			}
 			case "Firework" -> {
 				ItemStack fireworkType = (ItemStack) args.get("firework").getVal();
@@ -171,6 +184,8 @@ public class GameAction extends Action {
 				firework.setFireworkMeta(meta);
 				if (tags.get("Instant").equalsIgnoreCase("true")) firework.detonate();
 				if (tags.get("Movement").equalsIgnoreCase("directional")) firework.setShotAtAngle(true);
+				DFUtilities.lastEntity = firework;
+
 			}
 			case "LaunchProj" -> {
 				ItemStack projectile = (ItemStack) args.get("projectile").getVal();
@@ -193,6 +208,8 @@ public class GameAction extends Action {
 				
 				cloud.setRadius((float) rad);
 				cloud.setDuration((int) dur);
+				DFUtilities.lastEntity = cloud;
+
 			}
 			case "FallingBlock" -> {
 				Location loc = (Location) args.get("loc").getVal();
@@ -217,6 +234,8 @@ public class GameAction extends Action {
 					fb.setMetadata("dontreform1176", new FixedMetadataValue(DFPlugin.plugin, "1")); //TODO: This tag does not work properly!
 				if (tags.get("Hurt Hit Entities").equalsIgnoreCase("true"))
 					fb.setHurtEntities(true);
+				DFUtilities.lastEntity = fb;
+
 			}
 			case "SpawnArmorStand" -> {
 				Location loc = (Location) args.get("loc").getVal();
@@ -462,22 +481,24 @@ public class GameAction extends Action {
 						String.join("", txtArray);
 
 
-				TextDisplay textDisplay = (TextDisplay) loc.getWorld().spawnEntity(loc,EntityType.TEXT_DISPLAY);
+				TextDisplay textDisplay = (TextDisplay) DFPlugin.world.spawnEntity(loc,EntityType.TEXT_DISPLAY);
 				textDisplay.setText(msg);
 				textDisplay.setVisibleByDefault(true);
 				textDisplay.setBillboard(Display.Billboard.CENTER);
+				DFUtilities.lastEntity = textDisplay;
 				break;
 			}
 			case "SpawnItemDisplay" -> {
 				Location loc = (Location) args.get("loc").getVal();
 				ItemStack item = (ItemStack) args.get("item").getVal();
-				ItemDisplay itemDisplay = (ItemDisplay) loc.getWorld().spawnEntity(loc,EntityType.ITEM_DISPLAY);
+				ItemDisplay itemDisplay = (ItemDisplay) DFPlugin.world.spawnEntity(loc,EntityType.ITEM_DISPLAY);
 				itemDisplay.setItemStack(item);
+				DFUtilities.lastEntity = itemDisplay;
 			}
 			case "SpawnBlockDisp" -> {
 				Location loc = (Location) args.get("loc").getVal();
 				ItemStack item = (ItemStack) args.get("item").getVal();
-				BlockDisplay blockDisplay = (BlockDisplay) loc.getWorld().spawnEntity(loc,EntityType.BLOCK_DISPLAY);
+				BlockDisplay blockDisplay = (BlockDisplay) DFPlugin.world.spawnEntity(loc,EntityType.BLOCK_DISPLAY);
 				String[] blockTags = DFValue.castTxt((DFValue[]) args.get("tags").getVal());
 					Material material = item.getType();
 				BlockData finalData = material.createBlockData();
@@ -497,6 +518,7 @@ public class GameAction extends Action {
 					}
 
 				blockDisplay.setBlock(finalData);
+				DFUtilities.lastEntity = blockDisplay;
 
 
 			}
