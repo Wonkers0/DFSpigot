@@ -5841,5 +5841,35 @@
         "defaultValue": null
       }
     ]
+  ],
+  "ENTITYACTION:TDisplayLineWidth": [
+    [
+      {
+        "name": "width",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 200
+      }
+    ]
+  ],
+  "ENTITYACTION:TDisplayOpacity": [
+    [
+      {
+        "name": "opacity",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 100
+      }
+    ]
+  ],
+  "ENTITYACTION:TDisplayAlign": [
+    [
+      
+    ]
+  ],
+  "ENTITYACTION:TDisplayShadow": [
+    [
+      
+    ]
   ]
 }
