@@ -5752,5 +5752,52 @@
         "defaultValue": null
       }
     ]
+  ],
+  "ENTITYACTION:DisplayViewRange": [
+    [
+      {
+        "name": "amount",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
+  ],
+  "ENTITYACTION:DisplayBillboard": [
+    [
+      
+    ]
+  ],
+  "ENTITYACTION:DisplayShadow": [
+    [
+      {
+        "name": "radius",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 1
+      },
+      {
+        "name": "opacity",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": 100
+      }
+    ]
+  ],
+  "ENTITYACTION:DisplayBrightness": [
+    [
+      {
+        "name": "brightness",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      },
+      {
+        "name": "skybrightness",
+        "type": "NUM",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
   ]
 }
