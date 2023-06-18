@@ -5938,7 +5938,7 @@
     [
       {
         "name": "list",
-        "type": "LIST",
+        "type": "VAR",
         "repeating": false,
         "defaultValue": null
       }
