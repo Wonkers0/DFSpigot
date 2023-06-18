@@ -5933,5 +5933,15 @@
         "defaultValue": null
       }
     ]
+  ],
+  "ENTITYACTION:DisplayMatrix": [
+    [
+      {
+        "name": "list",
+        "type": "LIST",
+        "repeating": false,
+        "defaultValue": null
+      }
+    ]
   ]
 }
